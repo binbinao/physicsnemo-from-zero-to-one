@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I Used AI Agents to Write a 7-Chapter Technical Book in 2 Weeks</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.7; color: #1a1a1a; max-width: 680px; margin: 0 auto; padding: 40px 20px; background: #f3f2ef; }
+.post-card { background: #fff; border-radius: 8px; padding: 24px 32px; box-shadow: 0 0 0 1px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.05); }
+.author { display: flex; align-items: center; margin-bottom: 16px; }
+.avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #0077B5, #00A0DC); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 18px; margin-right: 12px; }
+.author-info h3 { font-size: 14px; color: #000; }
+.author-info p { font-size: 12px; color: #666; }
+h1 { font-size: 22px; font-weight: 700; margin: 20px 0 16px; color: #000; line-height: 1.3; }
+h2 { font-size: 16px; font-weight: 700; margin: 24px 0 12px; color: #0077B5; }
+p { margin-bottom: 14px; font-size: 15px; }
+.highlight { background: linear-gradient(to right, #e8f4fd, #f0f9ff); border-left: 3px solid #0077B5; padding: 16px 20px; margin: 20px 0; border-radius: 0 6px 6px 0; }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+.stat-card { background: #f8f9fa; border-radius: 8px; padding: 16px; text-align: center; }
+.stat-card .number { font-size: 28px; font-weight: 700; color: #0077B5; }
+.stat-card .label { font-size: 12px; color: #666; margin-top: 4px; }
+.pipeline { background: #1a1a2e; color: #fff; border-radius: 8px; padding: 24px; margin: 20px 0; }
+.pipeline h2 { color: #00D4AA; }
+.step { display: flex; align-items: flex-start; margin: 12px 0; }
+.step-num { background: #0077B5; color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-right: 12px; flex-shrink: 0; margin-top: 2px; }
+.step-content { flex: 1; }
+.step-content strong { color: #00D4AA; }
+.step-content span { color: #ccc; font-size: 14px; }
+.arrow { text-align: center; color: #0077B5; font-size: 18px; margin: 4px 0; }
+.insight { margin: 12px 0; padding: 12px 16px; background: #f8f9fa; border-radius: 6px; }
+.insight strong { color: #0077B5; }
+.cta { background: linear-gradient(135deg, #0077B5, #00A0DC); color: #fff; padding: 24px; border-radius: 8px; text-align: center; margin: 24px 0; }
+.cta p { color: #fff; font-size: 18px; font-weight: 600; margin: 0; }
+.tags { margin-top: 20px; }
+.tag { display: inline-block; background: #e8f4fd; color: #0077B5; padding: 4px 10px; border-radius: 12px; font-size: 12px; margin: 4px 4px 4px 0; }
+.separator { border: none; border-top: 1px solid #e8e8e8; margin: 20px 0; }
+.emoji { font-size: 18px; }
+</style>
+</head>
+<body>
+
+<div class="post-card">
+
+<div class="author">
+<div class="avatar">R</div>
+<div class="author-info">
+<h3>robinji</h3>
+<p>AI + Industrial Software | Building the future of physics simulation</p>
+</div>
+</div>
+
+<h1>I Used AI Agents to Write a 7-Chapter Technical Book in 2 Weeks</h1>
+
+<p>Not "I asked ChatGPT to write it." That would be plagiarism with extra steps.</p>
+
+<p>Here's what I actually did — and why I think <strong>"vibe publishing"</strong> is about to eat traditional technical writing alive.</p>
+
+<hr class="separator">
+
+<h2><span class="emoji">📖</span> The Book</h2>
+
+<div class="highlight">
+<strong>"PhysicsNeMo: From Zero to One"</strong><br>
+A hands-on tutorial teaching CAE engineers how to use NVIDIA's AI physics simulation SDK.<br>
+7 chapters · 50,000+ words · 56 runnable Python files.<br>
+From spring oscillators to Darcy flow to neural operators.<br>
+<a href="https://github.com/binbinao/physicsnemo-from-zero-to-one" style="color:#0077B5;">🔗 github.com/binbinao/physicsnemo-from-zero-to-one</a>
+</div>
+
+<p><strong>⏱️ Timeline:</strong> 14 days, start to finish.</p>
+<p>A traditional tech book takes 6–12 months. I did it in 2 weeks — not because I'm faster, but because I <em>orchestrated</em> differently.</p>
+
+<hr class="separator">
+
+<h2><span class="emoji">🧠</span> The System</h2>
+
+<p>I didn't "use AI to write." I built a <strong>multi-agent pipeline</strong>:</p>
+
+<div class="pipeline">
+<div class="step">
+<div class="step-num">1</div>
+<div class="step-content"><strong>Topic Scout Agent</strong><br><span>Scans NVIDIA docs, GitHub repos, and research papers → structured chapter plan</span></div>
+</div>
+<div class="arrow">↓</div>
+<div class="step">
+<div class="step-num">2</div>
+<div class="step-content"><strong>Plan Agent</strong><br><span>Produces detailed writing spec: section-by-section word count, tone, key points, figures, code blocks</span></div>
+</div>
+<div class="arrow">↓</div>
+<div class="step">
+<div class="step-num">3</div>
+<div class="step-content"><strong>Research Agent</strong><br><span>Pulls API docs, reads source code, finds real-world industrial use cases</span></div>
+</div>
+<div class="arrow">↓</div>
+<div class="step">
+<div class="step-num">4</div>
+<div class="step-content"><strong>Writing Agent (parallel! ×4)</strong><br><span>3–4 chapters writing simultaneously, each following the plan spec</span></div>
+</div>
+<div class="arrow">↓</div>
+<div class="step">
+<div class="step-num">5</div>
+<div class="step-content"><strong>Review Agent</strong><br><span>Checks technical accuracy, flags hallucinated APIs, broken code paths</span></div>
+</div>
+<div class="arrow">↓</div>
+<div class="step">
+<div class="step-num">6</div>
+<div class="step-content"><strong>Revision → Final</strong><br><span>Human-in-the-loop quality gate before publish</span></div>
+</div>
+</div>
+
+<hr class="separator">
+
+<h2><span class="emoji">📊</span> The Numbers</h2>
+
+<div class="stats">
+<div class="stat-card">
+<div class="number">180K</div>
+<div class="label">characters of polished prose</div>
+</div>
+<div class="stat-card">
+<div class="number">30h</div>
+<div class="label">human hours (plan + review)</div>
+</div>
+<div class="stat-card">
+<div class="number">7,400+</div>
+<div class="label">lines of runnable Python</div>
+</div>
+<div class="stat-card">
+<div class="number">30×</div>
+<div class="label">productivity multiplier</div>
+</div>
+</div>
+
+<p style="font-size:13px; color:#666;">Traditional estimate for equivalent book: 800–1,200 human hours. Not because AI "wrote the book" — but because it handled the 80% that's research, structuring, and first-draft generation.</p>
+
+<hr class="separator">
+
+<h2><span class="emoji">🔑</span> 5 Non-Obvious Learnings</h2>
+
+<div class="insight">
+<strong>1. Plans > Prompts.</strong> A 300-word detailed writing plan produces better output than a 30-word prompt every single time. The bottleneck is never "AI can't write" — it's "you haven't thought clearly enough about what you want."
+</div>
+
+<div class="insight">
+<strong>2. Parallel execution changes everything.</strong> Writing Ch3, Ch4, and Ch5 simultaneously? Impossible for a human. Trivial for agents. This is where the 30× comes from — concurrency, not speed.
+</div>
+
+<div class="insight">
+<strong>3. The Review Agent is the hero.</strong> First drafts are 70% good. The review agent catches the other 30% — wrong function names, deprecated APIs, logic gaps. Without it, you ship garbage.
+</div>
+
+<div class="insight">
+<strong>4. Human taste is the moat.</strong> Agents don't know what makes a <em>great</em> tutorial vs. a mediocre one. When to use a joke, when a diagram beats 500 words, when "start over" is the right call — that's the human job. And it's the hardest job.
+</div>
+
+<div class="insight">
+<strong>5. This isn't laziness — it's a role upgrade.</strong> From "solo writer" to "editor-in-chief + architect." You design the experience. Agents do the heavy lifting. You quality-control the output.
+</div>
+
+<hr class="separator">
+
+<h2><span class="emoji">💡</span> Why This Matters</h2>
+
+<p><strong>Traditional model:</strong> 1 author × 12 months = 1 book</p>
+<p><strong>Agent-orchestrated model:</strong> 1 architect × 2 weeks = 1 book</p>
+
+<p>If you're a domain expert sitting on 10 years of hard-won knowledge — the barrier to turning that into a published, useful artifact just dropped by <strong>95%</strong>.</p>
+
+<p>The question isn't "will AI replace writers?"</p>
+<p>It's <strong>"will domain experts who can orchestrate AI agents make traditional technical publishers obsolete?"</strong></p>
+
+<p>I think yes. And I think it happens in 2026.</p>
+
+<div class="cta">
+<p>I'm calling it <strong>Vibe Publishing</strong>. 🎵<br>Who's in?</p>
+</div>
+
+<hr class="separator">
+
+<h2><span class="emoji">🛠️</span> If You Want to Try This Yourself</h2>
+
+<p>• Start with a plan, not a prompt<br>
+• Break your book into independent chapters that can run in parallel<br>
+• Build a review step that checks against ground truth (docs, APIs, data)<br>
+• Budget 30% of your time for the human layer: narrative, taste, judgment<br>
+• Don't ship without running every code block yourself</p>
+
+<p><em>The future of publishing isn't AI-written books. It's human-architected, agent-executed, expert-reviewed knowledge products.</em></p>
+
+<p>👉 <strong>See the code:</strong> <a href="https://github.com/binbinao/physicsnemo-from-zero-to-one" style="color:#0077B5;">github.com/binbinao/physicsnemo-from-zero-to-one</a> — 56 files, three variants per chapter (raw PyTorch / PhysicsNeMo SDK / GPU+DDP). Clone, run, learn.</p>
+
+<div class="tags">
+<span class="tag">#AI</span>
+<span class="tag">#TechnicalWriting</span>
+<span class="tag">#PhysicsNeMo</span>
+<span class="tag">#NVIDIA</span>
+<span class="tag">#AIAgents</span>
+<span class="tag">#Productivity</span>
+<span class="tag">#FutureOfWork</span>
+<span class="tag">#VibeCoding</span>
+<span class="tag">#Publishing</span>
+</div>
+
+</div>
+
+</body>
+</html>

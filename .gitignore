@@ -6,5 +6,4 @@ outputs_gpu/
 data/*.pt
 *.pt
 *.onnx
-*.png
 .DS_Store
