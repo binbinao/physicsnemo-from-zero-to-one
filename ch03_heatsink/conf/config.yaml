@@ -1,0 +1,30 @@
+# Chapter 3: Heat Sink Configuration
+hidden: 128
+depth: 5
+steps: 3000
+lr: 0.001
+
+# Geometry
+fin_height: 20.0
+n_fins: 3
+
+# Physics
+k: 1.0
+Q: 0.0
+T_source: 100.0
+h_conv: 10.0
+T_inf: 0.0
+
+# Sampling
+n_interior: 3000
+n_bottom: 300
+n_side: 300
+n_robin: 500
+
+# Loss weights
+w_pde: 1.0
+w_bottom: 10.0
+w_side: 1.0
+w_robin: 5.0
+
+output_dir: outputs

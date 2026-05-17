@@ -1,0 +1,27 @@
+# Chapter 7: DrivAerNet Optimization Pipeline Config
+# ===================================================
+
+data:
+  n_samples: 2000
+  data_path: data/car_aero_data.pt
+  train_ratio: 0.8
+
+model:
+  in_features: 7
+  hidden_dim: 128
+  n_layers: 4
+  dropout: 0.1
+
+training:
+  epochs: 200
+  batch_size: 64
+  lr: 1.0e-3
+  weight_decay: 1.0e-4
+
+optimization:
+  n_trials: 500
+  method: optuna  # or random
+
+deploy:
+  onnx_path: outputs/cd_mlp.onnx
+  api_port: 8000

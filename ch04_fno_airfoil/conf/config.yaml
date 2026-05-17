@@ -1,0 +1,16 @@
+# Chapter 4: FNO Training Configuration
+width: 32
+modes_x: 12
+modes_y: 12
+n_layers: 4
+
+epochs: 30
+batch_size: 16
+lr: 0.001
+weight_decay: 0.0001
+
+n_samples: 200
+resolution: 64
+
+data_dir: data
+output_dir: outputs

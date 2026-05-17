@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pyo
+outputs/
+outputs_gpu/
+data/*.pt
+*.pt
+*.onnx
+*.png
+.DS_Store

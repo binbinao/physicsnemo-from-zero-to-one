@@ -1,0 +1,25 @@
+# ch01 SDK 版 Hydra 配置
+defaults:
+  - _self_
+
+arch:
+  fully_connected:
+    nr_layers: 4
+    layer_size: 32
+
+batch_size:
+  interior: 256
+
+scheduler:
+  type: tf_exponential_lr
+  decay_rate: 0.95
+  decay_steps: 1000
+
+optimizer:
+  type: adam
+  lr: 1.0e-3
+
+training:
+  rec_results_freq: 1000
+  rec_constraint_freq: 2000
+  max_steps: 5000

@@ -1,0 +1,13 @@
+# Chapter 6: AFNO Weather Prediction Configuration
+embed_dim: 64
+depth: 4
+mlp_ratio: 4.0
+
+epochs: 30
+batch_size: 8
+lr: 0.0005
+weight_decay: 0.00001
+
+lead_time: 1
+data_dir: data
+output_dir: outputs

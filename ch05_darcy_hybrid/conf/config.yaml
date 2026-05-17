@@ -1,0 +1,18 @@
+# Chapter 5: Hybrid FNO Configuration
+width: 32
+modes: 12
+n_layers: 4
+
+epochs: 50
+batch_size: 16
+lr: 0.001
+
+n_samples: 200
+resolution: 64
+n_train: 100
+
+# Physics-informed loss weights
+lambda_data: 1.0
+lambda_physics: 0.1
+
+output_dir: outputs

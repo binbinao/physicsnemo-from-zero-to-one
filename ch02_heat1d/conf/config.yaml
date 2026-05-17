@@ -1,0 +1,21 @@
+# Chapter 2 main Hydra config
+defaults:
+  - arch: small
+  - training: debug
+  - _self_
+
+# Physics
+alpha: 0.1
+
+# Sampling
+n_pde: 2000
+n_ic: 200
+n_bc: 200
+
+# Loss weights
+w_pde: 1.0
+w_ic: 10.0
+w_bc: 10.0
+
+# Output
+output_dir: outputs
