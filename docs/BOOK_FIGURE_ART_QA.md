@@ -239,8 +239,9 @@ flowchart LR
 
 - **提示词手册**：[BOOK_FIGURE_GEMINI_PROMPTS.md](BOOK_FIGURE_GEMINI_PROMPTS.md)  
 - **试稿目录**：`book/assets/gemini/`（验收后覆盖 `book/assets/`）  
-- **Issues**：#110（文档）· #111（P0 横幅+路线图）· #112（P1）· #113（P2）
+- **Issues**：#110（文档）· #111（P0）· #112（P1）· #113（P2）  
+- **配图决策（已确认 2026-05-19）**：[BOOK_FIGURE_MEDIA_DECISIONS.md](BOOK_FIGURE_MEDIA_DECISIONS.md) · P3 执行 [#115](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/115)
 
 ---
 
-*文档版本：v1.1 · 路线 A 已执行；路线 B 提示词与试稿进行中*
+*文档版本：v1.2 · 路线 A 已执行；路线 B P0–P2 试稿已覆盖（工业风横幅 v2，见 #113）*
