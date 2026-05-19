@@ -76,6 +76,10 @@ python scripts/check_env.py --tier 2
 
 [CLOUD_GPU_GUIDE.md](CLOUD_GPU_GUIDE.md) · [notebooks/colab_quickstart.ipynb](../notebooks/colab_quickstart.ipynb)
 
-## 版本锁定（计划）
+## 依赖文件
 
-正式 `requirements-*.txt` 见 Issue #13；当前以本文档 + 各章 README 为准。
+| 文件 | 用途 |
+|:---|:---|
+| [requirements-minimal.txt](../requirements-minimal.txt) | ch01–ch03 裸 PyTorch |
+| [requirements-full.txt](../requirements-full.txt) | SDK + ch07 |
+| [TESTED_ENVIRONMENT.md](TESTED_ENVIRONMENT.md) | 最近验证的 commit / Python / PyTorch |

@@ -5,7 +5,7 @@
 ## 当前状态
 
 - **硬件与训练时长**：见 [docs/HARDWARE_EXPECTATIONS.md](../docs/HARDWARE_EXPECTATIONS.md)（含分章 wall-clock、显存、定性 loss 趋势）。
-- **逐章数值 baseline**：待补充（Issue #16）；欢迎 PR 附上环境说明（GPU 型号、PyTorch 版本、commit hash）。
+- **逐章数值 baseline**：[BASELINE.md](BASELINE.md)（定性 loss 趋势与脚本）；欢迎 PR 在子目录附上实测数值。
 
 ## 建议本地记录格式
 

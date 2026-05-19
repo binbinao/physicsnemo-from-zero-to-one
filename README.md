@@ -17,10 +17,10 @@ A hands-on tutorial book for physics-informed neural networks (PINNs) and neural
 
 | 阶段 | 安装 |
 |:---|:---|
-| **第 1 天（ch01）** | `pip install "torch>=2.3" numpy matplotlib` — [QUICKSTART_DAY1](docs/QUICKSTART_DAY1.md) |
-| **ch01–ch03 裸 PyTorch** | 同上 |
-| **SDK 版 `*_sdk.py`** | + `nvidia-physicsnemo` `nvidia-physicsnemo.sym` `hydra-core` |
-| **全书 + ch07 部署** | + `optuna` `fastapi` `uvicorn` `onnx` |
+| **第 1 天（ch01）** | `pip install -r requirements-minimal.txt` — [QUICKSTART_DAY1](docs/QUICKSTART_DAY1.md) |
+| **ch01–ch03 裸 PyTorch** | `requirements-minimal.txt` |
+| **SDK + ch07** | `pip install -r requirements-full.txt` |
+| **验证快照** | [docs/TESTED_ENVIRONMENT.md](docs/TESTED_ENVIRONMENT.md) |
 
 **书—代码命令**：[docs/COMMAND_REFERENCE.md](docs/COMMAND_REFERENCE.md) · **分章说明**：各 `chXX_*/README.md`
 
@@ -31,6 +31,9 @@ A hands-on tutorial book for physics-informed neural networks (PINNs) and neural
 | A | [book/appendix_a_math.md](book/appendix_a_math.md) | 数学与符号速查 |
 | B | [book/appendix_b_cloud_gpu.md](book/appendix_b_cloud_gpu.md) | 云 GPU 与环境（速查） |
 | C | [book/appendix_c_troubleshooting.md](book/appendix_c_troubleshooting.md) | 常见踩坑 50 问 |
+| D | [book/appendix_d_pytorch_mini.md](book/appendix_d_pytorch_mini.md) | PyTorch 30 分钟最小集 |
+
+**学习路径**：[6 周计划](docs/STUDY_PLAN_6WEEKS.md) · **读完后**：[WHATS_NEXT](docs/WHATS_NEXT.md) · **训练基线**：[results/BASELINE.md](results/BASELINE.md)
 
 **无本地 GPU？** [云 GPU 分步指南](docs/CLOUD_GPU_GUIDE.md) · [Colab 笔记本](notebooks/colab_quickstart.ipynb) · [硬件预期表](docs/HARDWARE_EXPECTATIONS.md)
 

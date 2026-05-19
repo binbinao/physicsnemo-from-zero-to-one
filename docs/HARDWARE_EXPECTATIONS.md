@@ -141,7 +141,7 @@
 | ch05 | 加 `lambda_physics` 后小数据 val 往往优于纯数据 |
 | ch07 | val MSE 随 epoch 下降；优化后 Cd 低于 baseline 中心点 |
 
-更细的数值对照计划在 `results/README.md`（Issue #16）。
+更细的数值对照见 [results/BASELINE.md](../results/BASELINE.md)。
 
 ---
 
@@ -163,4 +163,4 @@ python scripts/check_env.py --chapter 4 # 该章必需包 + GPU 提示
 | ch03–ch04 | 20–30 min | 2 h+ |
 | ch05–ch07 | 30 min+ | 2 h+ |
 
-全书 6 周计划见 Issue #11（`docs/STUDY_PLAN_6WEEKS.md` 待补充）。
+全书 6 周计划见 [STUDY_PLAN_6WEEKS.md](STUDY_PLAN_6WEEKS.md)。

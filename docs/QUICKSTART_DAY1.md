@@ -16,10 +16,11 @@ source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -U pip
 ```
 
-## 3. 只装这 3 个包
+## 3. 只装最小依赖
 
 ```bash
-pip install "torch>=2.3" numpy matplotlib
+pip install -r requirements-minimal.txt
+# 或等价：pip install "torch>=2.3" numpy matplotlib
 ```
 
 不要在这一步安装 `nvidia-physicsnemo`（留给第 2 天或跑 SDK 版时再说）。

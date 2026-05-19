@@ -17,13 +17,13 @@
 | 7 | 书—代码命令对齐审计（Hydra 参数、文件名） | done | [#7](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/7) |
 | 8 | ch04：澄清翼型 vs Darcy、框架切换一页纸 | done | [#8](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/8) |
 | 9 | ch05→ch04 代码依赖：跳章警告与依赖图 | done | [#9](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/9) |
-| 10 | 可选「PyTorch 30 分钟最小集」或链到外部资源 | open | [#10](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/10) |
-| 11 | 6 周学习计划 + 读者自测（选 🟢/🔵/🟡 路径） | open | [#11](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/11) |
+| 10 | 可选「PyTorch 30 分钟最小集」或链到外部资源 | done | [#10](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/10) |
+| 11 | 6 周学习计划 + 读者自测（选 🟢/🔵/🟡 路径） | done | [#11](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/11) |
 | 12 | 云 GPU / Colab 实操指南（原附录 B 内容） | done | [#12](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/12) |
-| 13 | 依赖版本锁定（requirements-lock / 测试通过 tag） | open | [#13](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/13) |
-| 14 | 读完后路线图（官方 examples、真实数据、部署） | open | [#14](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/14) |
+| 13 | 依赖版本锁定（requirements-lock / 测试通过 tag） | done | [#13](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/13) |
+| 14 | 读完后路线图（官方 examples、真实数据、部署） | done | [#14](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/14) |
 | 15 | 全书训练时长 / 硬件预期汇总表 | done | [#15](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/15) |
-| 16 | 可复现 baseline（`results/` 或文档中的参考指标） | open | [#16](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/16) |
+| 16 | 可复现 baseline（`results/` 或文档中的参考指标） | done | [#16](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/16) |
 
 ---
 
@@ -170,4 +170,4 @@
 1. **阻塞阅读**：#1 附录、#2 配图、#3 版本、#6 章 README  
 2. **阻塞跑通**：#4 最小安装、#7 命令对齐、#9 ch05 依赖  
 3. **降低放弃率**：#12 云 GPU、#15 硬件表、#5 check_env  
-4. **长期质量**：#13 版本锁定、#16 baseline、#14 路线图、#10/#11 学习路径
+4. **长期质量**：#13 版本锁定、#16 baseline、#14 路线图、#10/#11 学习路径 — **已全部完成（16/16）**
