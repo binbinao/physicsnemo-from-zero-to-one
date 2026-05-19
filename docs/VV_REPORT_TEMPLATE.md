@@ -42,7 +42,9 @@
 
 - Top-K 候选数：  
 - 已回流 CFD 复核：□ 是 □ 否  
-- 复核后 $C_d$ 改善：___ %（[hifi_queue.csv](../ch07_drivaernet_optim/outputs/hifi_queue.csv)）
+- 批跑清单：`tools/cfd_batch/manifest.json`  
+- 复核汇总：[validation_summary.csv](../results/cfd_runs/validation_summary.csv)（`ingest_results.py` 生成）  
+- 复核后 $C_d$ 改善：___ %（对比 `predicted_cd` vs `cfd_cd` 列）
 
 ## 7. 结论
 

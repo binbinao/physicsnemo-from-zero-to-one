@@ -22,7 +22,8 @@
 | 章 | 验证 / 复核 |
 |:---|:---|
 | ch03 | `python ch03_heatsink/validator.py` → `outputs/validation_report.json` |
-| ch07 | `optimize.py` → `hifi_validation_queue.py` → `outputs/hifi_queue.csv` |
+| ch07 | `optimize.py` / `optimize_multi.py` → `hifi_validation_queue.py` → `tools/cfd_batch/` |
+| ch03 反演 | `heat_sink_inverse_joint.py`（联合训练）· `heat_sink_inverse.py`（扫描对照） |
 
 ## 数据档位（诚实标注）
 

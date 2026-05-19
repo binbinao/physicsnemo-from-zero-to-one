@@ -1,0 +1,37 @@
+[
+  {
+    "id": "C36",
+    "priority": "P0",
+    "number": 104,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/104",
+    "title": "CFD 批跑工作流骨架（deck/清单/对接 hifi_queue）"
+  },
+  {
+    "id": "C37",
+    "priority": "P0",
+    "number": 105,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/105",
+    "title": "ch03 联合反演 PINN（单训练学习 fin_height）"
+  },
+  {
+    "id": "C38",
+    "priority": "P1",
+    "number": 106,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/106",
+    "title": "ch07 多目标 Optuna 示例（Cd + 迎风面积代理）"
+  },
+  {
+    "id": "C39",
+    "priority": "P1",
+    "number": 107,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/107",
+    "title": "CFD 批跑结果回灌与 V&V 字段扩展"
+  },
+  {
+    "id": "C40",
+    "priority": "P2",
+    "number": 108,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/108",
+    "title": "教材与 START_HERE_CAE 更新 phase-3 能力"
+  }
+]

@@ -1,0 +1,4 @@
+#!/bin/bash
+# Copy to case work_dir and customize mesh/solver.
+# blockMesh && simpleFoam && postProcess ...
+# echo "cd=0.251" > result_cd.txt

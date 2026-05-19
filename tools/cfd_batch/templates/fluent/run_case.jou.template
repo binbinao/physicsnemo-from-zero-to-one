@@ -1,0 +1,6 @@
+; Fluent journal template — customize mesh import and report definitions
+/file/read-case-data "mesh.cas.h5"
+/solve/initialize-hybrid
+/solve/iterate 500
+/report/surface-integrals drag-coefficient () yes
+; User: export Cd to result_cd.txt via scheme or manual post
