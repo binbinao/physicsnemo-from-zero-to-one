@@ -11,9 +11,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 from pathlib import Path
 
+from cjk_font import configure_matplotlib_cjk
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 OUTPUT_DIR = REPO_ROOT / "book" / "assets"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+configure_matplotlib_cjk()
 
 try:
     import scienceplots  # noqa: F401
@@ -22,15 +26,6 @@ try:
 except ImportError:
     plt.style.use("ggplot")
 
-plt.rcParams["font.sans-serif"] = [
-    "PingFang SC",
-    "Heiti SC",
-    "Noto Sans CJK SC",
-    "Arial Unicode MS",
-    "DejaVu Sans",
-]
-plt.rcParams["font.family"] = "sans-serif"
-plt.rcParams["axes.unicode_minus"] = False
 plt.rcParams["figure.dpi"] = 150
 plt.rcParams["savefig.dpi"] = 150
 plt.rcParams["savefig.bbox"] = "tight"
