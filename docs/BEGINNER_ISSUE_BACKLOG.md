@@ -15,7 +15,7 @@
 | 5 | 增强 `scripts/check_env.py`：按章节检查可选依赖 | done | [#5](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/5) |
 | 6 | 每章添加 README：首选脚本 + 三档变体说明 | done | [#6](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/6) |
 | 7 | 书—代码命令对齐审计（Hydra 参数、文件名） | done | [#7](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/7) |
-| 8 | ch04：澄清翼型 vs Darcy、框架切换一页纸 | open（ch04 README+正文已部分覆盖） | [#8](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/8) |
+| 8 | ch04：澄清翼型 vs Darcy、框架切换一页纸 | done | [#8](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/8) |
 | 9 | ch05→ch04 代码依赖：跳章警告与依赖图 | done | [#9](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/9) |
 | 10 | 可选「PyTorch 30 分钟最小集」或链到外部资源 | open | [#10](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/10) |
 | 11 | 6 周学习计划 + 读者自测（选 🟢/🔵/🟡 路径） | open | [#11](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/11) |

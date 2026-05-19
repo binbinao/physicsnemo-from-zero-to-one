@@ -64,12 +64,13 @@ physicsnemo-from-zero-to-one/
 │   ├── heat_sink_inverse.py           # Inverse problem
 │   ├── equations.py                   # PDE definitions
 │   └── visualize.py
-├── ch04_fno_airfoil/                    # Chapter 4: Fourier Neural Operator
+├── ch04_fno_airfoil/                    # Chapter 4: FNO (airfoil narrative; default train = Darcy)
+│   ├── CH04_GUIDE.md                 # Why airfoil vs Darcy + two paths
 │   ├── fno_model.py                   # FNO from scratch
-│   ├── train_fno_mini.py             # Raw PyTorch training
+│   ├── train_fno_mini.py             # Default: Darcy synthetic data
 │   ├── train_fno_sdk.py              # PhysicsNeMo FNO
 │   ├── train_fno_gpu.py              # GPU + DDP + coord_features
-│   ├── dataset.py                    # Synthetic Darcy data
+│   ├── dataset.py                    # Darcy + optional airfoil synthetic
 │   └── visualize_airfoil.py
 ├── ch05_darcy_hybrid/                   # Chapter 5: Physics-Informed FNO
 │   ├── train_data_fno.py             # Data-only baseline

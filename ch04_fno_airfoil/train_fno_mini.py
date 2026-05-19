@@ -1,8 +1,9 @@
 """
-Chapter 4: FNO Training Script
-================================
-Train FNO2D on synthetic Darcy flow data.
-Generates data on-the-fly if not found.
+Chapter 4: FNO Training Script (Path A — Darcy default)
+=======================================================
+Train FNO2D on synthetic Darcy flow data (not AirfRANS).
+Chapter folder is named fno_airfoil for the aviation use case;
+see CH04_GUIDE.md for Path A (Darcy) vs Path B (airfoil).
 
 Usage:
     python train_fno_mini.py

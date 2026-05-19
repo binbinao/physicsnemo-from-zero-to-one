@@ -33,16 +33,19 @@ python heat_sink_train.py
 python visualize.py
 ```
 
-## ch04（Darcy FNO mini）
+## ch04（FNO：默认 Darcy，翼型为扩展路径）
+
+> 目录名 `fno_airfoil` = 工业场景；**默认训练 = Darcy**。见 [ch04_fno_airfoil/CH04_GUIDE.md](../ch04_fno_airfoil/CH04_GUIDE.md)。
+
+**路径 A（默认）**
 
 ```bash
 cd ch04_fno_airfoil
-python train_fno_mini.py
-python train_fno_mini.py epochs=50
-# 无 Hydra: python train_fno_mini.py --epochs 50
+python train_fno_mini.py --epochs 50
+# Hydra: python train_fno_mini.py epochs=50
 ```
 
-默认生成 **Darcy** 合成数据（`data/darcy_data.pt`）。翼型合成数据：
+**路径 B（翼型合成，可选）**
 
 ```bash
 python dataset.py --type airfoil --n_samples 100
