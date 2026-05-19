@@ -1,0 +1,39 @@
+{
+  "version": "1",
+  "solver": "mock_cfd",
+  "mode": "mock",
+  "cases": [
+    {
+      "case_id": "case_0001",
+      "params": {
+        "body_length": 5.1360295318449865,
+        "body_width": 2.1025114082794407,
+        "body_height": 1.2041712783187144,
+        "front_angle": 25.322419077326973,
+        "rear_angle": 17.52233009446337,
+        "ground_clearance": 0.14442156209414606,
+        "wheel_diameter": 0.5359596102001049
+      },
+      "predicted_cd": 0.4577980041503906,
+      "work_dir": "results/cfd_runs/case_0001",
+      "solver_cmd": "python \"/Users/duobinji/Documents/GitHub/physicsnemo-from-zero-to-one/tools/cfd_batch/mock_cfd_solver.py\"",
+      "status": "pending"
+    },
+    {
+      "case_id": "case_0002",
+      "params": {
+        "body_length": 4.684829137724085,
+        "body_width": 1.5325152889039984,
+        "body_height": 1.564526911140863,
+        "front_angle": 15.115723710618745,
+        "rear_angle": 6.9515477895583855,
+        "ground_clearance": 0.28977710745066665,
+        "wheel_diameter": 0.7896896099223678
+      },
+      "predicted_cd": 0.4594467580318451,
+      "work_dir": "results/cfd_runs/case_0002",
+      "solver_cmd": "python \"/Users/duobinji/Documents/GitHub/physicsnemo-from-zero-to-one/tools/cfd_batch/mock_cfd_solver.py\"",
+      "status": "pending"
+    }
+  ]
+}

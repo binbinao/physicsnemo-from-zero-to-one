@@ -2,10 +2,9 @@
 """
 Chapter 3: Joint inversion — learn fin_height in ONE PINN training.
 
-Contrast with heat_sink_inverse.py (brute-force retrain per height).
-
 Usage:
-    python heat_sink_inverse_joint.py --target_temp 40 --steps 3000
+    python heat_sink_inverse_joint.py --target_temp 40
+    python heat_sink_inverse_joint.py --fast          # 800 steps, CI/demo
 """
 
 from __future__ import annotations
@@ -22,8 +21,6 @@ from equations import heat_conduction_2d, robin_boundary
 
 
 class ParametricPINN(nn.Module):
-    """(x, y) -> T; geometry resampled each step from learnable fin_height."""
-
     def __init__(self, hidden: int = 64, depth: int = 4):
         super().__init__()
         layers = [nn.Linear(2, hidden), nn.Tanh()]
@@ -43,21 +40,25 @@ def train_joint(
     h_min: float,
     h_max: float,
     device: str,
-) -> tuple[float, float]:
+    log_every: int,
+    tol_temp: float,
+) -> tuple[float, float, int]:
     model = ParametricPINN().to(device)
     fin_height = nn.Parameter(torch.tensor([h_init], dtype=torch.float32, device=device))
     optimizer = torch.optim.Adam(
-        [{"params": model.parameters()}, {"params": [fin_height], "lr": 5e-4}],
-        lr=1e-3,
+        [{"params": model.parameters(), "lr": 1e-3}, {"params": [fin_height], "lr": 2e-2}],
     )
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=max(steps, 1))
     scale = 30.0
     T_source, k, h_conv, T_inf = 100.0, 1.0, 10.0, 0.0
-    w_target = 50.0
+    w_target = 200.0
+    last_step = steps
 
     for step in range(1, steps + 1):
         optimizer.zero_grad()
         h = torch.clamp(fin_height, h_min, h_max)
-        geo = HeatSinkGeometry(fin_height=float(h.detach().item()))
+        # Resample domain at current h (non-diff through CSG; tip loss drives h)
+        geo = HeatSinkGeometry(fin_height=float(h.item()))
 
         xi, yi = geo.sample_interior(1500)
         x = torch.tensor(xi / scale, device=device, dtype=torch.float32).unsqueeze(1)
@@ -84,54 +85,68 @@ def train_joint(
             robin_boundary(Tr, xrt, yrt, nxrt, nyrt, k=k, h_conv=h_conv, T_inf=T_inf) ** 2
         ).mean()
 
-        tip_y = 10.0 + float(h.item())
-        x_tips = np.linspace(-18, 18, 80)
-        y_tips = np.full(80, tip_y)
-        xt = torch.tensor(x_tips / scale, device=device, dtype=torch.float32).unsqueeze(1)
-        yt = torch.tensor(y_tips / scale, device=device, dtype=torch.float32).unsqueeze(1)
+        # Differentiable tip line w.r.t. fin_height (do not detach h here)
+        tip_y_norm = (10.0 + h.squeeze()) / scale
+        xt = (
+            torch.linspace(-18.0, 18.0, 80, device=device, dtype=torch.float32) / scale
+        ).unsqueeze(1)
+        yt = tip_y_norm.expand_as(xt)
         T_tip = model(xt, yt).mean()
         loss_obs = (T_tip - target_temp) ** 2
 
         loss = loss_pde + 10.0 * loss_bot + 5.0 * loss_robin + w_target * loss_obs
         loss.backward()
         optimizer.step()
+        scheduler.step()
 
-        if step % 500 == 0 or step == 1:
+        err = float(abs(T_tip.item() - target_temp))
+        if step % log_every == 0 or step == 1:
             print(
                 f"step {step:5d}  h={float(h.item()):6.2f} mm  "
-                f"T_tip={float(T_tip.item()):7.3f}  loss={loss.item():.4e}"
+                f"T_tip={float(T_tip.item()):7.3f}  |err|={err:.3f}  loss={loss.item():.4e}"
             )
+        if err < tol_temp:
+            last_step = step
+            print(f"Early stop at step {step}: |T_tip-target| < {tol_temp}")
+            break
+    else:
+        last_step = steps
 
     h_final = float(torch.clamp(fin_height, h_min, h_max).item())
     with torch.no_grad():
-        tip_y = 10.0 + h_final
-        xt = torch.tensor(
-            np.linspace(-18, 18, 80) / scale, device=device, dtype=torch.float32
+        h_t = torch.tensor([h_final], device=device, dtype=torch.float32)
+        tip_y_norm = (10.0 + h_t.squeeze()) / scale
+        xt = (
+            torch.linspace(-18.0, 18.0, 80, device=device, dtype=torch.float32) / scale
         ).unsqueeze(1)
-        yt = torch.tensor(
-            np.full(80, tip_y) / scale, device=device, dtype=torch.float32
-        ).unsqueeze(1)
+        yt = tip_y_norm.expand_as(xt)
         T_tip_f = float(model(xt, yt).mean().item())
-    return h_final, T_tip_f
+    return h_final, T_tip_f, last_step
 
 
 def main():
     p = argparse.ArgumentParser(description="Joint inversion for fin height")
     p.add_argument("--target_temp", type=float, default=40.0)
     p.add_argument("--steps", type=int, default=3000)
+    p.add_argument("--fast", action="store_true", help="800 steps, looser tol (demo/CI)")
     p.add_argument("--h_init", type=float, default=20.0)
     p.add_argument("--h_min", type=float, default=5.0)
     p.add_argument("--h_max", type=float, default=40.0)
     args = p.parse_args()
+    steps = 800 if args.fast else args.steps
+    tol = 2.5 if args.fast else 0.5
+    log_every = 200 if args.fast else 500
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    print(f"Joint inversion on {device} (single training, learnable fin_height)")
-    h, T_tip = train_joint(
-        args.target_temp, args.steps, args.h_init, args.h_min, args.h_max, device
+    print(f"Joint inversion on {device} (steps={steps}, tol={tol})")
+    h, T_tip, used = train_joint(
+        args.target_temp, steps, args.h_init, args.h_min, args.h_max, device, log_every, tol
     )
-    print(f"\nResult: fin_height={h:.2f} mm  T_tip_avg={T_tip:.3f}  target={args.target_temp}")
+    print(f"\nResult: fin_height={h:.2f} mm  T_tip={T_tip:.3f}  target={args.target_temp}  steps={used}")
     os.makedirs("outputs", exist_ok=True)
     with open("outputs/inverse_joint_result.txt", "w", encoding="utf-8") as f:
-        f.write(f"fin_height_mm={h}\nT_tip={T_tip}\ntarget={args.target_temp}\n")
+        f.write(
+            f"fin_height_mm={h}\nT_tip={T_tip}\ntarget={args.target_temp}\nsteps={used}\n"
+        )
 
 
 if __name__ == "__main__":

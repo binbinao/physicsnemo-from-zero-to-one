@@ -235,4 +235,12 @@ flowchart LR
 
 ---
 
-*文档版本：v1.0-executed · 配图已按路线 A 重出；P2 美术统一（箭头压字等）可另开 issue*
+## 十一、路线 B：Gemini / 插画升级
+
+- **提示词手册**：[BOOK_FIGURE_GEMINI_PROMPTS.md](BOOK_FIGURE_GEMINI_PROMPTS.md)  
+- **试稿目录**：`book/assets/gemini/`（验收后覆盖 `book/assets/`）  
+- **Issues**：#110（文档）· #111（P0 横幅+路线图）· #112（P1）· #113（P2）
+
+---
+
+*文档版本：v1.1 · 路线 A 已执行；路线 B 提示词与试稿进行中*
