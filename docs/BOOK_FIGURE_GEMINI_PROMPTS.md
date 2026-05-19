@@ -70,7 +70,9 @@ blurry text, Chinese characters, kanji, watermark, logo clutter, anime, cyberpun
 - [ ] 宽图 ≥ 1200 px；横幅约 3:1
 - [ ] `LICENSE_NOTES.md` 已含 AI 配图声明
 
-## 自动化试稿（Cursor / 其他）
+## 自动化试稿（Cursor 图像生成 / Gemini）
+
+本仓库 P0 试稿使用 **Cursor 内置图像生成**（提示词按上表），输出至 `book/assets/gemini/`。在 [Google AI Studio](https://aistudio.google.com/) 用同一提示词可换 **Gemini 2.0 Flash 图像** 重出并对比。
 
 仓库内试稿可放在 `book/assets/gemini/`。验收通过后：
 
