@@ -33,7 +33,9 @@ pip install torch numpy matplotlib nvidia-physicsnemo hydra-core optuna fastapi 
 | 附录 | 文件 | 内容 |
 |:---|:---|:---|
 | A | [book/appendix_a_math.md](book/appendix_a_math.md) | 数学与符号速查 |
-| B | [book/appendix_b_cloud_gpu.md](book/appendix_b_cloud_gpu.md) | 云 GPU 与环境 |
+| B | [book/appendix_b_cloud_gpu.md](book/appendix_b_cloud_gpu.md) | 云 GPU 与环境（速查） |
+
+**无本地 GPU？** [云 GPU 分步指南](docs/CLOUD_GPU_GUIDE.md) · [Colab 笔记本](notebooks/colab_quickstart.ipynb) · [硬件预期表](docs/HARDWARE_EXPECTATIONS.md)
 | C | [book/appendix_c_troubleshooting.md](book/appendix_c_troubleshooting.md) | 常见踩坑 50 问 |
 
 ## 小白读者改进跟踪

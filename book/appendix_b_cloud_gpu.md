@@ -1,7 +1,9 @@
 # 附录 B · 云 GPU 选型与一键环境
 
 > **用途**：本地无 NVIDIA GPU、或显存不足时，用云主机跑第 4–7 章。  
-> **5 分钟目标**：拿到一台带 CUDA 的机器，clone 仓库并跑通 `scripts/check_env.py`。
+> **5 分钟目标**：拿到一台带 CUDA 的机器，clone 仓库并跑通 `scripts/check_env.py`。  
+> **分步实操（Colab / AutoDL / 阿里云）**：见 [`docs/CLOUD_GPU_GUIDE.md`](../docs/CLOUD_GPU_GUIDE.md)  
+> **一键 Colab 笔记本**：[`notebooks/colab_quickstart.ipynb`](../notebooks/colab_quickstart.ipynb)（在 Colab 中打开即可）
 
 ---
 
@@ -74,17 +76,53 @@ python scripts/check_env.py
 
 ## B.5 Google Colab（免费 T4）
 
-1. 打开 [Google Colab](https://colab.research.google.com/)，运行时 → 更改运行时类型 → **T4 GPU**。  
-2. 新建单元格：
+**推荐：直接打开配套笔记本**
+
+1. 打开 [Google Colab](https://colab.research.google.com/)
+2. **文件 → 在 GitHub 中打开**，粘贴：  
+   `https://github.com/binbinao/physicsnemo-from-zero-to-one/blob/main/notebooks/colab_quickstart.ipynb`
+3. **运行时 → 更改运行时类型 → T4 GPU**
+4. 从上到下运行所有单元格（含 ch01 PINN + ch04 FNO mini）
+
+**手动单行版**（不用笔记本时）：
 
 ```python
-!git clone https://github.com/binbinao/physicsnemo-from-zero-to-one.git
+!git clone --depth 1 https://github.com/binbinao/physicsnemo-from-zero-to-one.git
 %cd physicsnemo-from-zero-to-one
-!pip install -q "torch>=2.3" numpy matplotlib
+!pip install -q numpy matplotlib hydra-core
 !python scripts/check_env.py
+!python ch01_hello/pinn_spring.py --epochs 800
+%cd ch04_fno_airfoil && python train_fno_mini.py --epochs 30
 ```
 
-3. 第 4 章起在 Colab 中运行对应 `train_*_mini.py` 或 `train_*_gpu.py`（注意 Colab 磁盘与会话时长）。
+**Colab 注意**：会话约 12h 断开；大文件用 Google Drive 挂载（笔记本末 cell 有示例）。详见 [CLOUD_GPU_GUIDE §2](../docs/CLOUD_GPU_GUIDE.md#2-google-colab逐步)。
+
+---
+
+## B.9 AutoDL 五步开机（国内）
+
+1. [autodl.com](https://www.autodl.com/) 租用 **PyTorch 2.x + CUDA 12** 镜像 + RTX 4090 / A100  
+2. 打开 **JupyterLab** 或 SSH 终端  
+3. `git clone` 本仓库并 `pip install`（同 B.3）  
+4. `python scripts/check_env.py` 确认 CUDA ✅  
+5. 训完 **关机** 停止计费  
+
+分步截图级说明：[CLOUD_GPU_GUIDE §3](../docs/CLOUD_GPU_GUIDE.md#3-autodl国内常用)
+
+---
+
+## B.10 各章在云上的首选命令
+
+| 章 | 命令 |
+|:---|:---|
+| ch01 | `python ch01_hello/pinn_spring.py --epochs 1000` |
+| ch02 | `python ch02_heat1d/heat1d_pinn_raw.py` |
+| ch04 | `cd ch04_fno_airfoil && python train_fno_mini.py --epochs 50` |
+| ch05 | 先确保 ch04 存在；`cd ch05_darcy_hybrid && python train_data_fno.py` |
+| ch06 | `cd ch06_fourcastnet_mini && python train_afno_mini.py --epochs 30` |
+| ch07 | `cd ch07_drivaernet_optim && python train.py` |
+
+显存与时长表：[HARDWARE_EXPECTATIONS.md](../docs/HARDWARE_EXPECTATIONS.md)
 
 ---
 

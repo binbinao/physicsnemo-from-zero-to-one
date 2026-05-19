@@ -19,10 +19,10 @@
 | 9 | ch05→ch04 代码依赖：跳章警告与依赖图 | open | [#9](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/9) |
 | 10 | 可选「PyTorch 30 分钟最小集」或链到外部资源 | open | [#10](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/10) |
 | 11 | 6 周学习计划 + 读者自测（选 🟢/🔵/🟡 路径） | open | [#11](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/11) |
-| 12 | 云 GPU / Colab 实操指南（原附录 B 内容） | open | [#12](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/12) |
+| 12 | 云 GPU / Colab 实操指南（原附录 B 内容） | done | [#12](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/12) |
 | 13 | 依赖版本锁定（requirements-lock / 测试通过 tag） | open | [#13](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/13) |
 | 14 | 读完后路线图（官方 examples、真实数据、部署） | open | [#14](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/14) |
-| 15 | 全书训练时长 / 硬件预期汇总表 | open | [#15](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/15) |
+| 15 | 全书训练时长 / 硬件预期汇总表 | open（初版见 HARDWARE_EXPECTATIONS.md） | [#15](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/15) |
 | 16 | 可复现 baseline（`results/` 或文档中的参考指标） | open | [#16](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/16) |
 
 ---
