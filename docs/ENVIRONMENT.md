@@ -59,7 +59,7 @@ pip install "torch>=2.3" numpy matplotlib nvidia-physicsnemo nvidia-physicsnemo.
 | ch06 | `train_afno_mini.py` | 1 | 建议 8GB |
 | ch07 | `train.py` | 1；Optuna 要 Tier 3 | 建议 8GB |
 
-完整表：[DEPENDENCIES_BY_CHAPTER.md](DEPENDENCIES_BY_CHAPTER.md)
+完整表：[DEPENDENCIES_BY_CHAPTER.md](DEPENDENCIES_BY_CHAPTER.md) · 硬件/时长：[HARDWARE_EXPECTATIONS.md](HARDWARE_EXPECTATIONS.md)
 
 ## 验证
 

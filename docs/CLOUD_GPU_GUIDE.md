@@ -116,7 +116,7 @@ ls -la data/   # 应生成 darcy_data.pt
 | ch06 | 8–16 GB | rollout 更长 |
 | ch07 | 8 GB（toy） / 24 GB+ | Optuna 多 trial 另计 |
 
-详见 [HARDWARE_EXPECTATIONS.md](HARDWARE_EXPECTATIONS.md)（若已创建）或附录 B 表。
+详见 [HARDWARE_EXPECTATIONS.md](HARDWARE_EXPECTATIONS.md)。
 
 ---
 

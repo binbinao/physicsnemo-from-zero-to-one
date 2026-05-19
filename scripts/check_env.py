@@ -257,7 +257,7 @@ def list_chapters() -> None:
         gpu = "建议" if meta["gpu"] else "可选"
         print(f"ch{ch:02d}  {meta['tier']:>4}  {gpu:>4}  {meta['title']}")
     print("\n用法: python scripts/check_env.py --chapter N")
-    print("文档: docs/ENVIRONMENT.md · docs/DEPENDENCIES_BY_CHAPTER.md")
+    print("文档: docs/ENVIRONMENT.md · docs/HARDWARE_EXPECTATIONS.md")
 
 
 def parse_args() -> argparse.Namespace:
