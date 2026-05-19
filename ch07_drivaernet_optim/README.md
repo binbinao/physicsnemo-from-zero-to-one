@@ -15,8 +15,8 @@ python optimize.py --checkpoint outputs/best.pt --n_trials 50
 |:---|:---|
 | 1. 数据 | `data/generate_toy_cars.py`（按需） |
 | 2. 训练 | `train.py` |
-| 3. 优化 | `optimize.py`（可选 Optuna，含 OOD 警告） |
-| 3b. CFD 复核队列 | `hifi_validation_queue.py` → `hifi_queue.csv` |
+| 3. 优化 | `optimize.py`（单目标 Cd）· `optimize_multi.py`（Cd + 迎风面积） |
+| 3b. CFD 复核队列 | `hifi_validation_queue.py` → [tools/cfd_batch](../tools/cfd_batch/README.md) |
 | 4. 导出 | `export_onnx.py` |
 | 5. 部署 | `api/app.py` |
 

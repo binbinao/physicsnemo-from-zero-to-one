@@ -44,6 +44,7 @@ A hands-on tutorial book for physics-informed neural networks (PINNs) and neural
 - 第一轮（#1–#16）：已完成 → [BEGINNER_ISSUE_BACKLOG](docs/BEGINNER_ISSUE_BACKLOG.md)
 - 第二轮审阅（#17–#53）：已完成 → [REVIEW_ROUND2_BACKLOG](docs/REVIEW_ROUND2_BACKLOG.md)
 - **CAE 审阅（#54–#88）**：已完成 → [CAE_REVIEW_BACKLOG](docs/CAE_REVIEW_BACKLOG.md) · [START_HERE_CAE](docs/START_HERE_CAE.md)
+- **CAE Phase 3（#104–#108）**：CFD 批跑 / 联合反演 / 多目标优化 → [tools/cfd_batch](tools/cfd_batch/README.md)
 
 ## Directory Structure
 

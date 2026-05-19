@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CFD batch manifest",
+  "type": "object",
+  "properties": {
+    "version": { "type": "string" },
+    "solver": { "enum": ["openfoam", "fluent", "starccm", "custom"] },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["case_id", "params"],
+        "properties": {
+          "case_id": { "type": "string" },
+          "params": { "type": "object" },
+          "predicted_cd": { "type": "number" },
+          "work_dir": { "type": "string" },
+          "solver_cmd": { "type": "string" },
+          "status": { "enum": ["pending", "running", "done", "failed"] }
+        }
+      }
+    }
+  }
+}

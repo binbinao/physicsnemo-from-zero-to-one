@@ -31,6 +31,7 @@ python heat1d_train.py -m arch=small,large lr=1e-3,1e-4
 cd ch03_heatsink
 python heat_sink_train.py          # 结束写 outputs/validation_report.json
 python validator.py --checkpoint outputs/heat_sink.pt
+python heat_sink_inverse_joint.py --target_temp 40 --steps 2000
 python visualize.py
 ```
 
@@ -79,6 +80,8 @@ python data/generate_toy_cars.py   # 若 data/ 为空
 python train.py --epochs 200
 python optimize.py --checkpoint outputs/best.pt --n_trials 100
 python hifi_validation_queue.py --checkpoint outputs/best.pt --top_k 5
+python optimize_multi.py --checkpoint outputs/best.pt --n_trials 100
+python ../../tools/cfd_batch/import_hifi_queue.py --csv outputs/hifi_queue.csv
 python export_onnx.py --checkpoint outputs/best.pt
 ```
 

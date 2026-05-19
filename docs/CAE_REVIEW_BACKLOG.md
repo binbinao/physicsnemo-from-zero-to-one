@@ -15,3 +15,15 @@
 | #84–#88 | P3 | C31–C35 | done |
 
 **入口**：[START_HERE_CAE.md](START_HERE_CAE.md)
+
+## Phase 3（原「刻意未做」· #104–#108）
+
+| GH | P | ID | 状态 |
+|:---|:---|:---|:---|
+| [#104](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/104) | P0 | C36 CFD 批跑骨架 | done |
+| [#105](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/105) | P0 | C37 联合反演 PINN | done |
+| [#106](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/106) | P1 | C38 多目标 Optuna | done |
+| [#107](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/107) | P1 | C39 CFD 结果回灌 | done |
+| [#108](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/108) | P2 | C40 教材/导读更新 | done |
+
+映射：`docs/issues/cae-phase3/phase3_issue_map.json`
