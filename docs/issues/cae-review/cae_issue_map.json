@@ -1,0 +1,247 @@
+[
+  {
+    "id": "C1",
+    "priority": "P0",
+    "title": "ch03 落地 Validator（参考解/残差报告）",
+    "number": 54,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/54"
+  },
+  {
+    "id": "C2",
+    "priority": "P0",
+    "title": "反问题：书—码对齐（非一次训练联合反演）",
+    "number": 55,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/55"
+  },
+  {
+    "id": "C3",
+    "priority": "P0",
+    "title": "ch04 行业节按 Darcy / 翼型分叉叙述",
+    "number": 56,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/56"
+  },
+  {
+    "id": "C4",
+    "priority": "P0",
+    "title": "ch07 高保真复核闭环（脚本/文档）",
+    "number": 57,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/57"
+  },
+  {
+    "id": "C5",
+    "priority": "P0",
+    "title": "ch07 数据档位诚实标注（toy vs DrivAerNet）",
+    "number": 58,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/58"
+  },
+  {
+    "id": "C6",
+    "priority": "P0",
+    "title": "ch00 弱化「无网格/直接喂几何」表述",
+    "number": 59,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/59"
+  },
+  {
+    "id": "C7",
+    "priority": "P1",
+    "title": "CAE 单位与无量纲化指南",
+    "number": 60,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/60"
+  },
+  {
+    "id": "C8",
+    "priority": "P1",
+    "title": "瞬态 vs 稳态：ch02–ch03 衔接说明",
+    "number": 61,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/61"
+  },
+  {
+    "id": "C9",
+    "priority": "P1",
+    "title": "ch03 明确 2D 微缩 vs 3D Icepak",
+    "number": 62,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/62"
+  },
+  {
+    "id": "C10",
+    "priority": "P1",
+    "title": "ch05 FD 物理损失 vs FEM 通量形式说明",
+    "number": 63,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/63"
+  },
+  {
+    "id": "C11",
+    "priority": "P1",
+    "title": "ch04 湍流/RANS 标签与训练数据口径",
+    "number": 64,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/64"
+  },
+  {
+    "id": "C12",
+    "priority": "P1",
+    "title": "CAE 守恒/残差检查清单",
+    "number": 65,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/65"
+  },
+  {
+    "id": "C13",
+    "priority": "P1",
+    "title": "ch01 行业表：FNO 扫参表述时机",
+    "number": 66,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/66"
+  },
+  {
+    "id": "C14",
+    "priority": "P1",
+    "title": "ch00 本书物理场覆盖范围说明",
+    "number": 67,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/67"
+  },
+  {
+    "id": "C15",
+    "priority": "P1",
+    "title": "CAE 训练数据生成 SOP 骨架",
+    "number": 68,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/68"
+  },
+  {
+    "id": "C16",
+    "priority": "P1",
+    "title": "网格收敛对代理模型影响（文档）",
+    "number": 69,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/69"
+  },
+  {
+    "id": "C17",
+    "priority": "P1",
+    "title": "多保真概念与本书边界（文档）",
+    "number": 70,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/70"
+  },
+  {
+    "id": "C18",
+    "priority": "P1",
+    "title": "ch07 OOD/设计空间包络检查",
+    "number": 71,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/71"
+  },
+  {
+    "id": "C19",
+    "priority": "P1",
+    "title": "toy→真实数据迁移检查表",
+    "number": 72,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/72"
+  },
+  {
+    "id": "C20",
+    "priority": "P1",
+    "title": "ch07 checkpoint 数据/版本元数据",
+    "number": 73,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/73"
+  },
+  {
+    "id": "C21",
+    "priority": "P2",
+    "title": "ch07 优化约束扩展说明（工程约束）",
+    "number": 74,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/74"
+  },
+  {
+    "id": "C22",
+    "priority": "P2",
+    "title": "多目标气动优化（文档延伸）",
+    "number": 75,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/75"
+  },
+  {
+    "id": "C23",
+    "priority": "P2",
+    "title": "部署生产化差距说明（Triton/API）",
+    "number": 76,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/76"
+  },
+  {
+    "id": "C24",
+    "priority": "P2",
+    "title": "ONNX 与 CAE 求解器集成说明",
+    "number": 77,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/77"
+  },
+  {
+    "id": "C25",
+    "priority": "P2",
+    "title": "工业级/API 变动风险说明",
+    "number": 78,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/78"
+  },
+  {
+    "id": "C26",
+    "priority": "P2",
+    "title": "ch03 TensorBoard/Monitor 书码对齐",
+    "number": 79,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/79"
+  },
+  {
+    "id": "C27",
+    "priority": "P2",
+    "title": "ch04 调参图「待替换」注释清理",
+    "number": 80,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/80"
+  },
+  {
+    "id": "C28",
+    "priority": "P2",
+    "title": "ch05 PhysicsInformer 与仓库代码对照注",
+    "number": 81,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/81"
+  },
+  {
+    "id": "C29",
+    "priority": "P2",
+    "title": "硬件表：3D 级 PINN 资源免责声明",
+    "number": 82,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/82"
+  },
+  {
+    "id": "C30",
+    "priority": "P2",
+    "title": "许可证合规说明",
+    "number": 83,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/83"
+  },
+  {
+    "id": "C31",
+    "priority": "P3",
+    "title": "START_HERE_CAE 导读",
+    "number": 84,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/84"
+  },
+  {
+    "id": "C32",
+    "priority": "P3",
+    "title": "V&V 报告模板（可填）",
+    "number": 85,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/85"
+  },
+  {
+    "id": "C33",
+    "priority": "P3",
+    "title": "参考解对照实验设计（文档）",
+    "number": 86,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/86"
+  },
+  {
+    "id": "C34",
+    "priority": "P3",
+    "title": "PINN/FNO/传统 CFD 决策树",
+    "number": 87,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/87"
+  },
+  {
+    "id": "C35",
+    "priority": "P3",
+    "title": "CAE 延伸阅读（V&V40/NAFEMS）",
+    "number": 88,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/88"
+  }
+]

@@ -19,8 +19,11 @@ python heat_sink_train.py
 | 文件 | 用途 |
 |:---|:---|
 | `heat_sink_geometry.py` | CSG 几何 |
-| `heat_sink_inverse.py` | 反问题 |
+| `heat_sink_inverse.py` | 反问题（参数扫描演示，非联合反演） |
+| `validator.py` | CAE 残差报告 → `outputs/validation_report.json` |
 | `visualize.py` | 结果可视化 |
+
+训练结束自动生成验证报告。2D 微缩，非 Icepak 3D 签审级。
 
 ## 教材
 

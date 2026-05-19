@@ -11,6 +11,9 @@ Reads data from data/car_aero_data.pt (run data/generate_toy_cars.py first).
 import os
 import sys
 import argparse
+import subprocess
+from datetime import datetime, timezone
+
 import numpy as np
 import torch
 import torch.nn as nn
@@ -104,6 +107,14 @@ def train(args):
 
         if val_mse < best_val:
             best_val = val_mse
+            try:
+                git_commit = subprocess.run(
+                    ["git", "rev-parse", "--short", "HEAD"],
+                    capture_output=True, text=True, check=True,
+                ).stdout.strip()
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                git_commit = "unknown"
+            data_path = os.path.join(_SCRIPT_DIR, "data", "car_aero_data.pt")
             ckpt = {
                 "epoch": epoch,
                 "model_state": model.state_dict(),
@@ -114,6 +125,14 @@ def train(args):
                 "param_names": data["param_names"],
                 "param_ranges": data["param_ranges"],
                 "args": vars(args),
+                "meta": {
+                    "data_tier": "toy_synthetic",
+                    "data_path": data_path,
+                    "git_commit": git_commit,
+                    "trained_at_utc": datetime.now(timezone.utc).isoformat(),
+                    "n_samples": int(n),
+                    "note": "Not DrivAerNet production data unless you replace car_aero_data.pt",
+                },
             }
             torch.save(ckpt, os.path.join(args.out_dir, "best.pt"))
 

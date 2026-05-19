@@ -2,7 +2,8 @@
 
 > **用途**：选型云 GPU、安排学习计划、判断「慢是否正常」。  
 > **基准环境**：微缩默认 epoch / 分辨率；在 **RTX 4070 12GB** 与 **Colab T4 16GB** 上定性验证，非严格 benchmark。  
-> **原则**：看**数量级与趋势**；换 CPU、驱动、PyTorch 版本会有偏差。
+> **原则**：看**数量级与趋势**；换 CPU、驱动、PyTorch 版本会有偏差。  
+> **CAE 免责（C29）**：表中 ch03 等为 **2D 微缩 PINN**；对标 Icepak **3D 瞬态封装** 通常需更大显存与更长训练，不在本书微缩验证范围内。
 
 相关文档：[ENVIRONMENT.md](ENVIRONMENT.md) · [CLOUD_GPU_GUIDE.md](CLOUD_GPU_GUIDE.md) · [COMMAND_REFERENCE.md](COMMAND_REFERENCE.md)
 

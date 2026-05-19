@@ -10,7 +10,8 @@ This demonstrates how PINNs enable inverse design:
      |T_tip_avg - T_target|
 
 For simplicity, we re-train a small PINN for each candidate fin_height
-(brute-force approach suitable for demonstration).
+(brute-force approach suitable for demonstration — NOT joint inversion
+in a single PINN training as described in some textbook PINN papers).
 
 Usage:
     python heat_sink_inverse.py

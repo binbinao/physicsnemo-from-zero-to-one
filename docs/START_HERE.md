@@ -29,6 +29,7 @@ python ch01_hello/pinn_spring.py --epochs 500
 |:---|:---|
 | 目录 `fno_airfoil` 为何跑 Darcy？ | [ch04_fno_airfoil/CH04_GUIDE.md](../ch04_fno_airfoil/CH04_GUIDE.md) |
 | ch3 用 sym，ch4 换主框架？ | [FRAMEWORK_SWITCH.md](FRAMEWORK_SWITCH.md) |
+| **CAE / 签审** | [START_HERE_CAE.md](START_HERE_CAE.md) |
 | 没 GPU | [CLOUD_GPU_GUIDE.md](CLOUD_GPU_GUIDE.md) · [Colab](../notebooks/colab_quickstart.ipynb) |
 | 装不上 PhysicsNeMo | [ENVIRONMENT.md](ENVIRONMENT.md) §「SDK 装不上」 |
 | 训练 loss 是否正常？ | [results/BASELINE.md](../results/BASELINE.md) |

@@ -175,6 +175,14 @@ def train(cfg: dict):
     }, ckpt_path)
     print(f"\nCheckpoint saved: {ckpt_path}")
 
+    # CAE-style validation report (see validator.py)
+    from validator import run_validation, save_report
+    cfg_val = dict(cfg)
+    cfg_val["scale"] = scale
+    report = run_validation(model, geo, cfg_val, device=device)
+    vpath = save_report(report, out_dir)
+    print(f"Validation report: {vpath}  pass_all={report['pass_all']}")
+
     return model, history, geo, scale
 
 

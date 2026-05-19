@@ -39,8 +39,22 @@ def load_model(ckpt_path):
     return model, ckpt
 
 
+def check_design_space(params_dict, param_ranges, rtol=0.02):
+    """Return (ok, warnings) for parameters outside training ranges."""
+    warnings = []
+    for name, val in params_dict.items():
+        lo, hi = param_ranges[name]
+        span = hi - lo
+        if val < lo - rtol * span or val > hi + rtol * span:
+            warnings.append(f"{name}={val:.4f} outside [{lo}, {hi}]")
+    return len(warnings) == 0, warnings
+
+
 def predict_cd(model, params_dict, param_names, param_ranges):
     """Predict Cd from a parameter dictionary."""
+    ok, warns = check_design_space(params_dict, param_ranges)
+    if not ok:
+        print("[WARN] OOD design:", "; ".join(warns))
     x = torch.tensor([[params_dict[n] for n in param_names]], dtype=torch.float32)
     with torch.no_grad():
         cd = model(x).item()
@@ -141,6 +155,8 @@ def main():
         pct = (val - lo) / (hi - lo) * 100
         print(f"    {name:20s} = {val:.3f}  ({pct:.0f}% of range)")
     print(f"{'='*55}")
+    print("\nNext: export Top-K for CFD re-validation:")
+    print(f"  python hifi_validation_queue.py --checkpoint {args.checkpoint}")
 
 
 if __name__ == "__main__":
