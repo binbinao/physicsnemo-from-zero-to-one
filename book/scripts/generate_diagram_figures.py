@@ -26,6 +26,10 @@ plt.rcParams.update(
     }
 )
 C = plt.cm.tab10.colors
+BLUE = "#2E86AB"
+ORANGE = "#E07A2F"
+FREQ_BG = "#D6EAF5"
+SPATIAL_BG = "#F5F5F5"
 
 
 def save(name: str) -> None:
@@ -148,17 +152,150 @@ def triangle_relation(name: str, labels: tuple[str, str, str], center: str) -> N
     save(name)
 
 
+def _pipeline_box(
+    ax,
+    x: float,
+    y: float,
+    w: float,
+    h: float,
+    label: str,
+    *,
+    fc: str = "white",
+    ec: str = "#333",
+) -> None:
+    ax.add_patch(
+        mpatches.FancyBboxPatch(
+            (x, y),
+            w,
+            h,
+            boxstyle="round,pad=0.02",
+            fc=fc,
+            ec=ec,
+            lw=1.2,
+        )
+    )
+    ax.text(x + w / 2, y + h / 2, label, ha="center", va="center", fontsize=9, color="#222")
+
+
+def _arrow_h(ax, x0: float, x1: float, y: float) -> None:
+    ax.annotate("", xy=(x1, y), xytext=(x0, y), arrowprops=dict(arrowstyle="->", lw=1.8, color="#444"))
+
+
 def fno_block() -> None:
-    fig, ax = plt.subplots(figsize=(12, 3))
+    """F4.5 — structured FNO block (English labels, freq-domain band)."""
+    labels = [
+        "Input\nfield",
+        "Lifting",
+        "FFT",
+        "Truncate\nmodes (k)",
+        "Spectral\nConv",
+        "iFFT",
+        "Activation +\nPointwise",
+        "Output\nfield",
+    ]
+    n = len(labels)
+    fig_w = max(14, n * 1.55)
+    fig, ax = plt.subplots(figsize=(fig_w, 4.2))
+    ax.set_xlim(0, n * 1.45 + 0.3)
+    ax.set_ylim(0, 1)
     ax.axis("off")
-    boxes = ["输入 u(x)", "FFT", "频域卷积", "iFFT", "输出 u'(x)"]
-    for i, b in enumerate(boxes):
-        x = i * 2.2
-        ax.add_patch(mpatches.FancyBboxPatch((x, 0.3), 1.8, 0.5, boxstyle="round", fc=C[i % 5], alpha=0.35, ec="black"))
-        ax.text(x + 0.9, 0.55, b, ha="center", va="center", fontsize=10)
-        if i < len(boxes) - 1:
-            ax.annotate("", xy=(x + 1.95, 0.55), xytext=(x + 2.05, 0.55), arrowprops=dict(arrowstyle="->", lw=2))
+
+    # Frequency-domain band (steps 2–5: FFT .. iFFT)
+    band_x0, band_x1 = 1.35, 5.85
+    ax.add_patch(
+        mpatches.Rectangle(
+            (band_x0, 0.12),
+            band_x1 - band_x0,
+            0.76,
+            fc=FREQ_BG,
+            ec=BLUE,
+            lw=1.0,
+            ls="--",
+            alpha=0.85,
+        )
+    )
+    ax.text(
+        (band_x0 + band_x1) / 2,
+        0.05,
+        "Frequency domain",
+        ha="center",
+        fontsize=8,
+        color=BLUE,
+        style="italic",
+    )
+    ax.text(0.55, 0.05, "Spatial domain", ha="center", fontsize=8, color="#666", style="italic")
+
+    box_w, box_h, y0 = 1.15, 0.42, 0.38
+    for i, lab in enumerate(labels):
+        x = 0.25 + i * 1.45
+        in_freq = 2 <= i <= 5
+        fc = FREQ_BG if in_freq else SPATIAL_BG
+        ec = BLUE if in_freq else "#555"
+        _pipeline_box(ax, x, y0, box_w, box_h, lab, fc=fc, ec=ec)
+        if i < n - 1:
+            _arrow_h(ax, x + box_w + 0.02, x + 1.45 - 0.02, y0 + box_h / 2)
+
+    ax.text(n * 0.72, 0.92, "One FNO block", ha="center", fontsize=13, fontweight="bold", color="#222")
     save("f4_5_fno_block.png")
+
+
+def domain_constraint_stack() -> None:
+    """F3.6 — PhysicsNeMo-Sym Domain / Constraint stack (English labels)."""
+    fig, ax = plt.subplots(figsize=(11, 6.5))
+    ax.set_xlim(0, 10)
+    ax.set_ylim(0, 10)
+    ax.axis("off")
+
+    def box(cx: float, cy: float, w: float, h: float, text: str, fc: str) -> None:
+        ax.add_patch(
+            mpatches.FancyBboxPatch(
+                (cx - w / 2, cy - h / 2),
+                w,
+                h,
+                boxstyle="round,pad=0.03",
+                fc=fc,
+                ec="#333",
+                lw=1.2,
+            )
+        )
+        ax.text(cx, cy, text, ha="center", va="center", fontsize=9)
+
+    def arr(x0: float, y0: float, x1: float, y1: float) -> None:
+        ax.annotate("", xy=(x1, y1), xytext=(x0, y0), arrowprops=dict(arrowstyle="->", lw=1.6, color="#444"))
+
+    box(2.0, 8.2, 2.8, 0.9, "CSG Geometry\n(base + fins)", "#E8F4FC")
+    box(5.0, 8.2, 2.2, 0.9, "Domain", BLUE)
+    arr(3.4, 8.2, 3.9, 8.2)
+
+    box(2.0, 6.0, 2.6, 0.75, "HeatConduction2D\n(interior PDE)", "#FFF3E0")
+    box(5.8, 6.0, 2.4, 0.75, "InteriorConstraint", ORANGE)
+    arr(3.3, 6.0, 4.6, 6.0)
+    arr(5.8, 6.35, 5.0, 7.75)
+
+    for i, (lab, y) in enumerate(
+        [
+            ("Dirichlet BC", 4.5),
+            ("Neumann BC", 3.5),
+            ("Robin BC", 2.5),
+        ]
+    ):
+        box(2.0, y, 2.4, 0.65, lab, "#FFF3E0")
+        box(5.8, y, 2.5, 0.65, "BoundaryConstraint", ORANGE)
+        arr(3.2, y, 4.55, y)
+        arr(5.8, y + 0.32, 5.0, 7.75)
+
+    box(2.0, 0.9, 2.4, 0.7, "Neural Network\nT = f(x,y)", "#E8F8E8")
+    box(5.0, 0.9, 1.8, 0.7, "Nodes", "#F0F0F0")
+    box(7.2, 0.9, 1.5, 0.7, "Solver", "#F0F0F0")
+    box(9.0, 0.9, 1.6, 0.7, "Validator", "#F0F0F0")
+    arr(3.2, 0.9, 4.1, 0.9)
+    arr(5.9, 0.9, 6.45, 0.9)
+    arr(7.95, 0.9, 8.2, 0.9)
+    for cy in (4.5, 3.5, 2.5, 6.0):
+        arr(5.0, 1.25, 5.0, cy - 0.35)
+
+    ax.text(5.0, 9.55, "physicsnemo-sym assembly", ha="center", fontsize=12, fontweight="bold")
+    save("f3_6_domain_constraint.png")
 
 
 def operator_mapping() -> None:
@@ -231,7 +368,7 @@ def main() -> None:
     heatsink_geom()
     csg_union()
     h_flow(["几何", "BC 标注", "采样", "训练"], "f3_5_boundary_conditions.png", "边界条件示意")
-    h_flow(["Domain", "Constraint", "Solver", "Validator"], "f3_6_domain_constraint.png", "Sym 结构")
+    domain_constraint_stack()
     h_flow(["观测温度", "反演 k", "优化设计"], "f3_8_inverse_flow.png", "反问题")
     h_flow(["CAD", "Icepak", "PINN", "优化", "复核"], "f3_9_design_loop.png", "散热设计闭环")
     banner("第 4 章", "FNO · 翼型 / Darcy 代理", "f4_0_banner.png", C[3])
@@ -278,4 +415,11 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+
+    if len(sys.argv) > 1 and sys.argv[1] == "--vector-only":
+        print("Regenerating vector-style diagrams only →", OUT)
+        fno_block()
+        domain_constraint_stack()
+    else:
+        main()

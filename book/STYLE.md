@@ -38,7 +38,8 @@
 - **图号**：`F{章号}.{序}`，子图 `F2.7.1` 仅当同一节多图且需细分子序。
 - **表号**：`T{章号}.{序}`，标题 `### T1.1 …`。
 - **图题**：`![F1.0 简短说明](assets/f1_0_banner.png)`；生产用描述写在 [assets/FIGURE_MANIFEST.md](assets/FIGURE_MANIFEST.md)，不进正文。
-- **Mermaid**：源文件可保留；读者版以 `assets/*.png` 为准（与图题并存时，PNG 优先）。
+- **Mermaid**：印前与静态阅读以 `assets/*.png` 为准；**勿**与定稿图并列同内容的 `` ```text` `` 竖排流程或 Mermaid（三叠）。架构/算法流程见 [BOOK_FIGURE_OUTPUT_FORMS.md](../docs/BOOK_FIGURE_OUTPUT_FORMS.md)。
+- **架构框图**（FNO block、Domain/Constraint 等）：用脚本可复现的矢量风格 PNG（`book/scripts/generate_diagram_figures.py --vector-only`）或 Figma/SVG 源稿，图内英文、图题中文。
 
 ## 章末块（顺序固定）
 
