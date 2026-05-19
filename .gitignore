@@ -7,3 +7,5 @@ data/*.pt
 *.pt
 *.onnx
 .DS_Store
+pinn_results.png
+*_results.png
