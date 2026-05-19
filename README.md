@@ -7,7 +7,7 @@
 
 A hands-on tutorial book for physics-informed neural networks (PINNs) and neural operators using NVIDIA PhysicsNeMo. Every chapter provides **three variants**: raw PyTorch (educational), PhysicsNeMo SDK (CPU-verified), and GPU production (DDP + AMP).
 
-> **中文读者请从这里开始 → [docs/START_HERE.md](docs/START_HERE.md)**（教材在 `book/ch00.md`，第 1 天安装见 [QUICKSTART_DAY1](docs/QUICKSTART_DAY1.md)）
+> **中文读者请从这里开始 → [docs/START_HERE.md](docs/START_HERE.md)**（教材目录 [book/SUMMARY.md](book/SUMMARY.md)，正文从 [book/ch00.md](book/ch00.md)；第 1 天安装见 [QUICKSTART_DAY1](docs/QUICKSTART_DAY1.md)）
 
 > 📖 **Built with multi-agent orchestration in 2 weeks.** See [Vibe Publishing](#vibe-publishing) below.
 

@@ -11,14 +11,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 from pathlib import Path
 
+from cjk_font import configure_matplotlib_cjk
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 OUT = REPO_ROOT / "book" / "assets"
 OUT.mkdir(parents=True, exist_ok=True)
 
+configure_matplotlib_cjk()
 plt.rcParams.update(
     {
-        "font.sans-serif": ["PingFang SC", "Heiti SC", "DejaVu Sans"],
-        "axes.unicode_minus": False,
         "figure.dpi": 150,
         "savefig.dpi": 150,
         "savefig.bbox": "tight",

@@ -27,6 +27,16 @@ import argparse
 import numpy as np
 import torch
 
+PARAM_NAMES = [
+    "body_length",
+    "body_width",
+    "body_height",
+    "front_angle",
+    "rear_angle",
+    "ground_clearance",
+    "wheel_diameter",
+]
+
 
 def compute_cd(params: np.ndarray) -> np.ndarray:
     """
@@ -97,14 +107,10 @@ def generate_car_data(n_samples: int = 1000, seed: int = 42) -> dict:
     np.random.seed(seed)
     cd = compute_cd(params)
 
-    param_names = ["body_length", "body_width", "body_height",
-                   "front_angle", "rear_angle", "ground_clearance",
-                   "wheel_diameter"]
-
     return {
         'params': torch.tensor(params),       # (N, 7)
         'cd': torch.tensor(cd),               # (N,)
-        'param_names': param_names,
+        'param_names': PARAM_NAMES,
         'param_ranges': {
             'body_length': (3.5, 5.5),
             'body_width': (1.5, 2.2),

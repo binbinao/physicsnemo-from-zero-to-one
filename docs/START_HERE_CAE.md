@@ -24,6 +24,7 @@
 | ch03 | `python ch03_heatsink/validator.py` → `outputs/validation_report.json` |
 | ch07 | `optimize.py` / `optimize_multi.py` → `hifi_validation_queue.py` → `tools/cfd_batch/` |
 | ch03 反演 | `heat_sink_inverse_joint.py`（联合训练）· `heat_sink_inverse.py`（扫描对照） |
+| **闭环演示** | `python scripts/run_cae_closed_loop_demo.py` — 见 [CAE_CLOSED_LOOP_DEMO.md](CAE_CLOSED_LOOP_DEMO.md)（mock CFD，无需商业许可证） |
 
 ## 数据档位（诚实标注）
 

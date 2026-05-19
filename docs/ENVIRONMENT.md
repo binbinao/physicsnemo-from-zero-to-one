@@ -34,6 +34,19 @@ pip install "torch>=2.3" numpy matplotlib
 pip install "torch>=2.3" numpy matplotlib
 ```
 
+### 教材配图（`book/assets/`）
+
+含中文标注的图由 **Matplotlib 程序化出图**（非文生图 AI），须能加载仓库内置 **Noto Sans SC**：
+
+```bash
+python scripts/download_book_fonts.py   # 若缺少 book/assets/fonts/NotoSansSC-Regular.otf
+python scripts/check_figure_cjk.py
+python book/scripts/generate_diagram_figures.py
+python book/scripts/generate_all_figures.py
+```
+
+详见 [BOOK_FIGURE_ART_QA.md](BOOK_FIGURE_ART_QA.md)、[book/assets/fonts/README.md](../book/assets/fonts/README.md)。
+
 ### Tier 2 — SDK 版（ch01–ch07 的 `*_sdk.py`）
 
 ```bash

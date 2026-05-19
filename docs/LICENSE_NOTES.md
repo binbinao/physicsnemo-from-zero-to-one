@@ -17,3 +17,8 @@
 ## 数据
 
 - DrivAerNet、AirfRANS 等公开数据集各有 **引用与使用条款**；商用前请阅读原始协议。
+
+## 教材 AI 配图（路线 B）
+
+- 部分章横幅、路线图、行业示意图可能由 **生成式 AI**（如 Google Gemini、Cursor 图像生成）制作，提示词见 [BOOK_FIGURE_GEMINI_PROMPTS.md](BOOK_FIGURE_GEMINI_PROMPTS.md)。  
+- 定稿文件若位于 `book/assets/gemini/`，合并前须经编辑验收；**数据类曲线/场图** 仍为 Matplotlib 程序化生成，非文生图。
