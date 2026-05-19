@@ -18,9 +18,12 @@
 | F1.8 | f1_7_physicsnemo_arch.png | PhysicsNeMo 双框架堆栈 | matplotlib |
 | F2.1–F2.8 | f2_* | 热传导 loss、场演化、配点、调参扫描 | matplotlib |
 | F3.0 | f3_0_banner.png | 散热片章横幅 | **gemini** |
-| F3.1–F3.9 | f3_*（除 f3_0） | 几何、BC、CSG、闭环等 | matplotlib |
+| F3.1–F3.8 | f3_*（除 f3_0/9） | 几何、BC、CSG 等 | matplotlib |
+| F3.9 | f3_9_design_loop.png | 散热设计闭环 | **gemini** |
 | F4.0 | f4_0_banner.png | 翼型/FNO 章横幅 | **gemini** |
-| F4.1–F4.9 | f4_*（除 f4_0） | 结构、预测场、Cp、调参 | matplotlib |
+| F4.1 | f4_1_framework_switch.png | sym/main 框架切换 | **gemini** |
+| F4.3 | f4_3_pinn_vs_fno.png | 单工况 vs 多工况 | **gemini** |
+| F4.x | f4_*（其余） | 预测场、Cp、调参 | matplotlib |
 | F5.0 | f5_0_banner.png | Darcy 章横幅 | **gemini** |
 | F5.7 | f5_8_industry_map.png | 多孔介质行业映射 | **gemini** |
 | F5.x | f5_*（其余） | 混合 FNO、λ 扫描等 | matplotlib |
