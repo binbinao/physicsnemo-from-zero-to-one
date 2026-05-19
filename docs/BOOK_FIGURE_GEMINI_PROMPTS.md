@@ -58,6 +58,23 @@ AVOID: cherry blossoms, flowers, pastel floral frames, decorative nature borders
 | `f2_1_roadmap.png` | F2.1 | Chapter 2 flow: Hook → PDE → 3 losses → Hydra → Tuning, same visual language as f1_1. |
 | `f0_1_ai4s_timeline.png` | F0.1 | Timeline 2020-2026 with icons: protein, graph, modulus logo style blocks, weather, car; events AlphaFold, PIML, Modulus, GraphCast, PhysicsNeMo, v2.0. English event names only. |
 
+## P3 — 概念/流程图（12 张，Issue #115）
+
+| 文件 | 图号 | 提示词主体 |
+|:---|:---|:---|
+| `f2_4_physics_intuition.png` | F2.4 | Three overlaid Gaussian heat pulses on a rod (narrow to wide), arrows showing diffusion over time t=0, t=0.1, t=0.3. Label "heat diffusion". No axis numbers. |
+| `f3_1_progression.png` | F3.1 | Three-step progression left to right: 1D rod sketch → 2D finned heatsink → 3D chip package cutaway. Labels "1D", "2D", "3D". |
+| `f3_5_boundary_conditions.png` | F3.5 | Heatsink cross-section with color-coded edges: red fixed T, blue heat flux, green convection h. English BC labels only. |
+| `f3_8_inverse_flow.png` | F3.8 | Flow: measured temperature field → invert conductivity k → design update. Icons for sensor, neural net, CAD. |
+| `f4_4_neural_operator.png` | F4.4 | Left: one input shape; center: neural operator block; right: fan of many output fields. Label "one model, many cases". |
+| `f4_6_data_pipeline.png` | F4.6 | Linear pipeline: raw CFD meshes → preprocessing → tensor dataset → FNO training. CFD/ML engineering icons. |
+| `f5_1_triangle.png` | F5.1 | Equilateral triangle with vertices PINN, FNO, Data; center label PINO. Clean infographic, not 3D. |
+| `f5_3_darcy_physics.png` | F5.3 | Porous media slice with flow arrows; permeability field a(x) as shaded band; Darcy law hint. |
+| `f6_1_afno_block.png` | F6.1 | Block diagram: input weather field → AFNO spectral blocks → output field; small FFT motif. |
+| `f6_3_autoregressive.png` | F6.3 | Time sequence t, t+Δ, t+2Δ with weather maps feeding back into model arrow loop. |
+| `f7_1_pipeline.png` | F7.1 | Six chevrons: Data → Train → HPO → Optimize → ONNX → API. Automotive Cd context subtle. |
+| `f1_7_physicsnemo_arch.png` | F1.8 | Two-layer stack: bottom physicsnemo-sym (PINN/PDE), top physicsnemo (FNO/train). Bridge arrow between layers. |
+
 ## 负面提示词（Negative prompt，Gemini / Imagen 可用时附加）
 
 ```

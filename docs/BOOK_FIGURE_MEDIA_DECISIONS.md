@@ -191,8 +191,8 @@
 
 | 动作 | 状态 |
 |:---|:---|
-| 合并 PR #114（22 张 Gemini 定稿） | 待合并 |
-| Issue P3：12 张 Gemini 重绘 | 已登记 |
+| 合并 PR #114（22 张 Gemini 定稿） | ✅ 已合并 |
+| Issue #115 P3：12 张 Gemini 重绘 | ✅ 试稿已入库 |
 | Figma：F4.5、F3.6（+ 可选 F1.8） |  backlog，不阻塞 P3 |
 | Matplotlib 26 张 | 冻结，仅 CJK/数据更新 |
 
