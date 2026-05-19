@@ -14,7 +14,15 @@ python book/scripts/generate_diagram_figures.py
 
 **依赖**：`matplotlib`、`numpy`；可选 `scienceplots`（未安装时自动回退 `ggplot` 样式）。
 
+## 两个 assets 目录
+
+| 路径 | 用途 |
+|:---|:---|
+| **`book/assets/`** | 教材插图（`ch*.md` 里 `![](assets/...)`） |
+| **`assets/`（仓库根）** | 非正文插图，如章末公众号二维码占位 [`wechat_qrcode.png`](../../assets/wechat_qrcode.png) |
+
+章末「扫码关注」图为**占位**，可替换为正式二维码后覆盖根目录文件。
+
 ## 说明
 
 - 配图为教学示意，部分为合成数据可视化，非论文级实验复现图。
-- 公众号二维码占位图位于仓库根目录 [`assets/wechat_qrcode.png`](../../assets/wechat_qrcode.png)。

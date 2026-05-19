@@ -6,13 +6,13 @@
 
 | 项 | 值 |
 |:---|:---|
-| **Git commit** | `5de0cb7`（2026-05，小白 issue 批次完成后） |
+| **Git commit** | 以 `main` 最新为准（本地：`git rev-parse --short HEAD`） |
 | **Python** | 3.12 |
 | **PyTorch** | 2.9.x（CUDA 与 CPU 均测过 check_env） |
 | **OS** | macOS / Linux |
 
 ```bash
-git checkout 5de0cb7   # 可选：锁定到验证提交
+git fetch origin && git checkout main && git pull   # 与 Colab/协作者保持一致
 pip install -r requirements-minimal.txt
 python scripts/check_env.py --chapter 1
 ```

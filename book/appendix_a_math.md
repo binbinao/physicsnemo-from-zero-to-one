@@ -116,4 +116,5 @@ $$\frac{\partial \hat{u}}{\partial x} = \frac{\partial \hat{u}}{\partial \text{N
 ---
 
 ➡️ **附录 B**：[云 GPU 与环境](appendix_b_cloud_gpu.md)  
-➡️ **附录 C**：[常见踩坑 50 问](appendix_c_troubleshooting.md)
+➡️ **附录 C**：[常见踩坑 50 问](appendix_c_troubleshooting.md)  
+➡️ **附录 D**：[PyTorch 最小集](appendix_d_pytorch_mini.md)

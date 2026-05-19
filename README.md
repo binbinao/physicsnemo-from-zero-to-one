@@ -2,12 +2,14 @@
 
 [![GitHub](https://img.shields.io/badge/GitHub-binbinao%2Fphysicsnemo--from--zero--to--one-blue?logo=github)](https://github.com/binbinao/physicsnemo-from-zero-to-one)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python)](https://www.python.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-red?logo=pytorch)](https://pytorch.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.3%2B-red?logo=pytorch)](https://pytorch.org/)
 [![PhysicsNeMo](https://img.shields.io/badge/PhysicsNeMo-2.0-green?logo=nvidia)](https://github.com/NVIDIA/physicsnemo)
 
 A hands-on tutorial book for physics-informed neural networks (PINNs) and neural operators using NVIDIA PhysicsNeMo. Every chapter provides **three variants**: raw PyTorch (educational), PhysicsNeMo SDK (CPU-verified), and GPU production (DDP + AMP).
 
-> 📖 **Built with multi-agent orchestration in 2 weeks.** See the [Vibe Publishing story](https://github.com/binbinao/physicsnemo-from-zero-to-one#vibe-publishing).
+> **中文读者请从这里开始 → [docs/START_HERE.md](docs/START_HERE.md)**（教材在 `book/ch00.md`，第 1 天安装见 [QUICKSTART_DAY1](docs/QUICKSTART_DAY1.md)）
+
+> 📖 **Built with multi-agent orchestration in 2 weeks.** See [Vibe Publishing](#vibe-publishing) below.
 
 ---
 
@@ -37,14 +39,18 @@ A hands-on tutorial book for physics-informed neural networks (PINNs) and neural
 
 **无本地 GPU？** [云 GPU 分步指南](docs/CLOUD_GPU_GUIDE.md) · [Colab 笔记本](notebooks/colab_quickstart.ipynb) · [硬件预期表](docs/HARDWARE_EXPECTATIONS.md)
 
-## 小白读者改进跟踪
+## 读者改进跟踪
 
-正在根据读者反馈逐项改进教程与仓库，详见 [Issue Backlog](docs/BEGINNER_ISSUE_BACKLOG.md) 与 [GitHub Issues（beginner 标签）](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues?q=is%3Aissue+label%3Abeginner)。
+- 第一轮（#1–#16）：已完成 → [BEGINNER_ISSUE_BACKLOG](docs/BEGINNER_ISSUE_BACKLOG.md)
+- 第二轮审阅（#17–#53）：进行中 → [REVIEW_ROUND2_BACKLOG](docs/REVIEW_ROUND2_BACKLOG.md)
 
 ## Directory Structure
 
 ```
 physicsnemo-from-zero-to-one/
+├── book/                                # Textbook ch00–ch07, appendices, assets/
+├── docs/                                # START_HERE, ENVIRONMENT, study plan, …
+├── notebooks/                           # Colab quickstart
 ├── scripts/
 │   └── check_env.py                    # Environment self-check
 ├── ch01_hello/                          # Chapter 1: Hello PINN
@@ -161,7 +167,7 @@ This entire codebase (56 files, 7,400+ lines) was created in **2 weeks** using m
 - ✅ **All CPU variants verified** to converge on real hardware
 - 🧑‍💻 **Human-in-the-loop** for architecture, taste, and quality control
 
-Read the full story: [I Used AI Agents to Write a 7-Chapter Technical Book in 2 Weeks](#)
+Read the full story in the repository commit history and chapter READMEs; multi-agent workflow is summarized in each chapter's delivery notes.
 
 ## License
 

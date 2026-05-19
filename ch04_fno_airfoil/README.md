@@ -16,7 +16,7 @@ python train_fno_mini.py --epochs 30
 | 路径 | 做什么 | 命令 |
 |:---|:---|:---|
 | **A · Darcy（默认）** | 练通 FNO 训练循环 | `train_fno_mini.py` |
-| **B · 翼型合成** | 仅生成/查看翼型式合成数据 | `python dataset.py --type airfoil` → `visualize_airfoil.py` |
+| **B · 翼型合成** | 仅生成/查看翼型式合成数据 | `dataset.py --type airfoil` → `visualize_airfoil.py`（默认 ckpt 为 Darcy，仅作演示） |
 | **B · 完整翼型** | AirfRANS / 真实 CFD 数据 | 见 `book/ch04.md` 完整版节，24GB+ |
 
 ## 三档脚本

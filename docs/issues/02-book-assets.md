@@ -1,3 +1,4 @@
+> **已关闭（历史模板）**：对应 beginner issue 已完成，内容仅供归档。
 ## 背景
 
 各章 Markdown 引用 `assets/f*.png`，仓库无 `book/assets/`，文中有大量 `IMAGE-TODO`。

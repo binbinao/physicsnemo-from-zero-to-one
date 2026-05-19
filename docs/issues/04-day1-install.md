@@ -1,3 +1,4 @@
+> **已关闭（历史模板）**：对应 beginner issue 已完成，内容仅供归档。
 ## 背景
 
 ch01 快速通道建议安装 sym，README 说 ch01–ch03 裸 PyTorch 可跑。小白不知道第一天该装什么。

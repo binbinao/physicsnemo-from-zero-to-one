@@ -114,3 +114,24 @@
 - [ ] W5 ch05
 - [ ] W6 ch06 + ch07 + WHATS_NEXT
 ```
+
+---
+
+## 章节小测验（自测，答案见下）
+
+1. **ch01**：PINN 相比 MLP 多出来的损失项是什么？（提示：PDE / IC）
+2. **ch02**：Hydra 里加大 `w_ic` 一般为了压哪类误差？
+3. **ch03**：`Domain` 与 `Constraint` 各描述什么？
+4. **ch04**：为何目录叫 `airfoil` 默认脚本却训 Darcy？
+5. **ch05**：`lambda_physics` 变大时，物理残差项在总损失里占什么变化？
+
+<details>
+<summary>参考答案（先自己做再点开）</summary>
+
+1. PDE 残差损失（+ 边界/初值），可不依赖标注数据。  
+2. 初值（IC）误差；过大可能导致 PDE 项相对变弱。  
+3. Domain=求解域与方程；Constraint=边界/初值等约束。  
+4. 工业叙事用翼型；教学默认用更小 Darcy 合成数据跑通 FNO 循环（见 CH04_GUIDE）。  
+5. 物理残差权重上升；小数据时 test 可能更稳，但过大可能拖累数据拟合。
+
+</details>

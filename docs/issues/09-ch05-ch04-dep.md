@@ -1,3 +1,4 @@
+> **已关闭（历史模板）**：对应 beginner issue 已完成，内容仅供归档。
 ## 背景
 
 `ch05_darcy_hybrid` 通过 `sys.path` 引用 `ch04_fno_airfoil` 的 `fno_model` 与数据。跳章会 `ModuleNotFoundError`。

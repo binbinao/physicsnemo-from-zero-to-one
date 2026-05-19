@@ -149,4 +149,5 @@ python scripts/check_env.py
 ---
 
 ➡️ **附录 A**：[数学速查](appendix_a_math.md)  
-➡️ **附录 C**：[常见踩坑 50 问](appendix_c_troubleshooting.md)
+➡️ **附录 C**：[常见踩坑 50 问](appendix_c_troubleshooting.md)  
+➡️ **附录 D**：[PyTorch 最小集](appendix_d_pytorch_mini.md)

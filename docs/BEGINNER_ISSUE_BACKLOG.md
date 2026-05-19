@@ -1,8 +1,8 @@
 # 小白读者体验 · Issue Backlog
 
 > 由「小白视角审阅」整理，用于逐项改进教程与仓库。
-> **GitHub Issues 已创建**：[查看全部 Issues](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues?q=is%3Aissue+label%3Abeginner)
-> 处理完成后在对应行打勾并关闭 Issue。
+> **第一轮 #1–#16**：已全部完成并关闭。  
+> **第二轮 #17–#53**：见 [REVIEW_ROUND2_BACKLOG.md](REVIEW_ROUND2_BACKLOG.md)。
 
 **标签**：`beginner` · `documentation` · `onboarding` · `book` · `enhancement`
 

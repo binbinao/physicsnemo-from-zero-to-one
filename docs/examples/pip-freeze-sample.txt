@@ -1,0 +1,7 @@
+# Example pip freeze snippet (illustrative — do not treat as lockfile)
+# Generate your own: pip freeze > my-env-freeze.txt
+# See TESTED_ENVIRONMENT.md for verified commit.
+
+torch==2.9.1
+numpy==2.2.6
+matplotlib==3.10.3

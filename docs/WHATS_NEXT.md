@@ -4,6 +4,22 @@
 
 ---
 
+## 0. 能力矩阵（自检）
+
+| 能力 | 应能独立完成 | 对应章 |
+|:---|:---|:---|
+| 跑通环境 + 弹簧 PINN | ✅ / ❌ | ch01 |
+| 改 Hydra 配置重训 1D 热 | ✅ / ❌ | ch02 |
+| 解释多 BC 散热片 setup | ✅ / ❌ | ch03 |
+| 说清 sym→主框架切换 + 跑通 Darcy FNO | ✅ / ❌ | ch04 |
+| 对比 data-only vs +physics FNO | ✅ / ❌ | ch05 |
+| 做短 rollout 天气 demo | ✅ / ❌ | ch06 |
+| train→optimize→ONNX 最小闭环 | ✅ / ❌ | ch07 |
+
+有 ❌：回到 [START_HERE.md](START_HERE.md) 与 [cheatsheets/](cheatsheets/README.md) 补对应章。
+
+---
+
 ## 1. 巩固本书内容
 
 | 动作 | 资源 |
@@ -11,7 +27,7 @@
 | 对照命令再跑一遍 | [COMMAND_REFERENCE.md](COMMAND_REFERENCE.md) |
 | 查硬件/时长是否合理 | [HARDWARE_EXPECTATIONS.md](HARDWARE_EXPECTATIONS.md) |
 | 对照 loss 趋势 | [results/BASELINE.md](../results/BASELINE.md) |
-| 小白改进项是否全关 | [BEGINNER_ISSUE_BACKLOG.md](BEGINNER_ISSUE_BACKLOG.md) |
+| 改进项跟踪 | [BEGINNER_ISSUE_BACKLOG](BEGINNER_ISSUE_BACKLOG.md) · [REVIEW_ROUND2](REVIEW_ROUND2_BACKLOG.md) |
 
 ---
 

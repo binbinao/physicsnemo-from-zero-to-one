@@ -1,5 +1,7 @@
 # Publication-Quality Figure Upgrade Summary
 
+> **维护者文档**：普通读者请读 `book/ch*.md` 与 `book/assets/README.md`，无需阅读本页。
+
 **Date:** 2026-05-17  
 **Task:** Upgrade all matplotlib-based data visualization figures for PhysicsNeMo book to publication quality using SciencePlots
 

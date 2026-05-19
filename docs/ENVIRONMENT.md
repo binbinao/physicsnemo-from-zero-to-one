@@ -76,6 +76,18 @@ python scripts/check_env.py --tier 2
 
 [CLOUD_GPU_GUIDE.md](CLOUD_GPU_GUIDE.md) · [notebooks/colab_quickstart.ipynb](../notebooks/colab_quickstart.ipynb)
 
+## SDK 装不上时怎么办
+
+| 情况 | 建议 |
+|:---|:---|
+| 无 NVIDIA GPU / Mac Apple Silicon | 先只装 `requirements-minimal.txt`，跑 ch01–ch03 裸 PyTorch；ch04+ 用 [Colab](CLOUD_GPU_GUIDE.md) |
+| `pip install nvidia-physicsnemo` 失败 | 查 [附录 C](../book/appendix_c_troubleshooting.md)；暂跳过 `*_sdk.py`，不影响 raw 脚本 |
+| 仅需某一章 SDK | 见 [DEPENDENCIES_BY_CHAPTER.md](DEPENDENCIES_BY_CHAPTER.md)，不必一次装全量 |
+
+**Apple Silicon**：PyTorch 可用 MPS 加速部分算子，但 PhysicsNeMo 官方以 Linux + CUDA 为主；本书微缩实验建议在 Colab T4 或 Linux GPU 上跑 ch04–ch07。
+
+**Windows**：推荐 [WSL2](https://learn.microsoft.com/windows/wsl/) + Ubuntu，在 WSL 内按 Linux 步骤安装；原生 Windows 下 sym 常遇路径/编译问题。
+
 ## 依赖文件
 
 | 文件 | 用途 |

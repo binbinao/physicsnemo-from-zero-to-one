@@ -49,6 +49,7 @@ python train_fno_mini.py --epochs 50
 
 ```bash
 python dataset.py --type airfoil --n_samples 100
+# 注意：fno_darcy.pt 是路径 A 的 Darcy 权重；翼型可视化仅看几何/流场样式，勿与 Darcy 精度对比
 python visualize_airfoil.py --ckpt outputs/fno_darcy.pt
 ```
 

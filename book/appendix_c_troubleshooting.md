@@ -19,8 +19,8 @@
 **4. CUDA 版本与 PyTorch 不匹配？**  
 到 [pytorch.org](https://pytorch.org) 选对应 cu12x 的安装命令，或改用 NGC 容器（附录 B）。
 
-**5. 该用 Python 3.9 还是 3.11？**  
-本书以 **3.10+（推荐 3.11）** 为准；README 若写 3.9+ 指最低兼容意图，自检脚本以 3.10 为门槛。
+**5. 该用哪个 Python 版本？**
+本书以 **Python 3.10+（推荐 3.11）** 为准；`scripts/check_env.py` 低于 3.10 会直接报错。见 [ENVIRONMENT.md](../docs/ENVIRONMENT.md)。
 
 **6. Windows 能跑吗？**  
 第 1–2 章裸 PyTorch 一般可以；SDK 与分布式建议 **WSL2 + Ubuntu** 或 Linux 云主机。
@@ -178,4 +178,5 @@ Constraint 参与训练损失；Validator 仅评估、不参与反传。
 ---
 
 ➡️ **附录 A**：[数学速查](appendix_a_math.md)  
-➡️ **附录 B**：[云 GPU 与环境](appendix_b_cloud_gpu.md)
+➡️ **附录 B**：[云 GPU 与环境](appendix_b_cloud_gpu.md)  
+➡️ **附录 D**：[PyTorch 最小集](appendix_d_pytorch_mini.md)

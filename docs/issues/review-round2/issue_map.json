@@ -1,0 +1,261 @@
+[
+  {
+    "local_id": 1,
+    "priority": "P0",
+    "title": "增加 START_HERE 中文入门单页",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/17",
+    "number": 17
+  },
+  {
+    "local_id": 2,
+    "priority": "P0",
+    "title": "ch00 路线图与 ch04 默认 Darcy 对齐",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/18",
+    "number": 18
+  },
+  {
+    "local_id": 3,
+    "priority": "P0",
+    "title": "ch01 分路径 A/B 安装（torch vs SDK）",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/19",
+    "number": 19
+  },
+  {
+    "local_id": 4,
+    "priority": "P0",
+    "title": "ch02 正文 Hydra 键名与 conf/config.yaml 对齐",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/20",
+    "number": 20
+  },
+  {
+    "local_id": 5,
+    "priority": "P0",
+    "title": "ENVIRONMENT：requirements-full 安装失败预期",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/21",
+    "number": 21
+  },
+  {
+    "local_id": 6,
+    "priority": "P0",
+    "title": "CI 冒烟：check_env + ch01 PINN",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/22",
+    "number": 22
+  },
+  {
+    "local_id": 7,
+    "priority": "P0",
+    "title": "文档注明 main 与 Colab clone 版本同步",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/23",
+    "number": 23
+  },
+  {
+    "local_id": 8,
+    "priority": "P1",
+    "title": "README 中英入口统一（中文读者指引）",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/24",
+    "number": 24
+  },
+  {
+    "local_id": 9,
+    "priority": "P1",
+    "title": "Badge 与 ENVIRONMENT 版本对齐（PyTorch 2.3+）",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/25",
+    "number": 25
+  },
+  {
+    "local_id": 10,
+    "priority": "P1",
+    "title": "ch00 磁盘空间说明改为分级",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/26",
+    "number": 26
+  },
+  {
+    "local_id": 11,
+    "priority": "P1",
+    "title": "ch00 PyTorch/CUDA 说明支持 CPU/Mac",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/27",
+    "number": 27
+  },
+  {
+    "local_id": 12,
+    "priority": "P1",
+    "title": "ch07 章首澄清：DrivAerNet toy vs 书名「自定义 PDE」",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/28",
+    "number": 28
+  },
+  {
+    "local_id": 13,
+    "priority": "P1",
+    "title": "统一 assets 目录说明（book/assets vs 根 assets）",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/29",
+    "number": 29
+  },
+  {
+    "local_id": 14,
+    "priority": "P1",
+    "title": "附录 C 更新 Python 版本表述（去掉 3.9+）",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/30",
+    "number": 30
+  },
+  {
+    "local_id": 15,
+    "priority": "P1",
+    "title": "Backlog/README 文案：16/16 done 后更新「正在改进」",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/31",
+    "number": 31
+  },
+  {
+    "local_id": 16,
+    "priority": "P1",
+    "title": "TESTED_ENVIRONMENT 更新验证 commit",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/32",
+    "number": 32
+  },
+  {
+    "local_id": 17,
+    "priority": "P1",
+    "title": "ch04 路径 B 命令与 ckpt 说明防误用",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/33",
+    "number": 33
+  },
+  {
+    "local_id": 18,
+    "priority": "P1",
+    "title": "框架切换信息收敛到单一入口",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/34",
+    "number": 34
+  },
+  {
+    "local_id": 19,
+    "priority": "P1",
+    "title": "Colab 笔记本显式安装 torch 与版本提示",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/35",
+    "number": 35
+  },
+  {
+    "local_id": 20,
+    "priority": "P1",
+    "title": "BASELINE 补充至少一章实测数值样例",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/36",
+    "number": 36
+  },
+  {
+    "local_id": 21,
+    "priority": "P2",
+    "title": "README 目录树补充 book/ docs/ notebooks/",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/37",
+    "number": 37
+  },
+  {
+    "local_id": 22,
+    "priority": "P2",
+    "title": "ch00 链接 STUDY_PLAN / QUICKSTART / COMMAND_REFERENCE",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/38",
+    "number": 38
+  },
+  {
+    "local_id": 23,
+    "priority": "P2",
+    "title": "附录 A/B/C 页脚增加附录 D 链接",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/39",
+    "number": 39
+  },
+  {
+    "local_id": 24,
+    "priority": "P2",
+    "title": "修复 README Vibe Publishing 空锚点",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/40",
+    "number": 40
+  },
+  {
+    "local_id": 25,
+    "priority": "P2",
+    "title": "book/FIGURE_UPGRADE_SUMMARY 移入维护者区或加说明",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/41",
+    "number": 41
+  },
+  {
+    "local_id": 26,
+    "priority": "P2",
+    "title": "章末微信公众号二维码说明（占位 vs 正式）",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/42",
+    "number": 42
+  },
+  {
+    "local_id": 27,
+    "priority": "P2",
+    "title": "ch01 Python 版本表述改为 3.10+（推荐 3.11）",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/43",
+    "number": 43
+  },
+  {
+    "local_id": 28,
+    "priority": "P2",
+    "title": "补充 Windows/WSL 环境简短说明",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/44",
+    "number": 44
+  },
+  {
+    "local_id": 29,
+    "priority": "P2",
+    "title": "补充 Apple Silicon / MPS 说明",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/45",
+    "number": 45
+  },
+  {
+    "local_id": 30,
+    "priority": "P2",
+    "title": "docs/issues/*.md 历史模板加「已关闭」头",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/46",
+    "number": 46
+  },
+  {
+    "local_id": 31,
+    "priority": "P3",
+    "title": "可选 requirements-lock.txt 或 pip freeze 样例",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/47",
+    "number": 47
+  },
+  {
+    "local_id": 32,
+    "priority": "P3",
+    "title": "results/ 增加一条完整实测记录样例目录",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/48",
+    "number": 48
+  },
+  {
+    "local_id": 33,
+    "priority": "P3",
+    "title": "SDK 版本矩阵或 compatibility 表",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/49",
+    "number": 49
+  },
+  {
+    "local_id": 34,
+    "priority": "P3",
+    "title": "每章 1 页 cheat sheet（快速通道摘要）",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/50",
+    "number": 50
+  },
+  {
+    "local_id": 35,
+    "priority": "P3",
+    "title": "STUDY_PLAN 章节小测验与参考答案",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/51",
+    "number": 51
+  },
+  {
+    "local_id": 36,
+    "priority": "P3",
+    "title": "配图风格统一性评估与迭代",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/52",
+    "number": 52
+  },
+  {
+    "local_id": 37,
+    "priority": "P3",
+    "title": "WHATS_NEXT 增加能力矩阵自检表",
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/53",
+    "number": 53
+  }
+]

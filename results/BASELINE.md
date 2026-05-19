@@ -15,7 +15,8 @@
 | 曲线 vs 解析解 |  visually 重合 |
 | 训练时长 | 1–5 min（CPU 可） |
 
-脚本：`pinn_spring.py --epochs 2000`
+脚本：`pinn_spring.py --epochs 2000`  
+**实测样例**：[ch01_hello/example_record/](ch01_hello/example_record/)（`final_losses.txt`）
 
 ---
 

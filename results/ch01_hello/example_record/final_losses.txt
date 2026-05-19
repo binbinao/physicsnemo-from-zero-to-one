@@ -1,0 +1,5 @@
+# ch01 pinn_spring.py --epochs 2000 (example record, CPU)
+# commit: see TESTED_ENVIRONMENT.md
+epoch_final_pde=4.2e-05
+epoch_final_ic=2.4e-05
+epoch_final_bc=4.8e-06

@@ -1,3 +1,4 @@
+> **已关闭（历史模板）**：对应 beginner issue 已完成，内容仅供归档。
 ## 背景
 
 `check_env` 全绿不等于能跑 ch07；缺少 Hydra / Optuna / FastAPI 分章提示。

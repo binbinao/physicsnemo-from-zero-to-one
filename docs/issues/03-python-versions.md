@@ -1,3 +1,4 @@
+> **已关闭（历史模板）**：对应 beginner issue 已完成，内容仅供归档。
 ## 背景
 
 - README：Python 3.9+
