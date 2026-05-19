@@ -64,8 +64,13 @@ pip install "torch>=2.3" numpy matplotlib nvidia-physicsnemo nvidia-physicsnemo.
 ## 验证
 
 ```bash
-python scripts/check_env.py
+python scripts/check_env.py           # 全局核心 + Tier 概览
+python scripts/check_env.py --list  # 各章 Tier / GPU 速查
+python scripts/check_env.py --chapter 4
+python scripts/check_env.py --tier 2
 ```
+
+`--chapter` 会检查该章必需包（含 ch05 的 `ch04_fno_airfoil/` 目录）及可选 SDK 包。
 
 ## 云 GPU / Colab
 

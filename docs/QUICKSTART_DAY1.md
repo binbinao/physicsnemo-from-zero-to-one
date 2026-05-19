@@ -29,7 +29,8 @@ pip install "torch>=2.3" numpy matplotlib
 ```bash
 git clone https://github.com/binbinao/physicsnemo-from-zero-to-one.git
 cd physicsnemo-from-zero-to-one
-python scripts/check_env.py
+python scripts/check_env.py --tier 0
+# 或：python scripts/check_env.py --chapter 1
 ```
 
 **预期**：Python ✅、PyTorch ✅；CUDA / PhysicsNeMo ❌ 也**没关系**。
