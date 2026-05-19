@@ -75,9 +75,12 @@ def main():
             all_ok &= check(name, False, f"pip install {pkg}")
 
     print("=" * WIDTH)
+    print("📖 环境说明: docs/ENVIRONMENT.md")
+    print("📖 第 1 天最小安装: docs/QUICKSTART_DAY1.md")
+    print("=" * WIDTH)
     if all_ok:
         print("🎉 核心依赖全部通过！可以开始第 1 章了：")
-        print("   cd ch01_hello && python mlp_spring.py --epochs 1000")
+        print("   cd ch01_hello && python pinn_spring.py --epochs 1000")
     else:
         print("⚠️  部分依赖缺失，请按上方提示安装后重试。")
     print()

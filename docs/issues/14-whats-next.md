@@ -1,0 +1,11 @@
+## 背景
+
+ch07 结尾指向附录后，缺少「第 8 步」：官方 examples、真实数据集、Triton 部署等。
+
+## 建议交付
+
+`docs/WHATS_NEXT.md`
+
+## 跟踪
+
+Backlog：`docs/BEGINNER_ISSUE_BACKLOG.md` #14

@@ -1,7 +1,7 @@
 # PhysicsNeMo: From Zero to One
 
 [![GitHub](https://img.shields.io/badge/GitHub-binbinao%2Fphysicsnemo--from--zero--to--one-blue?logo=github)](https://github.com/binbinao/physicsnemo-from-zero-to-one)
-[![Python](https://img.shields.io/badge/Python-3.9%2B-blue?logo=python)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-red?logo=pytorch)](https://pytorch.org/)
 [![PhysicsNeMo](https://img.shields.io/badge/PhysicsNeMo-2.0-green?logo=nvidia)](https://github.com/NVIDIA/physicsnemo)
 
@@ -13,20 +13,16 @@ A hands-on tutorial book for physics-informed neural networks (PINNs) and neural
 
 ## Requirements
 
-**Core (all chapters, CPU-runnable):**
-```bash
-pip install torch numpy matplotlib
-```
+环境以 **[docs/ENVIRONMENT.md](docs/ENVIRONMENT.md)** 为准（Python ≥3.10，PyTorch ≥2.3）。
 
-**PhysicsNeMo SDK (for `*_sdk.py` files):**
-```bash
-pip install nvidia-physicsnemo
-```
+| 阶段 | 安装 |
+|:---|:---|
+| **第 1 天（ch01）** | `pip install "torch>=2.3" numpy matplotlib` — [QUICKSTART_DAY1](docs/QUICKSTART_DAY1.md) |
+| **ch01–ch03 裸 PyTorch** | 同上 |
+| **SDK 版 `*_sdk.py`** | + `nvidia-physicsnemo` `nvidia-physicsnemo.sym` `hydra-core` |
+| **全书 + ch07 部署** | + `optuna` `fastapi` `uvicorn` `onnx` |
 
-**Full stack (GPU + optimization + deployment):**
-```bash
-pip install torch numpy matplotlib nvidia-physicsnemo hydra-core optuna fastapi uvicorn onnx
-```
+**书—代码命令**：[docs/COMMAND_REFERENCE.md](docs/COMMAND_REFERENCE.md) · **分章说明**：各 `chXX_*/README.md`
 
 ## 附录（教材）
 
@@ -34,9 +30,9 @@ pip install torch numpy matplotlib nvidia-physicsnemo hydra-core optuna fastapi 
 |:---|:---|:---|
 | A | [book/appendix_a_math.md](book/appendix_a_math.md) | 数学与符号速查 |
 | B | [book/appendix_b_cloud_gpu.md](book/appendix_b_cloud_gpu.md) | 云 GPU 与环境（速查） |
+| C | [book/appendix_c_troubleshooting.md](book/appendix_c_troubleshooting.md) | 常见踩坑 50 问 |
 
 **无本地 GPU？** [云 GPU 分步指南](docs/CLOUD_GPU_GUIDE.md) · [Colab 笔记本](notebooks/colab_quickstart.ipynb) · [硬件预期表](docs/HARDWARE_EXPECTATIONS.md)
-| C | [book/appendix_c_troubleshooting.md](book/appendix_c_troubleshooting.md) | 常见踩坑 50 问 |
 
 ## 小白读者改进跟踪
 
@@ -106,10 +102,12 @@ physicsnemo-from-zero-to-one/
 ```bash
 git clone https://github.com/binbinao/physicsnemo-from-zero-to-one.git
 cd physicsnemo-from-zero-to-one
-
-# Check environment
 python scripts/check_env.py
+```
 
+**第 1 天最小路径**（无需 PhysicsNeMo）：见 [docs/QUICKSTART_DAY1.md](docs/QUICKSTART_DAY1.md)
+
+```bash
 # Chapter 1: Your first PINN
 python ch01_hello/pinn_spring.py
 

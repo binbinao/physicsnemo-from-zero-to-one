@@ -28,6 +28,9 @@ from physicsnemo.models.fno import FNO
 from physicsnemo.utils import save_checkpoint
 
 sys.path.insert(0, os.path.dirname(__file__))
+from require_ch04 import require_ch04
+
+require_ch04()
 from darcy_residual import darcy_residual_simple
 
 

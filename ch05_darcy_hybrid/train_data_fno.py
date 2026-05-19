@@ -21,6 +21,9 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 sys.path.insert(0, os.path.dirname(__file__))
+from require_ch04 import require_ch04
+
+require_ch04()
 # Reuse FNO from chapter 4
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "ch04_fno_airfoil"))
 from fno_model import FNO2D

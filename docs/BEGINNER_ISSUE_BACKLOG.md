@@ -10,13 +10,13 @@
 |---|------|------|--------|
 | 1 | 补全附录 A/B/C（正文多处引用但仓库缺失） | done | [#1](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/1) |
 | 2 | 补全 `book/assets/` 配图（消除 IMAGE-TODO） | done | [#2](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/2) |
-| 3 | 统一 Python/依赖版本说明（README vs ch00 vs check_env） | open | [#3](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/3) |
-| 4 | 第 1 天「最小安装清单」与分章依赖表 | open | [#4](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/4) |
+| 3 | 统一 Python/依赖版本说明（README vs ch00 vs check_env） | done | [#3](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/3) |
+| 4 | 第 1 天「最小安装清单」与分章依赖表 | done | [#4](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/4) |
 | 5 | 增强 `scripts/check_env.py`：按章节检查可选依赖 | open | [#5](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/5) |
-| 6 | 每章添加 README：首选脚本 + 三档变体说明 | open | [#6](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/6) |
-| 7 | 书—代码命令对齐审计（Hydra 参数、文件名） | open | [#7](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/7) |
-| 8 | ch04：澄清翼型 vs Darcy、框架切换一页纸 | open | [#8](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/8) |
-| 9 | ch05→ch04 代码依赖：跳章警告与依赖图 | open | [#9](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/9) |
+| 6 | 每章添加 README：首选脚本 + 三档变体说明 | done | [#6](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/6) |
+| 7 | 书—代码命令对齐审计（Hydra 参数、文件名） | done | [#7](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/7) |
+| 8 | ch04：澄清翼型 vs Darcy、框架切换一页纸 | open（ch04 README+正文已部分覆盖） | [#8](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/8) |
+| 9 | ch05→ch04 代码依赖：跳章警告与依赖图 | done | [#9](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/9) |
 | 10 | 可选「PyTorch 30 分钟最小集」或链到外部资源 | open | [#10](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/10) |
 | 11 | 6 周学习计划 + 读者自测（选 🟢/🔵/🟡 路径） | open | [#11](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/11) |
 | 12 | 云 GPU / Colab 实操指南（原附录 B 内容） | done | [#12](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/12) |
