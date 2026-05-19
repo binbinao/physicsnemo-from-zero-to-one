@@ -75,6 +75,15 @@ AVOID: cherry blossoms, flowers, pastel floral frames, decorative nature borders
 | `f7_1_pipeline.png` | F7.1 | Six chevrons: Data → Train → HPO → Optimize → ONNX → API. Automotive Cd context subtle. |
 | `f1_7_physicsnemo_arch.png` | F1.8 | Two-layer stack: bottom physicsnemo-sym (PINN/PDE), top physicsnemo (FNO/train). Bridge arrow between layers. |
 
+## 不宜 Gemini 的图（改 Figma/SVG）
+
+| 文件 | 原因 | Issue |
+|:---|:---|:---|
+| `f4_5_fno_block.png` | FFT 链路须准确 | #117 |
+| `f3_6_domain_constraint.png` | API 框图须准确 | #118 |
+
+详见 [BOOK_FIGURE_OUTPUT_FORMS.md](BOOK_FIGURE_OUTPUT_FORMS.md)。
+
 ## 负面提示词（Negative prompt，Gemini / Imagen 可用时附加）
 
 ```

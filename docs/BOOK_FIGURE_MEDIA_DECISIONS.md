@@ -193,7 +193,9 @@
 |:---|:---|
 | 合并 PR #114（22 张 Gemini 定稿） | ✅ 已合并 |
 | Issue #115 P3：12 张 Gemini 重绘 | ✅ 试稿已入库 |
-| Figma：F4.5、F3.6（+ 可选 F1.8） |  backlog，不阻塞 P3 |
+| Figma/SVG：F4.5、F3.6 | #117、#118（见 [OUTPUT_FORMS](BOOK_FIGURE_OUTPUT_FORMS.md)） |
+| 正文去 text↓/mermaid 三叠 | #119 |
+| Mermaid→SVG 印前（可选） | #120 |
 | Matplotlib 26 张 | 冻结，仅 CJK/数据更新 |
 
 ---
