@@ -8,6 +8,8 @@
 
 ```
 Style: industrial technical textbook illustration, clean flat vector with subtle depth, blue (#2E86AB) and orange (#E07A2F) accent palette, white or very light gray background, 16:9 or 3:1 wide banner aspect ratio, high resolution, no watermark, no photorealistic faces, no sci-fi neon. Minimal English labels only (2-4 words max per label); do NOT render Chinese characters in the image.
+
+AVOID: cherry blossoms, flowers, pastel floral frames, decorative nature borders, romantic or artistic poster style. Prefer engineering diagrams, CFD/FEA aesthetic, dark-line technical drawing.
 ```
 
 ## 交付路径

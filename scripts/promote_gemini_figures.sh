@@ -15,6 +15,14 @@ if [[ "${1:-}" == "--all-p0" ]]; then
   set -- f1_0_banner.png f3_0_banner.png f4_0_banner.png f5_0_banner.png f6_0_banner.png f7_0_banner.png f0_4_book_roadmap.png
 fi
 
+if [[ "${1:-}" == "--all-p2" ]]; then
+  set -- f1_3_spring_diagram.png f1_1_roadmap.png f2_1_roadmap.png f3_3_geometry.png f3_4_csg.png f0_1_ai4s_timeline.png
+fi
+
+if [[ "${1:-}" == "--all-banners" ]]; then
+  set -- f1_0_banner.png f3_0_banner.png f4_0_banner.png f5_0_banner.png f6_0_banner.png f7_0_banner.png
+fi
+
 for f in "$@"; do
   src="$GEMINI/$f"
   [[ -f "$src" ]] || { echo "missing $src"; exit 1; }
