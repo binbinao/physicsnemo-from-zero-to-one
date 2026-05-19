@@ -99,6 +99,28 @@ python scripts/check_env.py
 
 ---
 
+## B.6 Mac（Apple Silicon）说明
+
+- **M1/M2/M3**：可跑第 1–3 章 CPU/MPS 版；PhysicsNeMo 官方以 CUDA 为主，**不建议**在 Mac 上强跑 SDK/分布式章节。  
+- 第 4 章及以后请用云 GPU 或 Linux + NVIDIA 显卡。
+
+---
+
+## B.7 磁盘与数据
+
+- 本书示例多为**合成数据**，无需大型下载。  
+- 建议预留 **≥30GB**：镜像、pip 缓存、`outputs/`、checkpoint。  
+- `.gitignore` 已忽略 `*.pt`、`outputs/`，训练产物不会进 Git。
+
+---
+
+## B.8 安全提醒
+
+- 勿在云端 notebook 中粘贴 API Key、公司 VPN 密码。  
+- 公网实例训完删除或关机，避免按量账单累积。
+
+---
+
 ## B.9 AutoDL 五步开机（国内）
 
 1. [autodl.com](https://www.autodl.com/) 租用 **PyTorch 2.x + CUDA 12** 镜像 + RTX 4090 / A100  
@@ -126,28 +148,10 @@ python scripts/check_env.py
 
 ---
 
-## B.6 Mac（Apple Silicon）说明
-
-- **M1/M2/M3**：可跑第 1–3 章 CPU/MPS 版；PhysicsNeMo 官方以 CUDA 为主，**不建议**在 Mac 上强跑 SDK/分布式章节。  
-- 第 4 章及以后请用云 GPU 或 Linux + NVIDIA 显卡。
-
----
-
-## B.7 磁盘与数据
-
-- 本书示例多为**合成数据**，无需大型下载。  
-- 建议预留 **≥30GB**：镜像、pip 缓存、`outputs/`、checkpoint。  
-- `.gitignore` 已忽略 `*.pt`、`outputs/`，训练产物不会进 Git。
-
----
-
-## B.8 安全提醒
-
-- 勿在云端 notebook 中粘贴 API Key、公司 VPN 密码。  
-- 公网实例训完删除或关机，避免按量账单累积。
-
----
-
 ➡️ **附录 A**：[数学速查](appendix_a_math.md)  
 ➡️ **附录 C**：[常见踩坑 50 问](appendix_c_troubleshooting.md)  
 ➡️ **附录 D**：[PyTorch 最小集](appendix_d_pytorch_mini.md)
+
+---
+
+*附录 B · v1.0 · 更新：2026-05-15*

@@ -26,3 +26,4 @@ python book/scripts/generate_diagram_figures.py
 ## 说明
 
 - 配图为教学示意，部分为合成数据可视化，非论文级实验复现图。
+- 图号与生产分镜见 [FIGURE_MANIFEST.md](FIGURE_MANIFEST.md)；体例见 [../STYLE.md](../STYLE.md)。

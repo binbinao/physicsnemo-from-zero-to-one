@@ -180,3 +180,7 @@ Constraint 参与训练损失；Validator 仅评估、不参与反传。
 ➡️ **附录 A**：[数学速查](appendix_a_math.md)  
 ➡️ **附录 B**：[云 GPU 与环境](appendix_b_cloud_gpu.md)  
 ➡️ **附录 D**：[PyTorch 最小集](appendix_d_pytorch_mini.md)
+
+---
+
+*附录 C · v1.0 · 更新：2026-05-15*
