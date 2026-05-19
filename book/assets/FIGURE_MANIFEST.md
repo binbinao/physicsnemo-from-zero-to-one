@@ -35,8 +35,19 @@
 | F6.5 | f6_5_weather_industry.png | 天气 AI 行业 | **gemini** |
 | F6.x | f6_*（其余） | AFNO、rollout、误差 | matplotlib |
 | F7.0 | f7_0_banner.png | 汽车气动章横幅 | **gemini** |
-| F7.1 | f7_1_pipeline.png | 端到端 pipeline | matplotlib |
+| F7.1 | f7_1_pipeline.png | 端到端 pipeline | matplotlib → **P3 gemini** |
 
-**路线 B 提示词**：[docs/BOOK_FIGURE_GEMINI_PROMPTS.md](../../docs/BOOK_FIGURE_GEMINI_PROMPTS.md)
+## 主编决策（2026-05-19）
+
+| 档位 | 数量 | 策略 |
+|:---|:---:|:---|
+| **定稿 gemini** | 22 | F0.1/0.3，各章横幅+路线图，F1.4，F3.3/3.4/3.9，F4.1/4.3，F5.7，F6.5 等（见 PR #114） |
+| **冻结 matplotlib** | 26 | 全部 loss/场/调参/预测对比 |
+| **P3 gemini（待绘）** | 12 | F2.4, F3.1, F3.5, F3.8, F4.4, F4.6, F5.1, F5.3, F6.1, F6.3, F7.1, F1.8 |
+| **Figma（待绘）** | 2–3 | F4.5, F3.6；F1.8 若不用 Gemini 则改 Figma |
+| **表格** | 全部 | Markdown，不转图 |
+
+**路线 B 提示词**：[docs/BOOK_FIGURE_GEMINI_PROMPTS.md](../../docs/BOOK_FIGURE_GEMINI_PROMPTS.md)  
+**决策全文**：[docs/BOOK_FIGURE_MEDIA_DECISIONS.md](../../docs/BOOK_FIGURE_MEDIA_DECISIONS.md)
 
 批量重绘脚本与历史记录见 [docs/FIGURE_UPGRADE_SUMMARY.md](../../docs/FIGURE_UPGRADE_SUMMARY.md)。
