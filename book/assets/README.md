@@ -1,0 +1,20 @@
+# 教材配图 (`book/assets/`)
+
+本目录存放各章 Markdown 引用的插图（PNG）。在 GitHub 上阅读 `book/ch*.md` 时可直接显示。
+
+## 重新生成
+
+```bash
+# 数据类图表（loss 曲线、场图、调参扫描等，26 张）
+python book/scripts/generate_all_figures.py
+
+# 路线图 / 横幅 / 结构示意图（其余配图）
+python book/scripts/generate_diagram_figures.py
+```
+
+**依赖**：`matplotlib`、`numpy`；可选 `scienceplots`（未安装时自动回退 `ggplot` 样式）。
+
+## 说明
+
+- 配图为教学示意，部分为合成数据可视化，非论文级实验复现图。
+- 公众号二维码占位图位于仓库根目录 [`assets/wechat_qrcode.png`](../../assets/wechat_qrcode.png)。

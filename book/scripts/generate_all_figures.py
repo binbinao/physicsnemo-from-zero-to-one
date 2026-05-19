@@ -5,28 +5,35 @@ Using SciencePlots + Chinese font support
 """
 
 import matplotlib
-matplotlib.use('Agg')
-import scienceplots
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from matplotlib.font_manager import fontManager
 import numpy as np
 from pathlib import Path
 
-# Chinese font
-fontManager.addfont('/usr/share/fonts/google-noto-cjk/NotoSansCJK-Regular.ttc')
-
-# Use science + no-latex + Chinese-friendly
-plt.style.use(['science', 'no-latex', 'grid'])
-plt.rcParams['font.sans-serif'] = ['Noto Sans CJK JP', 'DejaVu Sans']
-plt.rcParams['font.family'] = 'sans-serif'
-plt.rcParams['axes.unicode_minus'] = False
-plt.rcParams['figure.dpi'] = 150
-plt.rcParams['savefig.dpi'] = 150
-plt.rcParams['savefig.bbox'] = 'tight'
-
-# Output directory
-OUTPUT_DIR = Path('/root/.openclaw/workspace/physicsnemo-from-zero-to-one/book/assets')
+REPO_ROOT = Path(__file__).resolve().parents[2]
+OUTPUT_DIR = REPO_ROOT / "book" / "assets"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+try:
+    import scienceplots  # noqa: F401
+
+    plt.style.use(["science", "no-latex", "grid"])
+except ImportError:
+    plt.style.use("ggplot")
+
+plt.rcParams["font.sans-serif"] = [
+    "PingFang SC",
+    "Heiti SC",
+    "Noto Sans CJK SC",
+    "Arial Unicode MS",
+    "DejaVu Sans",
+]
+plt.rcParams["font.family"] = "sans-serif"
+plt.rcParams["axes.unicode_minus"] = False
+plt.rcParams["figure.dpi"] = 150
+plt.rcParams["savefig.dpi"] = 150
+plt.rcParams["savefig.bbox"] = "tight"
 
 # Professional color palette
 COLORS = plt.cm.tab10.colors

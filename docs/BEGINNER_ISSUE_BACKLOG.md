@@ -9,7 +9,7 @@
 | # | 标题 | 状态 | GitHub |
 |---|------|------|--------|
 | 1 | 补全附录 A/B/C（正文多处引用但仓库缺失） | done | [#1](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/1) |
-| 2 | 补全 `book/assets/` 配图（消除 IMAGE-TODO） | open | [#2](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/2) |
+| 2 | 补全 `book/assets/` 配图（消除 IMAGE-TODO） | done | [#2](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/2) |
 | 3 | 统一 Python/依赖版本说明（README vs ch00 vs check_env） | open | [#3](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/3) |
 | 4 | 第 1 天「最小安装清单」与分章依赖表 | open | [#4](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/4) |
 | 5 | 增强 `scripts/check_env.py`：按章节检查可选依赖 | open | [#5](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/5) |

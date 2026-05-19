@@ -71,7 +71,7 @@ All figures now include:
 ## 📁 Output Location
 
 ```
-/root/.openclaw/workspace/physicsnemo-from-zero-to-one/book/assets/
+book/assets/   # 相对仓库根目录
 ```
 
 ## 🔧 Generation Script

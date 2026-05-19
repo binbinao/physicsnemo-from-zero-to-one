@@ -170,7 +170,7 @@ Constraint 参与训练损失；Validator 仅评估、不参与反传。
 `model.eval()`、输入校验、并发与 GPU 锁；生产用 Triton 更合适（ch07 延伸阅读）。
 
 **49. 书中图片显示不出来？**  
-部分图尚在 `book/assets/` 生成中；不影响代码运行，见仓库 Issues。
+配图见 [`book/assets/`](../book/assets/README.md)，可用 `book/scripts/` 下脚本重新生成。
 
 **50. 还有问题怎么办？**  
 到 [GitHub Issues](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues) 提问，附上 `check_env` 输出、完整报错、章节与命令。
