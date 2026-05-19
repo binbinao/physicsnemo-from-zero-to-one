@@ -25,7 +25,7 @@
 | F3.3 | f3_3_geometry.png | three-fin 几何 | **gemini** |
 | F3.4 | f3_4_csg.png | CSG 并集示意 | **gemini** |
 | F3.5 | f3_5_boundary_conditions.png | 边界条件示意 | **gemini** |
-| F3.6 | f3_6_domain_constraint.png | Sym 结构 | matplotlib → **figma/svg**（#118） |
+| F3.6 | f3_6_domain_constraint.png | Sym 结构 | **matplotlib-vector**（#118） |
 | F3.7 | f3_7_loss_curves.png | loss | matplotlib |
 | F3.8 | f3_8_inverse_flow.png | 反问题流 | **gemini** |
 | F3.9 | f3_9_design_loop.png | 散热设计闭环 | **gemini** |
@@ -33,7 +33,7 @@
 | F4.1 | f4_1_framework_switch.png | sym/main 框架切换 | **gemini** |
 | F4.3 | f4_3_pinn_vs_fno.png | 单工况 vs 多工况 | **gemini** |
 | F4.4 | f4_4_neural_operator.png | 算子映射 | **gemini** |
-| F4.5 | f4_5_fno_block.png | FNO 结构 | matplotlib → **figma/svg**（#117；勿用 text↓ 块代图） |
+| F4.5 | f4_5_fno_block.png | FNO 结构 | **matplotlib-vector**（#117；频域色带 + 英文标签） |
 | F4.6 | f4_6_data_pipeline.png | 数据管线 | **gemini** |
 | F4.2, F4.7–F4.9 | f4_2, f4_7–9 | 预测场、Cp、调参 | matplotlib |
 | F5.0 | f5_0_banner.png | Darcy 章横幅 | **gemini** |

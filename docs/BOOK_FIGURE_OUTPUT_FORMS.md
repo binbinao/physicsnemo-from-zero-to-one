@@ -85,9 +85,9 @@ npx @mermaid-js/mermaid-cli -i book/diagrams/f4_5.mmd -o book/assets/svg/f4_5.sv
 
 | GH | 标题 | 优先级 |
 |:---|:---|:---|
-| [#117](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/117) | F4.5 FNO block 矢量定稿 | P0 |
-| [#118](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/118) | F3.6 Domain/Constraint 矢量定稿 | P1 |
-| [#119](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/119) | 正文去 text↓/mermaid 三重冗余 | P1 |
+| [#117](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/117) | F4.5 FNO block 矢量定稿 | ✅ done |
+| [#118](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/118) | F3.6 Domain/Constraint 矢量定稿 | ✅ done |
+| [#119](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/119) | 正文去 text↓/mermaid 三重冗余 | ✅ done（首批节） |
 | [#120](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/120) | Mermaid→SVG 印前导出（可选） | P2 |
 
 ---
