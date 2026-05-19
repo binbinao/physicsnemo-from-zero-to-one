@@ -28,6 +28,18 @@ pip install nvidia-physicsnemo
 pip install torch numpy matplotlib nvidia-physicsnemo hydra-core optuna fastapi uvicorn onnx
 ```
 
+## 附录（教材）
+
+| 附录 | 文件 | 内容 |
+|:---|:---|:---|
+| A | [book/appendix_a_math.md](book/appendix_a_math.md) | 数学与符号速查 |
+| B | [book/appendix_b_cloud_gpu.md](book/appendix_b_cloud_gpu.md) | 云 GPU 与环境 |
+| C | [book/appendix_c_troubleshooting.md](book/appendix_c_troubleshooting.md) | 常见踩坑 50 问 |
+
+## 小白读者改进跟踪
+
+正在根据读者反馈逐项改进教程与仓库，详见 [Issue Backlog](docs/BEGINNER_ISSUE_BACKLOG.md) 与 [GitHub Issues（beginner 标签）](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues?q=is%3Aissue+label%3Abeginner)。
+
 ## Directory Structure
 
 ```
