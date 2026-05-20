@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-第 1 章 · 解法二：用物理驱动的 PINN 求解弹簧振子（无数据）
+Chapter 1 - Solution B: Physics-Informed Neural Network (PINN) for Spring Oscillator
 
   python pinn_spring.py --epochs 5000
 
-物理方程：m·ẍ + k·x = 0
-训练方式：零数据，三件套损失 = PDE残差 + 初始位置 + 初始速度
+PDE: m*x'' + k*x = 0
+Training: zero data, three-term loss = PDE residual + IC position + IC velocity
 """
 
 import argparse
@@ -17,7 +17,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-# ── 物理参数 ──────────────────────────────────────────────
+# ── Physical parameters ───────────────────────────────────
 M = 1.0
 K = 4.0  # ω = 2 rad/s
 X0 = 1.0
@@ -30,7 +30,7 @@ def analytical_solution(t):
     return X0 * np.cos(omega * t) + (V0 / omega) * np.sin(omega * t)
 
 
-# ── PINN 模型（架构和 MLP 完全相同，区别在损失函数）────────
+# ── PINN model (same architecture as MLP; differs in loss) ─
 class PINN(nn.Module):
     def __init__(self, hidden=32, depth=4):
         super().__init__()
@@ -44,26 +44,26 @@ class PINN(nn.Module):
         return self.net(t)
 
 
-# ── PINN 三件套损失 ────────────────────────────────────────
+# ── PINN three-term loss ───────────────────────────────────
 def pinn_loss(model, t_collocation, x0=X0, v0=V0, m=M, k=K):
     """
-    返回 (pde_loss, ic_pos_loss, ic_vel_loss)
+    Returns (pde_loss, ic_pos_loss, ic_vel_loss)
     """
     device = t_collocation.device
 
-    # ---- 1) PDE 残差损失：m·ẍ + k·x = 0 ----
+    # ---- 1) PDE residual loss: m*x'' + k*x = 0 ----
     t = t_collocation.requires_grad_(True)
     x = model(t)
 
-    # 一阶导 dx/dt
+    # First derivative dx/dt
     dx = torch.autograd.grad(
         outputs=x,
         inputs=t,
         grad_outputs=torch.ones_like(x),
-        create_graph=True,  # ⚠️ 关键！后续还要对 dx 求导
+        create_graph=True,  # Required: need to differentiate dx again
     )[0]
 
-    # 二阶导 d²x/dt²
+    # Second derivative d²x/dt²
     ddx = torch.autograd.grad(
         outputs=dx,
         inputs=t,
@@ -74,12 +74,12 @@ def pinn_loss(model, t_collocation, x0=X0, v0=V0, m=M, k=K):
     residual = m * ddx + k * x
     loss_pde = (residual**2).mean()
 
-    # ---- 2) 初始位置损失：x(0) = x0 ----
+    # ---- 2) IC position loss: x(0) = x0 ----
     t0 = torch.zeros(1, 1, requires_grad=True, device=device)
     x_at_0 = model(t0)
     loss_ic_pos = ((x_at_0 - x0) ** 2).squeeze()
 
-    # ---- 3) 初始速度损失：dx/dt|_{t=0} = v0 ----
+    # ---- 3) IC velocity loss: dx/dt|_{t=0} = v0 ----
     dx_at_0 = torch.autograd.grad(
         x_at_0, t0, torch.ones_like(x_at_0), create_graph=True
     )[0]
@@ -88,14 +88,14 @@ def pinn_loss(model, t_collocation, x0=X0, v0=V0, m=M, k=K):
     return loss_pde, loss_ic_pos, loss_ic_vel
 
 
-# ── 训练 ──────────────────────────────────────────────────
+# ── Training ─────────────────────────────────────────────
 def train(model, epochs=5000, n_collocation=256, lr=1e-3,
           w_pde=1.0, w_ic_pos=100.0, w_ic_vel=100.0):
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     history = {"pde": [], "ic_pos": [], "ic_vel": [], "total": []}
 
     for epoch in range(epochs):
-        # 每轮重新采样配点（相当于数据增强）
+        # Resample collocation points each epoch (acts as data augmentation)
         t_col = torch.rand(n_collocation, 1) * T_MAX
 
         optimizer.zero_grad()
@@ -119,11 +119,11 @@ def train(model, epochs=5000, n_collocation=256, lr=1e-3,
     return history
 
 
-# ── 可视化 ─────────────────────────────────────────────────
+# ── Visualization ─────────────────────────────────────────
 def visualize(t_test, pred, truth, history, save_path="pinn_results.png"):
     fig, axes = plt.subplots(1, 3, figsize=(15, 4))
 
-    # 三件套 loss
+    # Three-term loss
     for key, color, label in [
         ("pde", "blue", "PDE residual"),
         ("ic_pos", "orange", "IC position"),
@@ -151,13 +151,13 @@ def visualize(t_test, pred, truth, history, save_path="pinn_results.png"):
 
     plt.tight_layout()
     plt.savefig(save_path, dpi=150)
-    print(f"图表已保存到 {save_path}")
+    print(f"Figure saved to {save_path}")
     plt.close()
 
 
 # ── main ──────────────────────────────────────────────────
 def main():
-    parser = argparse.ArgumentParser(description="PINN 求解弹簧振子")
+    parser = argparse.ArgumentParser(description="PINN solver for spring oscillator")
     parser.add_argument("--epochs", type=int, default=5000)
     parser.add_argument("--hidden", type=int, default=64)
     parser.add_argument("--depth", type=int, default=4)
@@ -166,12 +166,12 @@ def main():
     args = parser.parse_args()
 
     model = PINN(hidden=args.hidden, depth=args.depth)
-    print(f"模型参数量: {sum(p.numel() for p in model.parameters()):,}")
-    print(f"训练方式: 零数据，纯物理驱动")
+    print(f"Model parameters: {sum(p.numel() for p in model.parameters()):,}")
+    print(f"Training mode: zero data, physics-driven")
 
     history = train(model, epochs=args.epochs, n_collocation=args.n_collocation, lr=args.lr)
 
-    # 推理（外推到 3×T_MAX 展示 PINN 的周期学习能力）
+    # Inference (extrapolate to 3*T_MAX to show PINN's periodic learning)
     t_test = torch.linspace(0, T_MAX * 3, 600).reshape(-1, 1)
     with torch.no_grad():
         pred = model(t_test).numpy().flatten()
@@ -179,12 +179,12 @@ def main():
 
     visualize(t_test.numpy().flatten(), pred, truth, history)
 
-    # 训练区间 & 外推区间误差
+    # Training interval & extrapolation error
     t_np = t_test.numpy().flatten()
     mask_train = t_np <= T_MAX
     mask_extrap = t_np > T_MAX
-    print(f"训练区间 MAE: {np.mean(np.abs(pred[mask_train] - truth[mask_train])):.6f}")
-    print(f"外推区间 MAE: {np.mean(np.abs(pred[mask_extrap] - truth[mask_extrap])):.6f}")
+    print(f"Training interval MAE: {np.mean(np.abs(pred[mask_train] - truth[mask_train])):.6f}")
+    print(f"Extrapolation MAE: {np.mean(np.abs(pred[mask_extrap] - truth[mask_extrap])):.6f}")
 
 
 if __name__ == "__main__":

@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-第 1 章 · SDK 参考版：用 physicsnemo-sym 声明式 API 求解弹簧振子
+Chapter 1 - SDK Reference: Declarative PhysicsNeMo-Sym API for Spring Oscillator
 
   python pinn_spring_sdk.py
 
-⚠️ 需要安装 nvidia-physicsnemo 和 nvidia-physicsnemo.sym
-   如果没有安装，请先用 pinn_spring.py（裸 PyTorch 版）
+Requires nvidia-physicsnemo and nvidia-physicsnemo.sym.
+If not installed, use pinn_spring.py (raw PyTorch version) instead.
 
-本文件展示 PhysicsNeMo-Sym 的声明式风格：
-  - 用 SymPy 定义 PDE
-  - 用 1D 几何定义时间域
-  - 用 Constraint 定义损失三件套
-  - Solver 替你管训练循环
+Demonstrates PhysicsNeMo-Sym declarative style:
+  - Define PDE with SymPy
+  - Define temporal domain with 1D geometry
+  - Define loss terms with Constraints
+  - Solver manages training loop
 """
 
 try:
@@ -34,9 +34,9 @@ except ImportError:
     HAS_SDK = False
 
 
-# ── 自定义 PDE：弹簧振子 m·ẍ + k·x = 0 ──────────────────
+# ── Custom PDE: spring oscillator m*x'' + k*x = 0 ────────
 class SpringPDE(PDE):
-    """简谐振动 PDE：m * d²x/dt² + k * x = 0"""
+    """Simple harmonic oscillator PDE: m * d^2x/dt^2 + k * x = 0"""
 
     name = "SpringODE"
 
@@ -47,28 +47,28 @@ class SpringPDE(PDE):
 
 
 def run_sdk():
-    """SDK 版训练（需要 Hydra 配置文件 conf/config.yaml）"""
+    """SDK training (requires Hydra config file conf/config.yaml)"""
 
     @hydra.main(version_base="1.3", config_path="conf", config_name="config")
     def _main(cfg: DictConfig) -> None:
-        # 1) 几何：1D 时间域 t ∈ [0, 10]
+        # 1) Geometry: 1D time domain t in [0, 10]
         geo = Line1D(0.0, 10.0)
 
-        # 2) 网络
+        # 2) Network
         net = instantiate_arch(
             input_keys=[Key("t")],
             output_keys=[Key("x")],
             cfg=cfg.arch.fully_connected,
         )
 
-        # 3) PDE 节点
+        # 3) PDE nodes
         spring_eq = SpringPDE(m=1.0, k=4.0)
         nodes = spring_eq.make_nodes() + [net.make_node(name="spring_net")]
 
-        # 4) Domain + 约束
+        # 4) Domain + constraints
         domain = Domain()
 
-        # PDE 内部约束
+        # PDE interior constraint
         interior = PointwiseInteriorConstraint(
             nodes=nodes,
             geometry=geo,
@@ -77,7 +77,7 @@ def run_sdk():
         )
         domain.add_constraint(interior, "interior")
 
-        # 初始位置：x(0) = 1.0
+        # Initial position: x(0) = 1.0
         ic_pos = PointwiseBoundaryConstraint(
             nodes=nodes,
             geometry=geo,
@@ -88,7 +88,7 @@ def run_sdk():
         )
         domain.add_constraint(ic_pos, "ic_pos")
 
-        # 初始速度：dx/dt|_{t=0} = 0
+        # Initial velocity: dx/dt|_{t=0} = 0
         ic_vel = PointwiseBoundaryConstraint(
             nodes=nodes,
             geometry=geo,
@@ -109,14 +109,14 @@ def run_sdk():
 def main():
     if not HAS_SDK:
         print("=" * 60)
-        print("⚠️  PhysicsNeMo-Sym 未安装")
+        print("WARNING: PhysicsNeMo-Sym is not installed")
         print()
-        print("本文件需要 nvidia-physicsnemo 和 nvidia-physicsnemo.sym")
-        print("如果你只想跑通第 1 章，请使用裸 PyTorch 版：")
+        print("This file requires nvidia-physicsnemo and nvidia-physicsnemo.sym")
+        print("To run Chapter 1 without SDK, use the raw PyTorch version:")
         print()
         print("    python pinn_spring.py --epochs 5000")
         print()
-        print("SDK 安装方式：")
+        print("To install the SDK:")
         print("    pip install nvidia-physicsnemo nvidia-physicsnemo.sym")
         print("=" * 60)
         return

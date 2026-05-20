@@ -8,4 +8,5 @@ data/*.pt
 *.onnx
 .DS_Store
 pinn_results.png
-*_results.png
+mlp_results.png
+/*_results.png
