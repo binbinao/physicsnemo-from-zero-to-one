@@ -30,6 +30,6 @@
 ## 配套资源
 
 - [体例说明](STYLE.md)
-- [环境](ENVIRONMENT.md)（`docs/ENVIRONMENT.md`）
+- [环境](../docs/ENVIRONMENT.md)（`docs/ENVIRONMENT.md`）
 - [6 周学习计划](../docs/STUDY_PLAN_6WEEKS.md)
 - [命令对照](../docs/COMMAND_REFERENCE.md)
