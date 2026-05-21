@@ -63,7 +63,17 @@ def main():
 
     # Load model
     ckpt = torch.load(args.ckpt, map_location="cpu", weights_only=False)
-    cfg = ckpt.get("config", {})
+
+    # Support both old format (ckpt["model"]) and new format (ckpt["model_state_dict"])
+    if "model_state_dict" in ckpt:
+        state_dict = ckpt["model_state_dict"]
+    elif "model" in ckpt:
+        state_dict = ckpt["model"]
+    else:
+        # Assume the checkpoint is a plain state_dict
+        state_dict = ckpt
+
+    cfg = ckpt.get("config", {}) if isinstance(ckpt, dict) else {}
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     # Load data to determine n_vars
@@ -81,7 +91,7 @@ def main():
         depth=cfg.get("depth", 4),
         mlp_ratio=cfg.get("mlp_ratio", 4.0),
     ).to(device)
-    model.load_state_dict(ckpt["model"])
+    model.load_state_dict(state_dict)
     print(f"Loaded model, rolling out {args.rollout_steps} steps...")
 
     # Use last portion of data as test

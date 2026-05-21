@@ -168,6 +168,39 @@ class HeatSinkGeometry:
         return (np.concatenate(xs), np.concatenate(ys),
                 np.concatenate(nxs), np.concatenate(nys))
 
+    def sample_base_top_exposed(self, n: int) -> tuple:
+        """
+        Sample points on the top of the base plate between fins (exposed to air).
+
+        These points are at y = base_height but NOT under a fin footprint.
+        Normal is (0, 1) pointing up. They receive Robin BC (convective cooling).
+
+        Returns:
+            (x, y, nx, ny) arrays of shape (m,) where m <= n.
+        """
+        # Compute fin x-intervals on the base top
+        fin_intervals = [(fin.x_min, fin.x_max) for fin in self.fins]
+
+        # Sample uniformly along the full base width, then reject fin footprints
+        oversample_factor = 2
+        x_candidates = np.random.uniform(
+            -self.base_width / 2, self.base_width / 2, n * oversample_factor
+        )
+
+        # Reject points that fall within any fin footprint
+        mask = np.ones(len(x_candidates), dtype=bool)
+        for x_min_fin, x_max_fin in fin_intervals:
+            mask &= ~((x_candidates >= x_min_fin) & (x_candidates <= x_max_fin))
+
+        x_out = x_candidates[mask][:n]
+        m = len(x_out)
+
+        y_out = np.full(m, self.base_height)
+        nx_out = np.zeros(m)
+        ny_out = np.ones(m)
+
+        return x_out, y_out, nx_out, ny_out
+
     def contains(self, x: np.ndarray, y: np.ndarray) -> np.ndarray:
         """Check if points are inside the heat sink domain."""
         mask = self.base.contains(x, y)

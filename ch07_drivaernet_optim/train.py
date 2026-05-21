@@ -134,7 +134,10 @@ def train(args):
                     "note": "Not DrivAerNet production data unless you replace car_aero_data.pt",
                 },
             }
-            torch.save(ckpt, os.path.join(args.out_dir, "best.pt"))
+            save_path = os.path.join(args.out_dir, "best.pt")
+            tmp_path = save_path + ".tmp"
+            torch.save(ckpt, tmp_path)
+            os.replace(tmp_path, save_path)
 
     print(f"\nBest val MSE: {best_val:.6f}")
     print(f"Checkpoint saved: {args.out_dir}/best.pt")
