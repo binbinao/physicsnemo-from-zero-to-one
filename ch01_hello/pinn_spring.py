@@ -163,7 +163,11 @@ def main():
     parser.add_argument("--depth", type=int, default=4)
     parser.add_argument("--n-collocation", type=int, default=256)
     parser.add_argument("--lr", type=float, default=1e-3)
+    parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
+
+    torch.manual_seed(args.seed)
+    np.random.seed(args.seed)
 
     model = PINN(hidden=args.hidden, depth=args.depth)
     print(f"Model parameters: {sum(p.numel() for p in model.parameters()):,}")
