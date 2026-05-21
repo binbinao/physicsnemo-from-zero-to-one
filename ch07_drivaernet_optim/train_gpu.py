@@ -27,6 +27,7 @@ import torch.nn as nn
 import torch.distributed as dist
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.utils.data import TensorDataset, DataLoader
+from torch.utils.data.distributed import DistributedSampler
 
 import matplotlib
 matplotlib.use("Agg")
@@ -43,7 +44,8 @@ _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def setup_ddp():
     if "RANK" in os.environ:
-        dist.init_process_group(backend="nccl")
+        if not dist.is_initialized():
+            dist.init_process_group(backend="nccl")
         rank = dist.get_rank()
         torch.cuda.set_device(rank)
         return rank, dist.get_world_size(), True
@@ -90,8 +92,12 @@ def train_model(args, hidden=None, layers=None, lr=None, trial=None):
     x_train, y_train = params_norm[train_idx], cd[train_idx]
     x_val, y_val = params_norm[val_idx], cd[val_idx]
 
-    train_loader = DataLoader(TensorDataset(x_train, y_train),
-                              batch_size=args.batch_size, shuffle=True)
+    train_dataset = TensorDataset(x_train, y_train)
+    train_sampler = DistributedSampler(train_dataset, shuffle=True) if use_ddp else None
+    train_loader = DataLoader(train_dataset,
+                              batch_size=args.batch_size,
+                              sampler=train_sampler,
+                              shuffle=(train_sampler is None))
 
     model = FullyConnected(
         in_features=7,
@@ -115,6 +121,8 @@ def train_model(args, hidden=None, layers=None, lr=None, trial=None):
     os.makedirs(out_dir, exist_ok=True)
 
     for epoch in range(args.epochs):
+        if train_sampler is not None:
+            train_sampler.set_epoch(epoch)
         model.train()
         for xb, yb in train_loader:
             optimizer.zero_grad()

@@ -88,6 +88,7 @@ class AFNOBlock(nn.Module):
             self.w1[0], self.w1[1], self.b1[0], self.b1[1])
         # Soft thresholding (AFNO-style sparsity)
         magnitude = torch.sqrt(o_real**2 + o_imag**2 + 1e-8)
+        # NOTE: Original AFNO uses a learnable threshold parameter; fixed here for simplicity
         shrink = F.relu(magnitude - 0.01) / (magnitude + 1e-8)
         o_real = o_real * shrink
         o_imag = o_imag * shrink
@@ -141,6 +142,7 @@ class AFNOMini(nn.Module):
     def __init__(self, in_channels: int = 4, out_channels: int = 4,
                  embed_dim: int = 64, depth: int = 4, mlp_ratio: float = 4.0):
         super().__init__()
+        # NOTE: Original FourCastNet uses patch_size=4/8 for efficiency; pixel-level used here for simplicity
         self.embed = nn.Conv2d(in_channels, embed_dim, kernel_size=1)
         self.blocks = nn.ModuleList([
             AFNOBlock(embed_dim, mlp_ratio=mlp_ratio)

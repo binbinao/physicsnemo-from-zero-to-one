@@ -228,7 +228,11 @@ if __name__ == "__main__":
     parser.add_argument("--n_pde", type=int, default=2000, help="PDE collocation points")
     parser.add_argument("--n_ic", type=int, default=200, help="IC sample points")
     parser.add_argument("--n_bc", type=int, default=200, help="BC sample points per side")
+    parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
+
+    torch.manual_seed(args.seed)
+    np.random.seed(args.seed)
 
     model, history = train(args)
     device = "cuda" if torch.cuda.is_available() else "cpu"

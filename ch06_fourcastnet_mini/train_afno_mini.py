@@ -12,6 +12,7 @@ import os
 import sys
 import argparse
 
+import numpy as np
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -147,7 +148,13 @@ def main_argparse():
     parser = argparse.ArgumentParser()
     for k, v in get_defaults().items():
         parser.add_argument(f"--{k}", type=type(v), default=v)
-    train(vars(parser.parse_args()))
+    parser.add_argument("--seed", type=int, default=42)
+    args = parser.parse_args()
+
+    torch.manual_seed(args.seed)
+    np.random.seed(args.seed)
+
+    train(vars(args))
 
 if __name__ == "__main__":
     if HAS_HYDRA:

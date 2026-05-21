@@ -110,7 +110,11 @@ def main():
     parser.add_argument("--hidden", type=int, default=32)
     parser.add_argument("--depth", type=int, default=3)
     parser.add_argument("--lr", type=float, default=1e-3)
+    parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
+
+    torch.manual_seed(args.seed)
+    np.random.seed(args.seed)
 
     t, x = make_dataset()
     model = MLP(hidden=args.hidden, depth=args.depth)

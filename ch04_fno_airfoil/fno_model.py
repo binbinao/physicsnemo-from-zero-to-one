@@ -77,9 +77,10 @@ class FNOBlock(nn.Module):
         super().__init__()
         self.spectral_conv = SpectralConv2d(width, width, modes_x, modes_y)
         self.bypass = nn.Conv2d(width, width, 1)
-        self.norm = nn.InstanceNorm2d(width)
+        self.norm = nn.InstanceNorm2d(width)  # NOTE: Not in original FNO paper; added for training stability in this tutorial
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # NOTE: Original FNO (Li et al. 2021) uses ReLU; GELU used here for training stability
         return F.gelu(self.norm(self.spectral_conv(x) + self.bypass(x)))
 
 
