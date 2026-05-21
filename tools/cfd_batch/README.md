@@ -54,3 +54,29 @@ python tools/cfd_batch/ingest_results.py
 | `manifest.schema.json` | 清单字段说明 |
 
 生产环境：将 `templates/` 换成本机 deck，在 `manifest.json` 中填写 `solver_cmd`，`import_hifi_queue.py --mode fluent|openfoam`。
+
+## OpenFOAM 集成
+
+`run_openfoam_case.py` 提供基于模板的 OpenFOAM 单算例工作流：
+
+1. 将 `templates/openfoam/` 复制到目标目录
+2. 替换 `.template` 文件中的占位符（`{{INLET_VELOCITY}}`、`{{KINEMATIC_VISCOSITY}}`）
+3. 执行 `blockMesh` + `simpleFoam`（或 `--dry_run` 输出 mock 结果）
+4. 从 `postProcessing/forceCoeffs/` 提取 Cd/Cl，写入 `results.json`
+
+```bash
+# Dry-run（无需 OpenFOAM 安装）
+python tools/cfd_batch/run_openfoam_case.py \
+  --case_dir /tmp/test_case \
+  --inlet_velocity 10 \
+  --viscosity 1e-5 \
+  --dry_run
+
+# 真实求解（需安装 OpenFOAM）
+python tools/cfd_batch/run_openfoam_case.py \
+  --case_dir /tmp/real_case \
+  --inlet_velocity 15 \
+  --viscosity 1.5e-5
+```
+
+模板结构见 `templates/openfoam/README.md`。
