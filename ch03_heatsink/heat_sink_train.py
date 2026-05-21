@@ -26,8 +26,10 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+_CH03_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # Local imports
-sys.path.insert(0, os.path.dirname(__file__))
+sys.path.insert(0, _CH03_DIR)
 from heat_sink_geometry import HeatSinkGeometry
 from equations import heat_conduction_2d, robin_boundary, neumann_boundary
 
@@ -90,14 +92,17 @@ def train(cfg: dict):
     n_bot = cfg.get("n_bottom", 300)
     n_side = cfg.get("n_side", 300)
     n_robin = cfg.get("n_robin", 500)
+    n_base_top = cfg.get("n_base_top", 200)
 
     # Loss weights
     w_pde = cfg.get("w_pde", 1.0)
     w_bot = cfg.get("w_bottom", 10.0)
     w_side = cfg.get("w_side", 1.0)
     w_robin = cfg.get("w_robin", 5.0)
+    w_base_top = cfg.get("w_base_top", 5.0)
 
-    history = {"loss": [], "pde": [], "bottom": [], "side": [], "robin": []}
+    history = {"loss": [], "pde": [], "bottom": [], "side": [], "robin": [],
+               "base_top": []}
     log_interval = max(1, steps // 20)
 
     # Normalization scale (geometry is in mm, normalize to ~unit)
@@ -145,9 +150,21 @@ def train(cfg: dict):
                                    k=k, h_conv=h_conv, T_inf=T_inf)
         loss_robin = (res_robin ** 2).mean()
 
+        # --- Base top exposed surface (Robin BC, convective) ---
+        xbt, ybt, nxbt, nybt = geo.sample_base_top_exposed(n_base_top)
+        xbt_t = torch.tensor(xbt / scale, dtype=torch.float32, device=device).unsqueeze(1).requires_grad_(True)
+        ybt_t = torch.tensor(ybt / scale, dtype=torch.float32, device=device).unsqueeze(1).requires_grad_(True)
+        nxbt_t = torch.tensor(nxbt, dtype=torch.float32, device=device).unsqueeze(1)
+        nybt_t = torch.tensor(nybt, dtype=torch.float32, device=device).unsqueeze(1)
+        T_base_top = model(xbt_t, ybt_t)
+        res_base_top = robin_boundary(T_base_top, xbt_t, ybt_t, nxbt_t, nybt_t,
+                                      k=k, h_conv=h_conv, T_inf=T_inf)
+        loss_base_top = (res_base_top ** 2).mean()
+
         # Total loss
         loss = (w_pde * loss_pde + w_bot * loss_bot +
-                w_side * loss_side + w_robin * loss_robin)
+                w_side * loss_side + w_robin * loss_robin +
+                w_base_top * loss_base_top)
         loss.backward()
         optimizer.step()
         scheduler.step()
@@ -157,11 +174,13 @@ def train(cfg: dict):
         history["bottom"].append(loss_bot.item())
         history["side"].append(loss_side.item())
         history["robin"].append(loss_robin.item())
+        history["base_top"].append(loss_base_top.item())
 
         if step % log_interval == 0 or step == 1:
             print(f"[{step:5d}/{steps}] loss={loss.item():.4e} "
                   f"pde={loss_pde.item():.4e} bot={loss_bot.item():.4e} "
-                  f"side={loss_side.item():.4e} robin={loss_robin.item():.4e}")
+                  f"side={loss_side.item():.4e} robin={loss_robin.item():.4e} "
+                  f"base_top={loss_base_top.item():.4e}")
 
     # Save
     out_dir = cfg.get("output_dir", "outputs")
@@ -227,15 +246,31 @@ def quick_viz(model, geo, scale, out_dir="outputs"):
 # ---------------------------------------------------------------------------
 # Entry points
 # ---------------------------------------------------------------------------
+def resolve_output_dir(output_dir: str) -> str:
+    """Always write under ch03_heatsink/ unless an absolute path is given."""
+    if os.path.isabs(output_dir):
+        return output_dir
+    return os.path.join(_CH03_DIR, output_dir)
+
+
 def get_default_cfg():
     return {
         "hidden": 128, "depth": 5, "steps": 3000, "lr": 1e-3,
         "fin_height": 20.0, "n_fins": 3,
         "k": 1.0, "Q": 0.0, "T_source": 100.0, "h_conv": 10.0, "T_inf": 0.0,
         "n_interior": 3000, "n_bottom": 300, "n_side": 300, "n_robin": 500,
+        "n_base_top": 200,
         "w_pde": 1.0, "w_bottom": 10.0, "w_side": 1.0, "w_robin": 5.0,
-        "output_dir": "outputs",
+        "w_base_top": 5.0,
+        "output_dir": resolve_output_dir("outputs"),
     }
+
+
+def normalize_cfg(cfg: dict) -> dict:
+    cfg = dict(cfg)
+    cfg["output_dir"] = resolve_output_dir(str(cfg.get("output_dir", "outputs")))
+    os.makedirs(cfg["output_dir"], exist_ok=True)
+    return cfg
 
 
 if HAS_HYDRA:
@@ -243,6 +278,7 @@ if HAS_HYDRA:
     def main_hydra(cfg: DictConfig):
         flat = get_default_cfg()
         flat.update(OmegaConf.to_container(cfg, resolve=True))
+        flat = normalize_cfg(flat)
         model, history, geo, scale = train(flat)
         quick_viz(model, geo, scale, flat["output_dir"])
 
@@ -253,7 +289,7 @@ def main_argparse():
     for k, v in defaults.items():
         parser.add_argument(f"--{k}", type=type(v), default=v)
     args = parser.parse_args()
-    cfg = vars(args)
+    cfg = normalize_cfg(vars(args))
     model, history, geo, scale = train(cfg)
     quick_viz(model, geo, scale, cfg["output_dir"])
 

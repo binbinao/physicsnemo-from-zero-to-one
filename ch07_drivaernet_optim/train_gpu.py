@@ -83,7 +83,8 @@ def train_model(args, hidden=None, layers=None, lr=None, trial=None):
 
     n = len(cd)
     n_train = int(n * 0.8)
-    perm = torch.randperm(n, device=device)
+    g = torch.Generator().manual_seed(42)
+    perm = torch.randperm(n, generator=g)
     train_idx, val_idx = perm[:n_train], perm[n_train:]
 
     x_train, y_train = params_norm[train_idx], cd[train_idx]

@@ -101,8 +101,14 @@ def train(cfg: dict):
     out_dir = cfg.get("output_dir", "outputs")
     os.makedirs(out_dir, exist_ok=True)
     ckpt_path = os.path.join(out_dir, "afno_weather.pt")
-    torch.save({"model": model.state_dict(), "config": cfg, "history": history},
-               ckpt_path)
+    ckpt = {
+        "model_state_dict": model.state_dict(),
+        "optimizer_state_dict": optimizer.state_dict(),
+        "epoch": epochs,
+        "history": history,
+        "config": cfg,
+    }
+    torch.save(ckpt, ckpt_path)
     print(f"\nCheckpoint: {ckpt_path}")
 
     # Loss plot
