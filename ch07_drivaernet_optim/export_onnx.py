@@ -11,7 +11,7 @@ import argparse
 import torch
 
 sys.path.insert(0, os.path.dirname(__file__))
-from models.cd_mlp import CdMLP
+from models.cd_mlp import load_cd_mlp_from_checkpoint
 
 
 def main():
@@ -25,10 +25,10 @@ def main():
         print("Run train.py first.")
         sys.exit(1)
 
-    ckpt = torch.load(args.checkpoint, weights_only=False, map_location="cpu")
-    model = CdMLP(in_features=7, hidden_dim=128, n_layers=4, dropout=0.0)
-    model.load_state_dict(ckpt["model_state"])
-    model.eval()
+    model, ckpt = load_cd_mlp_from_checkpoint(args.checkpoint, map_location="cpu")
+    export_dropout = ckpt.get("args", {}).get("dropout", 0.1)
+    if export_dropout > 0:
+        print(f"[INFO] Exporting with training dropout={export_dropout} (eval mode).")
 
     dummy = torch.randn(1, 7)
     os.makedirs(os.path.dirname(args.output) or ".", exist_ok=True)

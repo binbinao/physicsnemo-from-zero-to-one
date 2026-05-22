@@ -27,9 +27,12 @@ python heat1d_train.py -m arch=small,large lr=1e-3,1e-4
 
 ## ch03
 
+> `heat_sink_train.py` 的 checkpoint 始终写在 `ch03_heatsink/outputs/`（与当前工作目录无关）。
+
 ```bash
 cd ch03_heatsink
 python heat_sink_train.py          # 结束写 outputs/validation_report.json
+python heat_sink_train.py --steps 500   # CPU 演示可缩短步数
 python validator.py --checkpoint outputs/heat_sink.pt
 python heat_sink_inverse_joint.py --target_temp 40 --steps 2000
 python visualize.py
@@ -84,6 +87,15 @@ python optimize_multi.py --checkpoint outputs/best.pt --n_trials 100
 python ../../tools/cfd_batch/import_hifi_queue.py --csv outputs/hifi_queue.csv
 python export_onnx.py --checkpoint outputs/best.pt
 ```
+
+## CAE 闭环（根目录）
+
+```bash
+python scripts/run_cae_closed_loop_demo.py
+python scripts/run_cae_closed_loop_demo.py --skip-train --skip-ch03
+```
+
+见 [CAE_CLOSED_LOOP_DEMO.md](CAE_CLOSED_LOOP_DEMO.md)。
 
 ## 已知的正文历史写法（勿用）
 

@@ -64,6 +64,27 @@ class CdMLP(nn.Module):
         return self.forward(x).squeeze(-1)
 
 
+def load_cd_mlp_from_checkpoint(
+    ckpt_path: str,
+    map_location: str | torch.device = "cpu",
+) -> tuple["CdMLP", dict]:
+    """Rebuild CdMLP from train.py checkpoint (matches dropout / layer count)."""
+    ckpt = torch.load(ckpt_path, weights_only=False, map_location=map_location)
+    train_args = ckpt.get("args", {})
+    in_features = len(ckpt.get("param_names", [])) or train_args.get("in_features", 7)
+    model = CdMLP(
+        in_features=in_features,
+        hidden_dim=train_args.get("hidden", 128),
+        n_layers=train_args.get("layers", 4),
+        dropout=train_args.get("dropout", 0.1),
+    )
+    model.load_state_dict(ckpt["model_state"])
+    if "input_mean" in ckpt and "input_std" in ckpt:
+        model.set_normalization(ckpt["input_mean"], ckpt["input_std"])
+    model.eval()
+    return model, ckpt
+
+
 if __name__ == "__main__":
     model = CdMLP(in_features=7, hidden_dim=128, n_layers=4)
     n_params = sum(p.numel() for p in model.parameters())

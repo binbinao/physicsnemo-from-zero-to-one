@@ -23,3 +23,30 @@ jobs:
         run: python scripts/check_env.py --tier 0
       - name: ch01 PINN short run
         run: python ch01_hello/pinn_spring.py --epochs 50
+      - name: ch02 raw PINN short run
+        working-directory: ch02_heat1d
+        run: python heat1d_pinn_raw.py --steps 100
+      - name: ch04 FNO mini short run
+        working-directory: ch04_fno_airfoil
+        run: python train_fno_mini.py --epochs 3 --n_samples 20
+      - name: ch05 data FNO short run
+        working-directory: ch05_darcy_hybrid
+        run: python train_data_fno.py --epochs 3 --n_train 20
+      - name: ch06 AFNO mini short run
+        working-directory: ch06_fourcastnet_mini
+        run: |
+          python scripts/generate_toy_weather.py --n_time 30 --resolution 32
+          python train_afno_mini.py --epochs 2
+      - name: ch07 train and checkpoint round-trip
+        working-directory: ch07_drivaernet_optim
+        run: |
+          python data/generate_toy_cars.py --n_samples 200
+          python train.py --epochs 5 --n_samples 200
+          python -c "from models.cd_mlp import load_cd_mlp_from_checkpoint as L; L('outputs/best.pt'); print('checkpoint OK')"
+      - name: ch07 ONNX export (Tier 3)
+        working-directory: ch07_drivaernet_optim
+        run: |
+          pip install onnx onnxscript
+          python export_onnx.py --checkpoint outputs/best.pt
+      - name: CAE closed-loop demo (skip train)
+        run: python scripts/run_cae_closed_loop_demo.py --skip-train --skip-ch03 --opt-trials 5 --top-k 2
