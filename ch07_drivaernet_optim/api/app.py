@@ -25,7 +25,7 @@ except ImportError:
 
 if HAS_FASTAPI:
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-    from models.cd_mlp import CdMLP
+    from models.cd_mlp import load_cd_mlp_from_checkpoint
 
     # ── Load model ────────────────────────────────────────
     CKPT_PATH = os.environ.get("CKPT_PATH", "outputs/best.pt")
@@ -39,10 +39,7 @@ if HAS_FASTAPI:
                     f"Checkpoint not found: {CKPT_PATH}. "
                     "Run train.py first, or set CKPT_PATH env var."
                 )
-            ckpt = torch.load(CKPT_PATH, weights_only=False, map_location="cpu")
-            _model = CdMLP(in_features=7, hidden_dim=128, n_layers=4, dropout=0.0)
-            _model.load_state_dict(ckpt["model_state"])
-            _model.eval()
+            _model, _ = load_cd_mlp_from_checkpoint(CKPT_PATH, map_location="cpu")
         return _model
 
     # ── API Schema ────────────────────────────────────────
