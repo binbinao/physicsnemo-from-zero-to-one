@@ -19,7 +19,7 @@ python book/scripts/generate_diagram_figures.py
 | 路径 | 用途 |
 |:---|:---|
 | **`book/assets/`** | 教材插图（`ch*.md` 里 `![](assets/...)`） |
-| **`assets/`（仓库根）** | 非正文插图，如章末公众号二维码占位 [`wechat_qrcode.png`](../../assets/wechat_qrcode.png) |
+| **`assets/`（仓库根）** | 非正文插图，如章末公众号二维码占位 [`wechat_qrcode.jpg`](../../assets/wechat_qrcode.jpg) |
 
 章末「扫码关注」图为**占位**，可替换为正式二维码后覆盖根目录文件。
 
