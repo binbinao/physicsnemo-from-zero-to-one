@@ -19,7 +19,7 @@
 | F2.1 | f2_1_roadmap.png | 第 2 章学习路线 | **gemini** |
 | F2.2–F2.3 | f2_2, f2_3 | loss、场演化 | matplotlib |
 | F2.4 | f2_4_physics_intuition.png | 热扩散直觉 | **gemini** |
-| F2.5–F2.8 | f2_5, f2_7* | 配点、调参 | matplotlib |
+| F2.5–F2.8 | f2_5, f2_6*, f2_7*, f2_8* | 配点、调参 | matplotlib |
 | F3.0 | f3_0_banner.png | 散热片章横幅 | **gemini** |
 | F3.1 | f3_1_progression.png | 维度递进 | **gemini** |
 | F3.3 | f3_3_geometry.png | three-fin 几何 | **gemini** |
