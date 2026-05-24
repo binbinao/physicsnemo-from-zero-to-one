@@ -37,7 +37,7 @@ Optional: `> **📌 Before you read**` (when the narrative and default code diff
 
 - **Figure numbering**: `F{chapter}.{seq}`, subfigures `F2.7.1` only when multiple figures in the same section require sub-numbering.
 - **Table numbering**: `T{chapter}.{seq}`, title `### T1.1 …`.
-- **Figure captions**: `![F1.0 Short description](assets/f1_0_banner.png)`; production-use descriptions go in [assets/FIGURE_MANIFEST.md](assets/FIGURE_MANIFEST.md), not in the body text.
+- **Figure captions**: `![F1.0 Short description](../book/assets/f1_0_banner.png)`; production-use descriptions go in [assets/FIGURE_MANIFEST.md](../book/assets/FIGURE_MANIFEST.md), not in the body text.
 - **Mermaid**: For print and static reading, use `assets/*.png` as the source of truth; **do not** place a `` ```text` `` vertical-flow or Mermaid block alongside the finalized figure showing the same content (triple duplication). For architecture/algorithm flows, see [BOOK_FIGURE_OUTPUT_FORMS.md](../docs/BOOK_FIGURE_OUTPUT_FORMS.md).
 - **Architecture diagrams** (FNO block, Domain/Constraint, etc.): Use script-reproducible vector-style PNGs (`book/scripts/generate_diagram_figures.py --vector-only`) or Figma/SVG source files; text inside diagrams in English, captions in the target language.
 
