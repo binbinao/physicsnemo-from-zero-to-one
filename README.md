@@ -1,3 +1,5 @@
+> 📄 **Deep-dive case study with metrics, highlights, and architecture**: [binbinao.github.io/resume/projects/physicsnemo-from-zero-to-one/](https://binbinao.github.io/resume/projects/physicsnemo-from-zero-to-one/)
+
 # PhysicsNeMo: From Zero to One
 
 [![GitHub](https://img.shields.io/badge/GitHub-binbinao%2Fphysicsnemo--from--zero--to--one-blue?logo=github)](https://github.com/binbinao/physicsnemo-from-zero-to-one)
