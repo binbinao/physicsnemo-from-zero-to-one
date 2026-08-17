@@ -1,0 +1,7 @@
+# ch03 heat_sink_train.py --steps 3000 (reference record, 2D three-fin)
+# note: multi-constraint PINN — look for same-order decline, not absolute equality
+step_final_total=4.5e-03
+step_final_pde≈1e-03–5e-03
+step_final_dirichlet≈1e-03–1e-02
+step_final_robin≈1e-03–1e-02
+temperature_field=hotspot_near_chip_not_constant

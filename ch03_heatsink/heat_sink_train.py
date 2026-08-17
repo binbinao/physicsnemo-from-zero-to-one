@@ -296,6 +296,11 @@ def main_argparse():
 
 if __name__ == "__main__":
     if HAS_HYDRA:
+        print(
+            "[INFO] hydra-core detected: use Hydra overrides "
+            "(e.g. epochs=50 / steps=500), not --epochs/--steps. "
+            "See docs/COMMAND_REFERENCE.md."
+        )
         main_hydra()
     else:
         print("[INFO] hydra-core not found, using argparse fallback.")

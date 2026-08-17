@@ -9,17 +9,23 @@
 ## 先跑这个
 
 ```bash
+# 无 Hydra：--epochs；有 Hydra：epochs=50 n_train=100
 python train_data_fno.py --epochs 50 --n_train 100
 python train_physics_fno.py --epochs 50 --n_train 100 --lambda_physics 0.1
 ```
 
-## 三档脚本
+> **Hydra 提示**：见 [COMMAND_REFERENCE](../docs/COMMAND_REFERENCE.md)。需 **scipy** + ch04 目录。
+
+## 三档 / 对照脚本
 
 | 档位 | 文件 | 说明 |
 |:---|:---|:---|
-| **基线 · 纯数据** | `train_data_fno.py` | 无 PDE 正则 |
+| **基线 · 纯数据** | `train_data_fno.py` | 无 PDE 正则（裸 PyTorch） |
 | **首选 · 混合** | `train_physics_fno.py` | 数据 + Darcy 残差 |
-| SDK / GPU | `train_physics_fno_sdk.py` / `train_physics_fno_gpu.py` | |
+| SDK | `train_physics_fno_sdk.py` | PhysicsNeMo backbone |
+| GPU | `train_physics_fno_gpu.py` | 生产档 |
+
+> 本章不是简单的 mini/sdk/gpu 三平行，而是 **数据基线 → 混合损失** 的实验对照。
 
 ## 教材
 

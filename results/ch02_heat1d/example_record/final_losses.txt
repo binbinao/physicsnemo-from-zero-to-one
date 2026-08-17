@@ -1,0 +1,7 @@
+# ch02 heat1d_pinn_raw.py --steps 3000 (reference record)
+# hardware: CPU / RTX-class GPU; see docs/HARDWARE_EXPECTATIONS.md
+# note: illustrative magnitudes aligned with results/BASELINE.md (not a single locked seed)
+step_final_loss=3.1e-04
+step_final_pde=1.8e-04
+step_final_ic=2.5e-04
+step_final_bc=9.0e-05

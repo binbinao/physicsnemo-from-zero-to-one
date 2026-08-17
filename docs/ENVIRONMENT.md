@@ -24,16 +24,17 @@
 
 ```bash
 pip install "torch>=2.3" numpy matplotlib
+# 或：pip install -r requirements-minimal.txt（含 scipy，ch04+ 必需）
 ```
 
 详见 [QUICKSTART_DAY1.md](QUICKSTART_DAY1.md)。
 
-### Tier 1 — ch01–ch03 全部裸 PyTorch版
+### Tier 1 — ch01–ch03 全部裸 PyTorch版（含 ch04 Darcy 数据生成）
 
 ```bash
-pip install "torch>=2.3" numpy matplotlib
+pip install "torch>=2.3" numpy matplotlib scipy
+# 推荐：pip install -r requirements-minimal.txt
 ```
-
 ### 教材配图（`book/assets/`）
 
 含中文标注的图由 **Matplotlib 程序化出图**（非文生图 AI），须能加载仓库内置 **Noto Sans SC**：
@@ -50,16 +51,18 @@ python book/scripts/generate_all_figures.py
 ### Tier 2 — SDK 版（ch01–ch07 的 `*_sdk.py`）
 
 ```bash
-pip install "torch>=2.3" numpy matplotlib nvidia-physicsnemo nvidia-physicsnemo.sym hydra-core
+pip install "torch>=2.3" numpy matplotlib scipy nvidia-physicsnemo nvidia-physicsnemo.sym hydra-core
 ```
+
+> **Hydra 注意**：装上 `hydra-core` 后，部分训练入口改用 `epochs=50` / `steps=500` 语法，
+> 不要用 `--epochs`。见 [COMMAND_REFERENCE.md](COMMAND_REFERENCE.md)。
 
 ### Tier 3 — 全书 + 部署（ch07 API / ONNX）
 
 ```bash
-pip install "torch>=2.3" numpy matplotlib nvidia-physicsnemo nvidia-physicsnemo.sym \
+pip install "torch>=2.3" numpy matplotlib scipy nvidia-physicsnemo nvidia-physicsnemo.sym \
   hydra-core optuna fastapi uvicorn onnx
 ```
-
 ## 按章依赖速查
 
 | 章 | 首选脚本 | 最低 Tier | GPU |

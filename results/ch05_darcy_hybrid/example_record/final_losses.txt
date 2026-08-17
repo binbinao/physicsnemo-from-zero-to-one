@@ -1,0 +1,8 @@
+# ch05 train_data_fno.py then train_physics_fno.py (n_train=100, epochs=50)
+# data-only: train may be much lower than test (overfit on small n)
+data_only_train_mse≈5e-03–2e-02
+data_only_test_mse≈2e-02–8e-02
+# hybrid lambda_physics=0.1: test often improves or stabilizes vs data-only
+hybrid_train_mse≈8e-03–3e-02
+hybrid_test_mse≈1e-02–5e-02
+lambda_physics=0.1

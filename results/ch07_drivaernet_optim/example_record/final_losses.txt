@@ -1,0 +1,5 @@
+# ch07 train.py --epochs 200 (toy_synthetic Cd surrogate)
+# hardware: CPU OK
+best_val_mse≈1e-04–1e-03
+val_mae_cd≈0.01–0.05
+data_tier=toy_synthetic
