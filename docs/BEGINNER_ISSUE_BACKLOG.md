@@ -2,7 +2,8 @@
 
 > 由「小白视角审阅」整理，用于逐项改进教程与仓库。
 > **第一轮 #1–#16**：已全部完成并关闭。  
-> **第二轮 #17–#53**：见 [REVIEW_ROUND2_BACKLOG.md](REVIEW_ROUND2_BACKLOG.md)。
+> **第二轮 #17–#53**：见 [REVIEW_ROUND2_BACKLOG.md](REVIEW_ROUND2_BACKLOG.md)。  
+> **第三轮 #166–#176（学习体验）**：见下表 · issue 正文 [issues/round3-ux/](issues/round3-ux/)。
 
 **标签**：`beginner` · `documentation` · `onboarding` · `book` · `enhancement`
 
@@ -171,3 +172,29 @@
 2. **阻塞跑通**：#4 最小安装、#7 命令对齐、#9 ch05 依赖  
 3. **降低放弃率**：#12 云 GPU、#15 硬件表、#5 check_env  
 4. **长期质量**：#13 版本锁定、#16 baseline、#14 路线图、#10/#11 学习路径 — **已全部完成（16/16）**
+
+---
+
+## 第三轮 · 学习体验（#166–#176）
+
+> 来源：初学者视角深度审阅（书稿 / 代码 / docs 支撑三线）。  
+> issue map：[issues/round3-ux/issue_map.json](issues/round3-ux/issue_map.json)
+
+| 本地 | 标题 | 优先级 | 状态 | GitHub |
+|:---|:---|:---|:---|:---|
+| R3-01 | check_env 补 scipy 自检（ch04/ch05） | P0 | done | [#166](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/166) |
+| R3-02 | Hydra/argparse 双语法提示 | P0 | done | [#167](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/167) |
+| R3-03 | 统一 ch01/ch07 README 与代码默认 epoch | P0 | done | [#168](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/168) |
+| R3-04 | 修复 BASELINE.md example_record 死链 | P0 | done | [#169](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/169) |
+| R3-05 | 补 ch02–ch07 example_record 与 BASELINE 数量级 | P1 | done | [#170](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/170) |
+| R3-06 | 对齐 Colab notebook 与 6 周计划无 GPU 覆盖 | P1 | done | [#171](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/171) |
+| R3-07 | 拆分 6 周计划第 6 周过载 | P1 | done | [#172](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/172) |
+| R3-08 | 三档变体命名对照表 + raw/sdk 不可直接对比 | P1 | done | [#173](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/173) |
+| R3-09 | ch04 翼型/Darcy 路径 A/B 与示例对齐标注 | P2 | done | [#174](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/174) |
+| R3-10 | ch03/ch06 可选深读 + DDP 无多卡可跳过 | P2 | done | [#175](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/175) |
+| R3-11 | 体例小错（ch07 编号 / SDK 口径 / 第0章 / 图号） | P2 | done | [#176](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/176) |
+
+**决策（实现时采用）**：
+
+1. 三档变体：**保留现有文件名**，各章 README 增加对照表（不统一改名）。  
+2. raw/sdk 物理设定不一致：**显式标注「两版问题不同，不可直接对比 loss」**（不对齐参数）。

@@ -21,7 +21,7 @@ python ch01_hello/pinn_spring.py --epochs 500
 
 ## 3. 按周学习（可选）
 
-[STUDY_PLAN_6WEEKS.md](STUDY_PLAN_6WEEKS.md) · 命令对照：[COMMAND_REFERENCE.md](COMMAND_REFERENCE.md)
+[STUDY_PLAN_6WEEKS.md](STUDY_PLAN_6WEEKS.md)（现为 **6–8 周**；零基础可 8–10 周） · 命令对照：[COMMAND_REFERENCE.md](COMMAND_REFERENCE.md)
 
 ## 4. 关键「别踩坑」一页纸
 

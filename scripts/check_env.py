@@ -21,14 +21,14 @@ WIDTH = 60
 
 # tier -> pip one-liner (display only)
 TIER_INSTALL = {
-    0: 'pip install "torch>=2.3" numpy matplotlib',
-    1: 'pip install "torch>=2.3" numpy matplotlib',
+    0: 'pip install "torch>=2.3" numpy matplotlib scipy',
+    1: 'pip install "torch>=2.3" numpy matplotlib scipy',
     2: (
-        'pip install "torch>=2.3" numpy matplotlib hydra-core '
+        'pip install "torch>=2.3" numpy matplotlib scipy hydra-core '
         "nvidia-physicsnemo nvidia-physicsnemo.sym"
     ),
     3: (
-        'pip install "torch>=2.3" numpy matplotlib hydra-core '
+        'pip install "torch>=2.3" numpy matplotlib scipy hydra-core '
         "nvidia-physicsnemo nvidia-physicsnemo.sym "
         "optuna fastapi uvicorn onnx"
     ),
@@ -67,7 +67,7 @@ CHAPTERS: dict[int, dict] = {
         "title": "FNO / Darcy",
         "tier": 1,
         "gpu": True,
-        "required": ["torch", "numpy", "matplotlib"],
+        "required": ["torch", "numpy", "matplotlib", "scipy"],
         "optional": ["hydra"],
         "sdk": ["physicsnemo"],
         "entry": "cd ch04_fno_airfoil && python train_fno_mini.py --epochs 30",
@@ -76,7 +76,7 @@ CHAPTERS: dict[int, dict] = {
         "title": "Physics-Informed FNO",
         "tier": 1,
         "gpu": True,
-        "required": ["torch", "numpy", "matplotlib", "ch04_dir"],
+        "required": ["torch", "numpy", "matplotlib", "scipy", "ch04_dir"],
         "optional": ["hydra"],
         "sdk": ["physicsnemo"],
         "entry": "cd ch05_darcy_hybrid && python train_data_fno.py --epochs 50",
@@ -97,7 +97,7 @@ CHAPTERS: dict[int, dict] = {
         "required": ["torch", "numpy", "matplotlib"],
         "optional": ["hydra", "optuna", "fastapi", "uvicorn", "onnx"],
         "sdk": ["physicsnemo"],
-        "entry": "cd ch07_drivaernet_optim && python train.py --epochs 100",
+        "entry": "cd ch07_drivaernet_optim && python train.py --epochs 200",
     },
 }
 
@@ -105,6 +105,7 @@ PKG_ALIASES = {
     "torch": "torch",
     "numpy": "numpy",
     "matplotlib": "matplotlib",
+    "scipy": "scipy",
     "hydra": "hydra",
     "physicsnemo": "physicsnemo",
     "physicsnemo.sym": "physicsnemo.sym",
@@ -175,8 +176,9 @@ def run_base_checks() -> bool:
     else:
         all_ok &= check_line("PyTorch", False, "pip install 'torch>=2.3'")
 
-    for pkg in ("numpy", "matplotlib"):
+    for pkg in ("numpy", "matplotlib", "scipy"):
         ok, detail = import_ok(pkg)
+        # scipy 在 requirements-minimal 中；ch04/ch05 Darcy 数据生成硬依赖
         all_ok &= check_line(pkg.capitalize(), ok, detail if ok else f"pip install {pkg}")
 
     return all_ok

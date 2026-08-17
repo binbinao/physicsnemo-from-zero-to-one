@@ -32,13 +32,18 @@
 
 ### 2.3 按章节运行
 
+> 推荐直接打开 [`notebooks/colab_quickstart.ipynb`](../notebooks/colab_quickstart.ipynb)（含 ch01/ch03/ch04/ch05/ch06）。  
+> **已装 hydra-core 时**用 `epochs=30` / `steps=500`，不要用 `--epochs`（见 [COMMAND_REFERENCE](COMMAND_REFERENCE.md)）。
+
 | 章节 | Colab 命令（在仓库根目录） | 预计时长 (T4) |
 |:---|:---|:---|
-| ch01 | `!python ch01_hello/pinn_spring.py --epochs 500` | ~2 min |
-| ch02 | `!python ch02_heat1d/heat1d_pinn_raw.py` | ~5–10 min |
-| ch04 | `!python ch04_fno_airfoil/train_fno_mini.py --epochs 30` | ~10–20 min |
-| ch06 | `!python ch06_fourcastnet_mini/train_afno_mini.py --epochs 20` | ~15–30 min |
-
+| ch01 | `!python ch01_hello/pinn_spring.py --epochs 800` | ~2 min |
+| ch02 | `!python ch02_heat1d/heat1d_pinn_raw.py --steps 500` | ~3–8 min |
+| ch03 | `!python ch03_heatsink/heat_sink_train.py steps=500` | ~5–15 min |
+| ch04 | `!python ch04_fno_airfoil/train_fno_mini.py epochs=30` | ~10–20 min |
+| ch05 | `!python ch05_darcy_hybrid/train_data_fno.py epochs=20 n_train=50` | ~10–20 min |
+| ch06 | `!python ch06_fourcastnet_mini/train_afno_mini.py epochs=20` | ~15–30 min |
+| ch07 | `!python ch07_drivaernet_optim/train.py --epochs 100` | ~5–10 min |
 ### 2.4 Colab 限制与对策
 
 | 问题 | 对策 |

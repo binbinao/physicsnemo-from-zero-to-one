@@ -5,10 +5,11 @@
 ## 先跑这个
 
 ```bash
-python train.py --epochs 100
+python train.py --epochs 200
 python optimize.py --checkpoint outputs/best.pt --n_trials 50
 ```
 
+（`train.py` 默认亦为 200 epochs。）
 ## 流程
 
 | 步骤 | 脚本 |
@@ -22,11 +23,13 @@ python optimize.py --checkpoint outputs/best.pt --n_trials 50
 
 ## 三档脚本
 
-| 档位 | 文件 |
-|:---|:---|
-| **首选** | `train.py` |
-| SDK | `train_sdk.py` |
-| GPU + HPO | `train_gpu.py` |
+| 档位 | 文件 | 说明 |
+|:---|:---|:---|
+| **首选 · 裸 PyTorch** | `train.py` | toy Cd 代理；始终 argparse |
+| SDK | `train_sdk.py` | PhysicsNeMo FullyConnected |
+| GPU + HPO | `train_gpu.py` | Optuna / 生产档 |
+
+> 默认数据为 **toy 合成**，非完整 DrivAerNet；勿与真实风洞数据比绝对精度。
 
 ## 教材
 

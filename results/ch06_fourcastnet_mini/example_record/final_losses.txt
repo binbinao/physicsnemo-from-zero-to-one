@@ -1,0 +1,4 @@
+# ch06 train_afno_mini.py --epochs 30 + rollout_eval.py --rollout_steps 10
+epoch_final_train_mse≈1e-02–5e-02
+rollout_rmse_step1≈lower
+rollout_rmse_step10≈higher  # error accumulation is expected

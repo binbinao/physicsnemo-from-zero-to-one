@@ -5,11 +5,15 @@
 ## 先跑这个（路径 A · 默认）
 
 ```bash
+# 无 Hydra：--epochs；有 Hydra：epochs=30
 python train_fno_mini.py --epochs 30
 # Hydra: python train_fno_mini.py epochs=30
 ```
 
 生成/加载 `data/darcy_data.pt`，checkpoint 一般为 `outputs/fno_darcy.pt`。
+需 **scipy**（`requirements-minimal.txt` 已含）；先跑 `python ../scripts/check_env.py --chapter 4`。
+
+> **Hydra 提示**：见 [COMMAND_REFERENCE](../docs/COMMAND_REFERENCE.md)。
 
 ## 两条路径速查
 
@@ -21,11 +25,11 @@ python train_fno_mini.py --epochs 30
 
 ## 三档脚本
 
-| 档位 | 文件 |
-|:---|:---|
-| **首选** | `train_fno_mini.py` |
-| SDK | `train_fno_sdk.py` |
-| GPU | `train_fno_gpu.py` |
+| 档位 | 文件 | 说明 |
+|:---|:---|:---|
+| **首选 · 裸 PyTorch** | `train_fno_mini.py` | 路径 A；手写 FNO |
+| SDK | `train_fno_sdk.py` | 同 Darcy 数据，换 PhysicsNeMo backbone |
+| GPU | `train_fno_gpu.py` | DDP / 生产档 |
 
 ## 框架切换
 

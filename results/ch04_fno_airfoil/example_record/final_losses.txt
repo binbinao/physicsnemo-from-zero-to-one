@@ -1,0 +1,5 @@
+# ch04 train_fno_mini.py --epochs 50 n≈200 (path A · Darcy)
+# hardware: ~8GB GPU typical; CPU possible but slow
+epoch_final_train_mse=2.4e-02
+epoch_final_test_mse=3.1e-02
+checkpoint=outputs/fno_darcy.pt
