@@ -1,0 +1,61 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Copyright (c) 2026 robinji (github.com/binbinao)
+
+============================================================================
+SCOPE
+============================================================================
+
+This license (CC BY 4.0) applies to the *documentary / prose / figure*
+portions of this repository, i.e. the book manuscript, articles, and
+illustrations, including but not limited to:
+
+  - book/**        (Chinese textbook: chapters, appendices, video scripts)
+  - book_en/**      (English textbook)
+  - docs/**         (guides, study plans, backlogs, cheatsheets, notes)
+  - article/**      (companion articles)
+  - all figures/images under book/assets/**
+
+The *software / source-code* portions of this repository (e.g. chXX_*/,
+tools/, scripts/, notebooks/, and any *.py / *.ipynb / config files) are
+licensed separately under the Apache License 2.0. See the root LICENSE file.
+
+Where a file could be considered both, the more permissive Apache-2.0 terms
+apply to the executable code and CC BY 4.0 applies to the accompanying prose.
+
+============================================================================
+HUMAN-READABLE SUMMARY (not a substitute for the full license)
+============================================================================
+
+You are free to:
+
+  - Share  — copy and redistribute the material in any medium or format
+  - Adapt  — remix, transform, and build upon the material
+             for any purpose, even commercially.
+
+Under the following term:
+
+  - Attribution — You must give appropriate credit (name the author
+    "robinji" and link to https://github.com/binbinao/physicsnemo-from-zero-to-one),
+    provide a link to this license, and indicate if changes were made.
+    You may do so in any reasonable manner, but not in any way that
+    suggests the licensor endorses you or your use.
+
+No additional restrictions — You may not apply legal terms or technological
+measures that legally restrict others from doing anything the license permits.
+
+============================================================================
+FULL LEGAL CODE
+============================================================================
+
+The complete, legally binding text of the Creative Commons Attribution 4.0
+International Public License is available at:
+
+    https://creativecommons.org/licenses/by/4.0/legalcode
+
+and the human-readable deed at:
+
+    https://creativecommons.org/licenses/by/4.0/
+
+By using the documentary portions of this repository, you agree to be bound
+by the terms of the full legal code linked above.

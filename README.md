@@ -175,7 +175,12 @@ Read the full story in the repository commit history and chapter READMEs; multi-
 
 ## License
 
-Educational use. Based on concepts from [NVIDIA PhysicsNeMo](https://github.com/NVIDIA/physicsnemo).
+This project uses a **dual license** (common for book-plus-code repositories):
+
+- **Code** (`chXX_*/`, `tools/`, `scripts/`, `notebooks/`, configs) — [Apache License 2.0](LICENSE). Includes an explicit patent grant, consistent with upstream [NVIDIA PhysicsNeMo](https://github.com/NVIDIA/physicsnemo) (also Apache-2.0).
+- **Book & figures** (`book/`, `book_en/`, `docs/`, `article/`, `book/assets/`) — [CC BY 4.0](LICENSE-docs). Free to share and adapt, including commercially, **with attribution**.
+
+Third-party solvers, SDKs, and datasets keep their own licenses — see [docs/LICENSE_NOTES.md](docs/LICENSE_NOTES.md).
 
 ## Citation
 
