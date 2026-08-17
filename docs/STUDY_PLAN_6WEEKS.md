@@ -87,7 +87,7 @@
 |:---|:---|
 | 代码 | ch06 `generate_toy_weather` + `train_afno_mini` |
 | 代码 | ch07 `train.py` → `optimize.py`（可选 API） |
-| 阅读 | [WHATS_NEXT.md](WHATS_NEXT.md) |
+| 阅读 | [附录 E](../book/appendix_e_further_learning.md) · [WHATS_NEXT.md](WHATS_NEXT.md) |
 | 复习 | 附录 A/B/C，[BEGINNER_ISSUE_BACKLOG](BEGINNER_ISSUE_BACKLOG.md) 全绿 |
 
 **毕业检查**：独立完成「从 clone 到 ch04 跑通」不查书超过 3 处。
@@ -112,7 +112,7 @@
 - [ ] W3 ch03
 - [ ] W4 ch04 + CH04_GUIDE
 - [ ] W5 ch05
-- [ ] W6 ch06 + ch07 + WHATS_NEXT
+- [ ] W6 ch06 + ch07 + 附录 E / WHATS_NEXT
 ```
 
 ---

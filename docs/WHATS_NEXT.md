@@ -1,6 +1,8 @@
 # 读完全书之后 · 下一步路线图
 
-> 正文 7 章 + 附录 A–D 完成后，按你的目标选路径。
+> 正文 7 章 + 附录 A–E 完成后，按你的目标选路径。  
+> **教材内完整选路与审阅小结**：[附录 E · 学完之后](../book/appendix_e_further_learning.md)（英文：[book_en/appendix_e_further_learning.md](../book_en/appendix_e_further_learning.md)）。  
+> 本文是仓库侧**勾选清单**；方法地图与论文精选以附录 E 为准。
 
 ---
 
@@ -28,6 +30,7 @@
 | 查硬件/时长是否合理 | [HARDWARE_EXPECTATIONS.md](HARDWARE_EXPECTATIONS.md) |
 | 对照 loss 趋势 | [results/BASELINE.md](../results/BASELINE.md) |
 | 改进项跟踪 | [BEGINNER_ISSUE_BACKLOG](BEGINNER_ISSUE_BACKLOG.md) · [REVIEW_ROUND2](REVIEW_ROUND2_BACKLOG.md) |
+| 读后选路（方法地图） | [附录 E](../book/appendix_e_further_learning.md) |
 
 ---
 
@@ -85,6 +88,7 @@
 | FNO | Li et al., ICLR 2021 |
 | 物理信息算子 | 本书 ch05 + PhysicsNeMo hybrid 示例 |
 | 天气预报 NN | Lam et al., GraphCast |
+| 完整精选清单 | [附录 E.5](../book/appendix_e_further_learning.md) |
 
 ---
 
@@ -105,5 +109,7 @@ Week 1–2: 官方 example 复现（与 ch04 或 ch07 同族）
 Week 3:   接入一个真实小数据集（<10GB）
 Week 4:   ONNX/Triton 或集成进现有 CAE 脚本
 ```
+
+更长的 90 天模板与四条进阶路径（官方生态 / 真实数据 / CAE·V&V / 研究）见 [附录 E](../book/appendix_e_further_learning.md)。
 
 祝你从 **Zero** 到 **One** 之后，走向 **Your Problem**。🚀

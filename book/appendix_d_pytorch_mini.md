@@ -92,6 +92,7 @@ x = x.to(device)
 ---
 
 ➡️ **附录 A**：[数学速查](appendix_a_math.md)  
+➡️ **附录 E**：[学完之后：继续学习](appendix_e_further_learning.md)  
 ➡️ **第 1 章**：[ch01.md](ch01.md)
 
 ---
