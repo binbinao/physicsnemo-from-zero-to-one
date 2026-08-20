@@ -40,7 +40,7 @@ python ch01_hello/pinn_spring.py --epochs 500
 
 | 路径 | 内容 |
 |:---|:---|
-| `book/` | 教材正文 ch00–ch07 + 附录 A–D |
+| `book/` | 教材正文 ch00–ch07 + 附录 A–E |
 | `book/assets/` | 正文插图 PNG |
 | `assets/` | 仓库级资源（如公众号二维码占位图） |
 | `ch01_hello/` … `ch07_*/` | 可运行代码（每章 README 写首选脚本） |
@@ -54,7 +54,7 @@ python ch01_hello/pinn_spring.py --epochs 500
 
 ## 7. 读完全书
 
-[WHATS_NEXT.md](WHATS_NEXT.md)
+[附录 E · 学完之后](../book/appendix_e_further_learning.md) · 行动勾选：[WHATS_NEXT.md](WHATS_NEXT.md)
 
 ---
 

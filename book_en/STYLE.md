@@ -8,7 +8,7 @@ All Markdown in this book follows this file. When revising, update the style gui
 # Chapter N · English Title
 ```
 
-The preface uses `# Preface: …` and is not called "Chapter 0"; the full book scope is **Preface + Chapters 1–7 + Appendices A–D**.
+The preface uses `# Preface: …` and is not called "Chapter 0"; the full book scope is **Preface + Chapters 1–7 + Appendices A–E**.
 
 ## Chapter Header Metadata (Required for ch01–ch07)
 

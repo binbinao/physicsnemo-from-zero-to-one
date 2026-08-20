@@ -36,8 +36,9 @@ A hands-on tutorial book for physics-informed neural networks (PINNs) and neural
 | B | [book/appendix_b_cloud_gpu.md](book/appendix_b_cloud_gpu.md) | 云 GPU 与环境（速查） |
 | C | [book/appendix_c_troubleshooting.md](book/appendix_c_troubleshooting.md) | 常见踩坑 50 问 |
 | D | [book/appendix_d_pytorch_mini.md](book/appendix_d_pytorch_mini.md) | PyTorch 30 分钟最小集 |
+| E | [book/appendix_e_further_learning.md](book/appendix_e_further_learning.md) | 学完之后：继续学习路线图 |
 
-**学习路径**：[6 周计划](docs/STUDY_PLAN_6WEEKS.md) · **读完后**：[WHATS_NEXT](docs/WHATS_NEXT.md) · **训练基线**：[results/BASELINE.md](results/BASELINE.md)
+**学习路径**：[6 周计划](docs/STUDY_PLAN_6WEEKS.md) · **读完后**：[附录 E](book/appendix_e_further_learning.md) · [WHATS_NEXT](docs/WHATS_NEXT.md) · **训练基线**：[results/BASELINE.md](results/BASELINE.md)
 
 **无本地 GPU？** [云 GPU 分步指南](docs/CLOUD_GPU_GUIDE.md) · [Colab 笔记本](notebooks/colab_quickstart.ipynb) · [硬件预期表](docs/HARDWARE_EXPECTATIONS.md)
 
