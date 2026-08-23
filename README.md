@@ -5,7 +5,12 @@
 [![GitHub](https://img.shields.io/badge/GitHub-binbinao%2Fphysicsnemo--from--zero--to--one-blue?logo=github)](https://github.com/binbinao/physicsnemo-from-zero-to-one)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.3%2B-red?logo=pytorch)](https://pytorch.org/)
-[![PhysicsNeMo](https://img.shields.io/badge/PhysicsNeMo-2.0-green?logo=nvidia)](https://github.com/NVIDIA/physicsnemo)
+[![PhysicsNeMo](https://img.shields.io/badge/PhysicsNeMo-2.0-76B900?logo=nvidia)](https://github.com/NVIDIA/physicsnemo)
+[![License (Code)](https://img.shields.io/badge/License_Code-Apache_2.0-blue)](https://github.com/binbinao/physicsnemo-from-zero-to-one/blob/main/LICENSE)
+[![License (Book)](https://img.shields.io/badge/License_Book-CC_BY_4.0-lightgrey)](https://github.com/binbinao/physicsnemo-from-zero-to-one/blob/main/LICENSE-docs)
+[![Stars](https://img.shields.io/github/stars/binbinao/physicsnemo-from-zero-to-one?style=social)](https://github.com/binbinao/physicsnemo-from-zero-to-one/stargazers)
+[![Forks](https://img.shields.io/github/forks/binbinao/physicsnemo-from-zero-to-one?style=social)](https://github.com/binbinao/physicsnemo-from-zero-to-one/network/members)
+[![Last commit](https://img.shields.io/github/last-commit/binbinao/physicsnemo-from-zero-to-one)](https://github.com/binbinao/physicsnemo-from-zero-to-one/commits/main)
 
 A hands-on tutorial book for physics-informed neural networks (PINNs) and neural operators using NVIDIA PhysicsNeMo. Every chapter provides **three variants**: raw PyTorch (educational), PhysicsNeMo SDK (CPU-verified), and GPU production (DDP + AMP).
 
