@@ -32,6 +32,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "ch04_fno_airfo
 from fno_model import FNO2D
 from darcy_residual import darcy_residual
 
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(_REPO_ROOT, "scripts"))
+from tb_logger import TBLogger  # noqa: E402
+
 try:
     import hydra
     from omegaconf import DictConfig, OmegaConf
@@ -52,7 +56,9 @@ def generate_data(n_samples=200, resolution=64):
     return data
 
 
-def train(cfg: dict):
+def train(cfg: dict, tb=None):
+    if tb is None:
+        tb = TBLogger(None, enabled=False)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"[Physics-informed FNO] Device: {device}")
 
@@ -129,6 +135,10 @@ def train(cfg: dict):
         history["data_loss"].append(epoch_data)
         history["physics_loss"].append(epoch_phys)
 
+        tb.log(epoch, {"loss/total": epoch_loss, "loss/data": epoch_data,
+                       "loss/physics": epoch_phys, "loss/test": v_loss,
+                       "lr": optimizer.param_groups[0]["lr"]})
+
         if epoch % max(1, epochs // 10) == 0 or epoch == 1:
             print(f"[Epoch {epoch:3d}/{epochs}] total={epoch_loss:.6f} "
                   f"data={epoch_data:.6f} phys={epoch_phys:.6f} "
@@ -156,13 +166,21 @@ if HAS_HYDRA:
     def main_hydra(cfg: DictConfig):
         flat = get_defaults()
         flat.update(OmegaConf.to_container(cfg, resolve=True))
-        train(flat)
+        tb = TBLogger.under(flat["output_dir"])
+        train(flat, tb=tb)
+        tb.close()
 
 def main_argparse():
     parser = argparse.ArgumentParser()
     for k, v in get_defaults().items():
         parser.add_argument(f"--{k}", type=type(v), default=v)
-    train(vars(parser.parse_args()))
+    TBLogger.add_args(parser)
+    args = parser.parse_args()
+    cfg = vars(args)
+    tb = TBLogger.from_args(args, os.path.splitext(os.path.basename(__file__))[0],
+                            out_dir=cfg["output_dir"])
+    train(cfg, tb=tb)
+    tb.close()
 
 if __name__ == "__main__":
     if HAS_HYDRA:

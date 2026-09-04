@@ -10,6 +10,58 @@
 | **推荐版本** | Python **3.11** |
 | **不支持** | Python 3.9 及以下（`check_env` 会报错） |
 
+### 用 uv 管理环境（推荐）
+
+[uv](https://docs.astral.sh/uv/) 可自动下载 Python 并创建隔离环境，命令在所有平台一致：
+
+```bash
+# 安装 uv（Windows PowerShell）
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+# Linux / macOS / WSL
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+```bash
+uv python install 3.11              # 下载推荐版本（无需系统预装 Python）
+uv venv --python 3.11 --seed        # 在项目根目录创建 .venv（--seed 附带 pip）
+. .venv/bin/activate                # Linux/macOS；Windows 用 .venv\Scripts\activate
+uv pip install -r requirements-minimal.txt     # Tier 0–1
+uv pip install -r requirements-full.txt        # Tier 2–3（SDK + 部署）
+```
+
+要点：
+
+- 若系统已有 Python，也可直接 `uv venv --python 3.12` 复用本机版本，不必重新下载。
+- `uv pip` 用法与 `pip` 基本一致，激活环境后可直接用 `python`/`pip`。
+- Windows 下 PyTorch 默认下载 CUDA 版 wheel（体积较大）；纯 CPU 可改用
+  `uv pip install torch --index-url https://download.pytorch.org/whl/cpu`。
+- `.venv/`、`.python-version` 已加入仓库 `.gitignore`。
+
+## 训练曲线（TensorBoard，默认开启）
+
+所有训练脚本默认记录 loss 等标量曲线，无需额外参数：
+
+- **记到哪里**：`scripts/tb_logger.py` 同时写出 TensorBoard 事件文件与 `metrics.csv`。
+  目录按脚本类型自动确定（每次运行一个时间戳子目录）：
+
+  | 脚本类型 | 默认日志目录 |
+  |:---|:---|
+  | Hydra 脚本（如 `ch02/heat1d_train.py`） | Hydra 运行目录 `/tb` |
+  | 有 `--out_dir` / `--output_dir` 的脚本 | `<out_dir>/tb/<时间戳>` |
+  | 其余脚本 | `outputs/tb/<脚本名>/<时间戳>` |
+
+  训练结束会打印实际目录。
+
+- **训练中看**：`tensorboard --logdir <目录>`（需 `pip install tensorboard`，可选依赖）。
+- **训练后看（零依赖）**：`python scripts/plot_tb_curves.py --logdir <目录> --out curves.png`，
+  直接读 `metrics.csv` 出图；支持 `--metrics loss/total,val/mae`、`--smooth 0.6`、`--linear-y`。
+- **关闭**：`--no-tb`，或环境变量 `PN_TB=0`；`PN_TB_DIR` 可覆写日志根目录。
+- **自定义**：`--tb-dir PATH`、`--tb-tag NAME`、`--tb-no-timestamp`。
+- **依赖**：`tensorboardX>=2.6` 已在 `requirements-minimal.txt`。
+  未安装时脚本**自动降级为只写 CSV**（打印一条提示），训练不受影响。
+
+详见 [TENSORBOARD_INTEGRATION_PLAN.md](TENSORBOARD_INTEGRATION_PLAN.md)。
+
 ## PyTorch
 
 | 项 | 要求 |

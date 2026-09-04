@@ -11,6 +11,9 @@ Usage:
 
 import os
 import argparse
+import sys
+from pathlib import Path
+
 import torch
 import torch.nn as nn
 import numpy as np
@@ -21,6 +24,9 @@ import matplotlib.pyplot as plt
 
 # PhysicsNeMo model
 from physicsnemo.models.mlp import FullyConnected
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+from tb_logger import TBLogger  # noqa: E402
 
 
 # ── Physics parameters ─────────────────────────────────────
@@ -78,9 +84,11 @@ def analytical_solution(t, x):
     return np.sin(np.pi * x) * np.exp(-ALPHA * np.pi**2 * t)
 
 
-def train(args):
+def train(args, tb=None):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"[PhysicsNeMo SDK] Device: {device}")
+    if tb is None:
+        tb = TBLogger(None, enabled=False)
 
     # ── PhysicsNeMo FullyConnected model ──────────────────
     # in_features=2 (t, x), out_features=1 (T)
@@ -134,6 +142,14 @@ def train(args):
         history["ic"].append(l_ic.item())
         history["bc"].append(l_bc.item())
         history["total"].append(loss.item())
+
+        tb.log(step, {
+            "loss/total": loss.item(),
+            "loss/pde": l_pde.item(),
+            "loss/ic": l_ic.item(),
+            "loss/bc": l_bc.item(),
+            "lr": optimizer.param_groups[0]["lr"],
+        })
 
         if step % max(1, args.steps // 20) == 0 or step == 1:
             print(f"[Step {step:5d}/{args.steps}]  loss={loss.item():.4e}  "
@@ -206,6 +222,7 @@ def train(args):
 
 def main():
     parser = argparse.ArgumentParser()
+    TBLogger.add_args(parser)
     parser.add_argument("--hidden", type=int, default=64)
     parser.add_argument("--depth", type=int, default=4)
     parser.add_argument("--steps", type=int, default=2000)
@@ -214,7 +231,10 @@ def main():
     parser.add_argument("--n_ic", type=int, default=200)
     parser.add_argument("--n_bc", type=int, default=200)
     args = parser.parse_args()
-    train(args)
+    out_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "outputs")
+    tb = TBLogger.from_args(args, Path(__file__).stem, out_dir=out_dir)
+    train(args, tb=tb)
+    tb.close()
 
 
 if __name__ == "__main__":

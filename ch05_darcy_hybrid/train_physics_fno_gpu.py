@@ -33,6 +33,10 @@ from require_ch04 import require_ch04
 require_ch04()
 from darcy_residual import darcy_residual_simple
 
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(_REPO_ROOT, "scripts"))
+from tb_logger import TBLogger  # noqa: E402
+
 
 def setup_ddp():
     if "RANK" in os.environ:
@@ -118,6 +122,12 @@ def train(args):
     out_dir = os.path.join(script_dir, "outputs_gpu")
     os.makedirs(out_dir, exist_ok=True)
 
+    # TensorBoard / CSV curves: only rank 0 writes to avoid clashes
+    tb = None
+    if rank == 0:
+        tb = TBLogger.from_args(args, os.path.splitext(os.path.basename(__file__))[0],
+                                out_dir=out_dir)
+
     for epoch in range(1, args.epochs + 1):
         if use_ddp:
             sampler.set_epoch(epoch)
@@ -163,6 +173,10 @@ def train(args):
                           ("physics", ep_phys), ("test", v_loss)]:
                 history[k].append(v)
 
+            tb.log(epoch, {"loss/total": ep_total, "loss/data": ep_data,
+                           "loss/physics": ep_phys, "loss/test": v_loss,
+                           "lr": optimizer.param_groups[0]["lr"]})
+
             if epoch % max(1, args.epochs // 10) == 0 or epoch == 1:
                 print(f"[Epoch {epoch:3d}/{args.epochs}] "
                       f"total={ep_total:.6f} data={ep_data:.6f} "
@@ -193,6 +207,9 @@ def train(args):
         plt.savefig(os.path.join(out_dir, "physics_fno_gpu.png"), dpi=150)
         print(f"\nSaved to {out_dir}/")
 
+    if tb is not None:
+        tb.close()
+
     cleanup_ddp()
 
 
@@ -208,6 +225,7 @@ def main():
     parser.add_argument("--n_layers", type=int, default=4)
     parser.add_argument("--n_modes", type=int, default=16)
     parser.add_argument("--ddp", action="store_true")
+    TBLogger.add_args(parser)
     args = parser.parse_args()
     train(args)
 

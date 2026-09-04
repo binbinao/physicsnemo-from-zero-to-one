@@ -1,6 +1,9 @@
 __pycache__/
 *.pyc
 *.pyo
+.venv/
+.python-version
+uv.lock.bak
 outputs/
 outputs_gpu/
 data/*.pt
@@ -10,3 +13,4 @@ data/*.pt
 pinn_results.png
 mlp_results.png
 /*_results.png
+multirun/

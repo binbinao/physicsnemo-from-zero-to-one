@@ -35,6 +35,10 @@ sys.path.insert(0, os.path.dirname(__file__))
 from fno_model import FNO2D
 from dataset import generate_darcy_data_fast
 
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(_REPO_ROOT, "scripts"))
+from tb_logger import TBLogger  # noqa: E402
+
 
 def get_data(cfg: dict):
     """Load or generate Darcy data."""
@@ -59,7 +63,9 @@ def get_data(cfg: dict):
     return train_ds, test_ds
 
 
-def train(cfg: dict):
+def train(cfg: dict, tb=None):
+    if tb is None:
+        tb = TBLogger(None, enabled=False)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Device: {device}")
 
@@ -116,6 +122,9 @@ def train(cfg: dict):
         history["train_loss"].append(train_loss)
         history["test_loss"].append(test_loss)
 
+        tb.log(epoch, {"loss/train": train_loss, "loss/test": test_loss,
+                       "lr": optimizer.param_groups[0]["lr"]})
+
         if epoch % max(1, epochs // 10) == 0 or epoch == 1:
             print(f"[Epoch {epoch:3d}/{epochs}] "
                   f"train_loss={train_loss:.6f}  test_loss={test_loss:.6f}")
@@ -165,14 +174,21 @@ if HAS_HYDRA:
     def main_hydra(cfg: DictConfig):
         flat = get_defaults()
         flat.update(OmegaConf.to_container(cfg, resolve=True))
-        train(flat)
+        tb = TBLogger.under(flat["output_dir"])
+        train(flat, tb=tb)
+        tb.close()
 
 def main_argparse():
     parser = argparse.ArgumentParser()
     for k, v in get_defaults().items():
         parser.add_argument(f"--{k}", type=type(v), default=v)
+    TBLogger.add_args(parser)
     args = parser.parse_args()
-    train(vars(args))
+    cfg = vars(args)
+    tb = TBLogger.from_args(args, os.path.splitext(os.path.basename(__file__))[0],
+                            out_dir=cfg["output_dir"])
+    train(cfg, tb=tb)
+    tb.close()
 
 if __name__ == "__main__":
     if HAS_HYDRA:

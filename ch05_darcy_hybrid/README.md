@@ -21,6 +21,23 @@ python train_physics_fno.py --epochs 50 --n_train 100 --lambda_physics 0.1
 | **首选 · 混合** | `train_physics_fno.py` | 数据 + Darcy 残差 |
 | SDK / GPU | `train_physics_fno_sdk.py` / `train_physics_fno_gpu.py` | |
 
+## 查看训练曲线
+
+训练默认记录曲线，结束后会打印日志目录：
+
+| 脚本 | 默认日志目录 |
+|:---|:---|
+| `train_data_fno.py` / `train_physics_fno.py` / `train_physics_fno_sdk.py` | `outputs/tb/<时间戳>` |
+| `train_physics_fno_gpu.py` | `outputs_gpu/tb/<时间戳>` |
+
+```bash
+python scripts/plot_tb_curves.py --logdir <目录> --out curves.png   # 零依赖出图
+tensorboard --logdir <目录>                                          # 需 pip install tensorboard
+```
+
+DDP 多卡时只有 rank 0 写日志。关闭记录：加 `--no-tb`，或设 `PN_TB=0`。
+详见 [docs/ENVIRONMENT.md](../docs/ENVIRONMENT.md#训练曲线tensorboard默认开启)。
+
 ## 教材
 
 [book/ch05.md](../book/ch05.md)

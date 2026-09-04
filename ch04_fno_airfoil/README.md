@@ -31,6 +31,23 @@ python train_fno_mini.py --epochs 30
 
 第 4 章起使用 **physicsnemo 主框架**（非 sym）。对比表见 [CH04_GUIDE.md §3](CH04_GUIDE.md#3-框架切换ch3--ch4) 与 [book/ch04.md §4.1](../book/ch04.md)。
 
+## 查看训练曲线
+
+训练默认记录曲线，结束后会打印日志目录：
+
+| 脚本 | 默认日志目录 |
+|:---|:---|
+| `train_fno_mini.py` / `train_fno_sdk.py` | `outputs/tb/<时间戳>` |
+| `train_fno_gpu.py` | `outputs_gpu/tb/<时间戳>` |
+
+```bash
+python scripts/plot_tb_curves.py --logdir <目录> --out curves.png   # 零依赖出图
+tensorboard --logdir <目录>                                          # 需 pip install tensorboard
+```
+
+DDP 多卡时只有 rank 0 写日志。关闭记录：加 `--no-tb`，或设 `PN_TB=0`。
+详见 [docs/ENVIRONMENT.md](../docs/ENVIRONMENT.md#训练曲线tensorboard默认开启)。
+
 ## 教材
 
 [book/ch04.md](../book/ch04.md)

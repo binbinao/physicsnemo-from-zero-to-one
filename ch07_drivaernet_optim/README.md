@@ -28,6 +28,23 @@ python optimize.py --checkpoint outputs/best.pt --n_trials 50
 | SDK | `train_sdk.py` |
 | GPU + HPO | `train_gpu.py` |
 
+## 查看训练曲线
+
+训练默认记录曲线，结束后会打印日志目录：
+
+| 脚本 | 默认日志目录 |
+|:---|:---|
+| `train.py` / `train_sdk.py` | `outputs/tb/<时间戳>` |
+| `train_gpu.py` | `outputs_gpu/tb/<时间戳>`（`--hpo` 时每个 trial 为 `outputs_gpu/tb/trial<N>/<时间戳>`） |
+
+```bash
+python scripts/plot_tb_curves.py --logdir <目录> --out curves.png   # 零依赖出图
+tensorboard --logdir <目录>                                          # 需 pip install tensorboard
+```
+
+DDP 多卡时只有 rank 0 写日志。关闭记录：加 `--no-tb`，或设 `PN_TB=0`。
+详见 [docs/ENVIRONMENT.md](../docs/ENVIRONMENT.md#训练曲线tensorboard默认开启)。
+
 ## 教材
 
 [book/ch07.md](../book/ch07.md)

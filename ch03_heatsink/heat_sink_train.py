@@ -33,6 +33,12 @@ sys.path.insert(0, _CH03_DIR)
 from heat_sink_geometry import HeatSinkGeometry
 from equations import heat_conduction_2d, robin_boundary, neumann_boundary
 
+_REPO_ROOT = os.path.dirname(_CH03_DIR)
+if _REPO_ROOT not in sys.path:
+    sys.path.insert(0, _REPO_ROOT)
+sys.path.insert(0, os.path.join(_REPO_ROOT, "scripts"))
+from tb_logger import TBLogger  # noqa: E402
+
 # Try Hydra
 try:
     import hydra
@@ -63,7 +69,9 @@ class HeatSinkNet(nn.Module):
 # ---------------------------------------------------------------------------
 # Training
 # ---------------------------------------------------------------------------
-def train(cfg: dict):
+def train(cfg: dict, tb=None):
+    if tb is None:
+        tb = TBLogger(None, enabled=False)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Device: {device}")
 
@@ -176,6 +184,16 @@ def train(cfg: dict):
         history["robin"].append(loss_robin.item())
         history["base_top"].append(loss_base_top.item())
 
+        tb.log(step, {
+            "loss/total": loss.item(),
+            "loss/pde": loss_pde.item(),
+            "loss/bottom": loss_bot.item(),
+            "loss/side": loss_side.item(),
+            "loss/robin": loss_robin.item(),
+            "loss/base_top": loss_base_top.item(),
+            "lr": optimizer.param_groups[0]["lr"],
+        })
+
         if step % log_interval == 0 or step == 1:
             print(f"[{step:5d}/{steps}] loss={loss.item():.4e} "
                   f"pde={loss_pde.item():.4e} bot={loss_bot.item():.4e} "
@@ -279,18 +297,24 @@ if HAS_HYDRA:
         flat = get_default_cfg()
         flat.update(OmegaConf.to_container(cfg, resolve=True))
         flat = normalize_cfg(flat)
-        model, history, geo, scale = train(flat)
+        tb = TBLogger.under(flat["output_dir"])
+        model, history, geo, scale = train(flat, tb=tb)
+        tb.close()
         quick_viz(model, geo, scale, flat["output_dir"])
 
 
 def main_argparse():
     parser = argparse.ArgumentParser()
+    TBLogger.add_args(parser)
     defaults = get_default_cfg()
     for k, v in defaults.items():
         parser.add_argument(f"--{k}", type=type(v), default=v)
     args = parser.parse_args()
     cfg = normalize_cfg(vars(args))
-    model, history, geo, scale = train(cfg)
+    tb = TBLogger.from_args(args, os.path.splitext(os.path.basename(__file__))[0],
+                            out_dir=cfg["output_dir"])
+    model, history, geo, scale = train(cfg, tb=tb)
+    tb.close()
     quick_viz(model, geo, scale, cfg["output_dir"])
 
 
