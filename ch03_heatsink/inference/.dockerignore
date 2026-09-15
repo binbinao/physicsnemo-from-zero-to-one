@@ -1,0 +1,4 @@
+# NOTE: Docker only honours .dockerignore at the *build-context root*.
+# The effective exclude list lives at ch03_heatsink/.dockerignore
+# (context for: docker build -f inference/Dockerfile .).
+# This file is inert and kept only to document the rule.

@@ -1,0 +1,18 @@
+# Runtime deps for the heat-sink inference service (ONNX engine, no PyTorch).
+# Generated from requirements-full.txt conventions in this repo.
+fastapi>=0.100
+uvicorn[standard]>=0.23
+pydantic>=2
+numpy>=1.26
+onnxruntime>=1.17
+prometheus-client>=0.20
+
+# ---------------------------------------------------------------------------
+# Optional extras (not needed for the default ONNX serving image):
+#
+# torch  -> only required for `export.py` (ONNX export) and for
+#           ENGINE=torch golden-reference runs. CPU wheels:
+#           pip install torch --index-url https://download.pytorch.org/whl/cpu
+# onnxscript -> required by torch>=2.6 torch.onnx.export (export.py only).
+# onnx       -> pulled by torch when exporting; pin in CI if you export.
+# ---------------------------------------------------------------------------

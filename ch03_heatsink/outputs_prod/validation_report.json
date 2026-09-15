@@ -1,0 +1,13 @@
+{
+  "pde_residual_rms": 16.462482452392578,
+  "robin_residual_rms": 10.477302551269531,
+  "T_min": 0.016114860773086548,
+  "T_max": 99.97992706298828,
+  "T_source_config": 100.0,
+  "fin_tip_1d_bound": 61.71063223953368,
+  "pass_pde": false,
+  "pass_robin": false,
+  "pass_temperature_range": true,
+  "note": "2D PINN micro-model; not comparable to Icepak sign-off without imported CFD reference.",
+  "pass_all": false
+}

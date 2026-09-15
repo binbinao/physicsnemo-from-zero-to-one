@@ -14,6 +14,7 @@ Usage:
     python heat_sink_train.py --steps 5000 --hidden 128
 """
 
+import math
 import os
 import sys
 import argparse
@@ -52,18 +53,65 @@ except ImportError:
 # Network
 # ---------------------------------------------------------------------------
 class HeatSinkNet(nn.Module):
-    """(x, y) -> T(x, y)"""
+    """(x, y) -> T(x, y)
 
-    def __init__(self, hidden: int = 128, depth: int = 5):
+    Args:
+        hidden: width of the tanh MLP.
+        depth: number of tanh layers.
+        hard_bottom: if True, the bottom Dirichlet BC (T = T_source at y = 0)
+            is enforced *exactly* by construction:
+                T(x, y) = (1 - y) * T_source + y * U(x, y)
+            where U is the network output and y is the normalised input
+            coordinate (y / scale, so y=0 is the heated bottom). This removes
+            the soft-constraint tug-of-war and the constant-field degenerate
+            solution that classic soft-PINN training is prone to.
+        T_source: bottom temperature in the same (normalised-coordinate) units.
+        fourier_maps: if > 0, prepend a *random Fourier feature* projection
+            (RFF, Tancik et al. 2020): the 2D input v is lifted to
+            [v, cos(2 pi B v), sin(2 pi B v)] with B ~ N(0, fourier_scale^2)
+            fixed (non-trainable buffer). This lifts the MLP out of the
+            spectral-bias regime for fields with sharp local gradients.
+            Default 0 keeps the plain MLP and the exact previous behaviour.
+        fourier_scale: std of the random frequency matrix B.
+        seed: seed for the RFF draw (reproducible across train/export).
+    """
+
+    def __init__(self, hidden: int = 128, depth: int = 5,
+                 hard_bottom: bool = False, T_source: float = 100.0,
+                 activation: str = "tanh",
+                 fourier_maps: int = 0, fourier_scale: float = 6.0,
+                 seed: int = 0):
         super().__init__()
-        layers = [nn.Linear(2, hidden), nn.Tanh()]
+        act = nn.Tanh if activation == "tanh" else nn.SiLU
+        in_dim = 2
+        self.hard_bottom = bool(hard_bottom)
+        self.T_source = float(T_source)
+        self.activation = activation
+        self.fourier_maps = int(fourier_maps)
+        if self.fourier_maps > 0:
+            gen = torch.Generator().manual_seed(int(seed))
+            B = torch.randn(self.fourier_maps, 2, generator=gen) * float(fourier_scale)
+            self.register_buffer("B", B)
+            in_dim = 2 * self.fourier_maps + 2
+        layers = [nn.Linear(in_dim, hidden), act()]
         for _ in range(depth - 1):
-            layers += [nn.Linear(hidden, hidden), nn.Tanh()]
+            layers += [nn.Linear(hidden, hidden), act()]
         layers.append(nn.Linear(hidden, 1))
         self.net = nn.Sequential(*layers)
 
+    def _encode(self, x, y):
+        v = torch.cat([x, y], dim=-1)
+        if self.fourier_maps > 0:
+            proj = v @ self.B.t()
+            v = torch.cat([v, torch.cos(2.0 * math.pi * proj),
+                           torch.sin(2.0 * math.pi * proj)], dim=-1)
+        return v
+
     def forward(self, x, y):
-        return self.net(torch.cat([x, y], dim=-1))
+        h = self.net(self._encode(x, y))
+        if self.hard_bottom:
+            return (1.0 - y) * self.T_source + y * h
+        return h
 
 
 # ---------------------------------------------------------------------------
@@ -90,7 +138,13 @@ def train(cfg: dict, tb=None):
 
     # Network
     model = HeatSinkNet(hidden=cfg.get("hidden", 128),
-                        depth=cfg.get("depth", 5)).to(device)
+                        depth=cfg.get("depth", 5),
+                        hard_bottom=cfg.get("hard_bottom", False),
+                        T_source=cfg.get("T_source", 100.0),
+                        activation=cfg.get("activation", "tanh"),
+                        fourier_maps=cfg.get("fourier_maps", 0),
+                        fourier_scale=cfg.get("fourier_scale", 6.0),
+                        seed=cfg.get("seed", 0)).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=cfg.get("lr", 1e-3))
     steps = cfg.get("steps", 3000)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=steps)
@@ -280,6 +334,7 @@ def get_default_cfg():
         "n_base_top": 200,
         "w_pde": 1.0, "w_bottom": 10.0, "w_side": 1.0, "w_robin": 5.0,
         "w_base_top": 5.0,
+        "fourier_maps": 0, "fourier_scale": 6.0, "seed": 0,
         "output_dir": resolve_output_dir("outputs"),
     }
 

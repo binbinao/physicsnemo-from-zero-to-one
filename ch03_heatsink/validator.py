@@ -93,10 +93,19 @@ def run_validation(
 def load_and_validate(ckpt_path: str, device: str = "cpu") -> dict:
     from heat_sink_train import HeatSinkNet
     ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
-    cfg = ckpt["config"]
+    cfg = dict(ckpt.get("config", {}) or {})
     cfg["scale"] = ckpt.get("scale", 30.0)
     geo = HeatSinkGeometry(fin_height=cfg.get("fin_height", 20.0), n_fins=cfg.get("n_fins", 3))
-    model = HeatSinkNet(hidden=cfg.get("hidden", 128), depth=cfg.get("depth", 5))
+    model = HeatSinkNet(
+        hidden=int(cfg.get("hidden", 128)),
+        depth=int(cfg.get("depth", 5)),
+        hard_bottom=bool(cfg.get("hard_bottom", False)),
+        T_source=float(cfg.get("T_source", 100.0)),
+        activation=str(cfg.get("activation", "tanh")),
+        fourier_maps=int(cfg.get("fourier_maps", 0)),
+        fourier_scale=float(cfg.get("fourier_scale", 6.0)),
+        seed=int(cfg.get("seed", 0)),
+    )
     model.load_state_dict(ckpt["model"])
     model.to(device)
     return run_validation(model, geo, cfg, device=device)

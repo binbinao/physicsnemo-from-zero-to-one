@@ -23,6 +23,8 @@ python heat_sink_train.py
 | `heat_sink_inverse_joint.py` | 反问题 · **联合训练**（推荐） |
 | `validator.py` | CAE 残差报告 → `outputs/validation_report.json` |
 | `visualize.py` | 结果可视化 |
+| `inference/` | **生产推理包**：ONNX 制品 + FastAPI 服务（见 [inference/README.md](inference/README.md)） |
+| `EXPERIMENTS_PASS.md` | **追 PASS 实验结论文档**：死锁机制/配方/Fourier 证据链/robin 量纲假说（后续改进项） |
 
 训练结束自动生成验证报告。2D 微缩，非 Icepak 3D 签审级。
 

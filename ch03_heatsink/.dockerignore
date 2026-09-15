@@ -1,0 +1,7 @@
+# Build context = ch03_heatsink/ (docker build -f inference/Dockerfile .)
+**/__pycache__/
+**/*.pyc
+outputs/
+outputs_gpu/
+.venv/
+*.log

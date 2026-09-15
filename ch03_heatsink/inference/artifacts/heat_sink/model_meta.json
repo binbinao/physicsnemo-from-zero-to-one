@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "model_name": "heat_sink_2d_temperature",
+  "task": "steady_2d_heat_conduction_solid",
+  "engine": "onnx",
+  "artifact_file": "model.onnx",
+  "input_units": "mm",
+  "net": {
+    "family": "mlp_tanh",
+    "hidden": 160,
+    "depth": 6,
+    "n_params": 129441,
+    "input_normalisation_scale": 30.0
+  },
+  "inputs_spec": [
+    {
+      "name": "x_mm",
+      "unit": "mm",
+      "description": "x in the heat-sink cross-section"
+    },
+    {
+      "name": "y_mm",
+      "unit": "mm",
+      "description": "y in the heat-sink cross-section"
+    }
+  ],
+  "outputs_spec": [
+    {
+      "name": "T",
+      "unit": "degC",
+      "description": "steady-state temperature"
+    }
+  ],
+  "physics": {
+    "k": 1.0,
+    "Q": 0.0,
+    "T_source": 100.0,
+    "h_conv": 10.0,
+    "T_inf": 0.0
+  },
+  "geometry": {
+    "family": "heatsink_2d",
+    "params": {
+      "base_width_mm": 60.0,
+      "base_height_mm": 10.0,
+      "fin_width_mm": 4.0,
+      "fin_height_mm": 20.0,
+      "n_fins": 3
+    },
+    "bbox_mm": {
+      "x_min": -30.0,
+      "x_max": 30.0,
+      "y_min": 0.0,
+      "y_max": 30.0
+    }
+  },
+  "quality": {
+    "steps_trained": 5000,
+    "last_total_loss": 27531.90625,
+    "validator_report_present": true,
+    "validator_pass_all": false,
+    "validator": {
+      "pde_residual_rms": 52.81590270996094,
+      "robin_residual_rms": 20.492128372192383,
+      "T_min": -0.020708560943603516,
+      "T_max": 99.97816467285156,
+      "fin_tip_1d_bound": 61.71063223953368,
+      "pass_pde": false,
+      "pass_robin": false,
+      "pass_temperature_range": true
+    }
+  },
+  "provenance": {
+    "source_ckpt": "heat_sink.pt",
+    "source_ckpt_sha256": "190d60615db478ec078ba584c8f110872162f072633a5f041b3556df9d6b5664",
+    "export_tool": "ch03_heatsink/inference/export.py"
+  }
+}
