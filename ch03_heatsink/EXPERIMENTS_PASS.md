@@ -105,17 +105,27 @@ robin 残差几乎全部来自**鳍根 0~1 mm 一条热边界层**；鳍顶面�
 3. **[低] validator 残差统计稳定性**：robin/pde 采样固定 RNG 或增大 `n_bc`（复跑波动 18.3→10.5，门槛判定需稳定口径）。
 4. **[信息] 物理形态核对**：把模型鳍顶温度与 1D 鳍解析/有限差分解对照（当前模型鳍顶 ≈0.1℃ 提示冷鳍伪解）。
 
-## 9. 复现命令（实验 runner）
+## 9. 复现命令
+
+exp7 配方已可通过仓库内公开脚本 `heat_sink_train.py` 复现（`hard_bottom` / `activation` /
+`fourier_*` / 采样与权重键均已进入 `conf/config.yaml` 与 `get_default_cfg()`，默认值不变）：
 
 ```bash
-# 参考（Fourier 探针，即 exp7）
-.venv/Scripts/python.exe ch03_heatsink/outputs/_exp/train_hp.py \
-  --tag exp7 --steps 8000 --hidden 192 --depth 6 --lr 0.003 \
-  --n-interior 6000 --n-bottom 600 --n-side 500 --n-robin 900 --n-base-top 300 \
-  --w-pde 1 --w-bottom 30 --w-side 8 --w-robin 30 --w-base-top 12 \
-  --wdecay 0 --activation silu --hard-bottom \
-  --fourier-maps 64 --fourier-scale 6 --seed 0 \
-  --pde-ramp-start 0 --pde-ramp-end 0 --pde-ramp-base 1
+# 公开训练脚本（Hydra 档），等价于 exp7 配方
+python ch03_heatsink/heat_sink_train.py \
+  output_dir=outputs_exp7 \
+  steps=8000 hidden=192 depth=6 lr=0.003 \
+  n_interior=6000 n_bottom=600 n_side=500 n_robin=900 n_base_top=300 \
+  w_pde=1 w_bottom=30 w_side=8 w_robin=30 w_base_top=12 \
+  activation=silu hard_bottom=true \
+  fourier_maps=64 fourier_scale=6 seed=0
+# 验证复跑（口径同 PROVENANCE）
+python ch03_heatsink/validator.py --checkpoint outputs_exp7/heat_sink.pt
 ```
 
-产物（log / ckpt / validation_report / temperature_field）写入 `ch03_heatsink/outputs/_exp/out_<tag>/`。
+说明：① 实验 runner 的 `--wdecay 0` 与 pde ramp 关闭即公开脚本的默认行为（Adam 无 weight
+decay、cosine 退火），无需传参；② `seed` 只控制 RFF 频率抽样，采样序列不全局固定，残差存
+在复跑波动（见 §7 与 backlog 3），数值不应逐位对齐；③ 原始实验 runner `outputs/_exp/train_hp.py`
+不随教材走，仅作为历史实验场保留。
+
+产物（ckpt / temperature_field）写入 `ch03_heatsink/outputs_exp7/`，训练曲线在其下 `tb/`。

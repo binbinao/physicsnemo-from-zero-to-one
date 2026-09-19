@@ -335,6 +335,7 @@ def get_default_cfg():
         "w_pde": 1.0, "w_bottom": 10.0, "w_side": 1.0, "w_robin": 5.0,
         "w_base_top": 5.0,
         "fourier_maps": 0, "fourier_scale": 6.0, "seed": 0,
+        "hard_bottom": False, "activation": "tanh",
         "output_dir": resolve_output_dir("outputs"),
     }
 

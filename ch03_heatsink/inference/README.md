@@ -31,16 +31,20 @@
 
 ## 快速开始（本机）
 
+> **fresh clone 请先 train + export**：`artifacts/` 制品目录不随仓库分发
+> （ONNX/权重属训练产物，与 `outputs/`、`*.pt` 同口径被 gitignore），下面的
+> 步骤 1-2 会在本地生成 `inference/artifacts/heat_sink/`。
+
 ```bash
 # 0) 依赖（.venv 已含 torch/fastapi；补运行时库）
 .venv\Scripts\python -m pip install -r ch03_heatsink/inference/requirements.txt
 
 # 1) 训练出**通过质量门槛**的模型
 #    validator.py 阈值：pde/robin 残差 RMS < 0.1 且温度范围合理（pass_all=true）。
-#    经验：默认 3000 步通常不足以收敛到该残差阈值，需更长训练/更宽网络；
-#    当前 outputs/heat_sink.pt 只训了 30 步（pass_all=false），outputs_prod/
-#    为 3000 步结果（pass_all 仍为 false，但温度范围已合理）。
-.venv\Scripts\python ch03_heatsink/heat_sink_train.py --steps 3000
+#    经验：默认 3000 步（tanh/无 Fourier）不足以收敛到该残差阈值；当前最佳
+#    配方是 exp7（SiLU + hard_bottom + RFF Fourier，8000 步，pass_all 仍为
+#    false 但残差已到 ~16/10 量级），复现命令见 ../EXPERIMENTS_PASS.md §9。
+.venv\Scripts\python ch03_heatsink/heat_sink_train.py steps=8000 hidden=192 depth=6 activation=silu hard_bottom=true fourier_maps=64
 
 # 2) 导出制品（含质量门槛提示，CI 可加 --require-quality）
 cd ch03_heatsink
@@ -74,8 +78,11 @@ docker run --rm -p 8000:8000 heat-sink-api:1.0.0
 ```
 inference/artifacts/heat_sink/
   model.onnx       输入 x_mm/y_mm（动态 batch）→ 输出 T；归一化已在图内
+  model.onnx.data  ONNX 外部权重数据（torch.onnx.export 自动生成）
   model_meta.json  schema v1：net/physics/geometry/inputs_spec/quality/provenance(sha256)
 ```
+
+- 该目录由 `export.py` 本地生成，**不入库**（`.gitignore` 覆盖）；三件套必须来自同一次导出，勿手工混搭。
 
 - 把 `artifacts/heat_sink/` 当成**不可变发布单元**：改名=新版本，结合镜像 tag 或对象存储即可做模型版本化/回滚。
 - `model_meta.json` 里 `provenance.source_ckpt_sha256` 保证可追溯到训练产物。

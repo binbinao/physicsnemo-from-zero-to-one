@@ -55,8 +55,8 @@ uv pip install -r requirements-full.txt        # Tier 2–3（SDK + 部署）
 - **训练中看**：`tensorboard --logdir <目录>`（需 `pip install tensorboard`，可选依赖）。
 - **训练后看（零依赖）**：`python scripts/plot_tb_curves.py --logdir <目录> --out curves.png`，
   直接读 `metrics.csv` 出图；支持 `--metrics loss/total,val/mae`、`--smooth 0.6`、`--linear-y`。
-- **关闭**：`--no-tb`，或环境变量 `PN_TB=0`；`PN_TB_DIR` 可覆写日志根目录。
-- **自定义**：`--tb-dir PATH`、`--tb-tag NAME`、`--tb-no-timestamp`。
+- **关闭**：环境变量 `PN_TB=0`（所有脚本通用）；纯 argparse 脚本也可加 `--no-tb`，但 Hydra 档脚本（ch03/ch04/ch05/ch06 主入口、ch07 optuna 路径）会把 `--no-tb` 当非法 override 报错，只能用 `PN_TB=0`。`PN_TB_DIR` 可覆写日志根目录。
+- **自定义**：`--tb-dir PATH`、`--tb-tag NAME`、`--tb-no-timestamp`（仅 argparse 档生效；`--tb-dir` 指定目录时 `--tb-tag` 不参与拼路径）。
 - **依赖**：`tensorboardX>=2.6` 已在 `requirements-minimal.txt`。
   未安装时脚本**自动降级为只写 CSV**（打印一条提示），训练不受影响。
 

@@ -46,6 +46,14 @@ from domain import HeatsinkDomain  # noqa: E402
 META_SCHEMA_VERSION = 1
 DEFAULT_ARTIFACT_DIR = os.path.join(_HERE, "artifacts", "heat_sink")
 
+if sys.platform == "win32":
+    # Windows 控制台默认 GBK，torch.onnx 导出日志中的 ✅ 等符号会触发 UnicodeEncodeError
+    for _stream in (sys.stdout, sys.stderr):
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
+
 
 # ---------------------------------------------------------------------------
 # Quality gate
@@ -121,7 +129,7 @@ def sha256_file(path: str, chunk: int = 1 << 20) -> str:
     return h.hexdigest()
 
 
-def export_onnx(ckpt_path: str, artifact_dir: str) -> str:
+def export_onnx(ckpt_path: str, artifact_dir: str, require_quality: bool = False) -> str:
     import torch
 
     ckpt = torch.load(ckpt_path, map_location="cpu", weights_only=True)
@@ -158,7 +166,14 @@ def export_onnx(ckpt_path: str, artifact_dir: str) -> str:
     )
     print(f"[export] saved {onnx_path}")
 
-    quality = _check_quality_gate(ckpt_path, ckpt, require=args.require_quality)
+    quality = _check_quality_gate(ckpt_path, ckpt, require=require_quality)
+
+    activation = str(cfg.get("activation", "tanh"))
+    family = f"mlp_{activation}"
+    if cfg.get("hard_bottom"):
+        family += "_hard_bottom"
+    if int(cfg.get("fourier_maps", 0) or 0) > 0:
+        family += f"_fourier{int(cfg['fourier_maps'])}"
 
     meta = {
         "schema_version": META_SCHEMA_VERSION,
@@ -168,7 +183,7 @@ def export_onnx(ckpt_path: str, artifact_dir: str) -> str:
         "artifact_file": os.path.basename(onnx_path),
         "input_units": "mm",
         "net": {
-            "family": "mlp_tanh",
+            "family": family,
             "hidden": int(cfg.get("hidden", 128)),
             "depth": int(cfg.get("depth", 5)),
             "n_params": int(n_params),
@@ -238,7 +253,6 @@ def verify_onnx(ckpt_path: str, onnx_path: str, tol: float = 1e-4) -> None:
 
 
 def main() -> None:
-    global args
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--ckpt", default="outputs/heat_sink.pt",
                         help="ch03 checkpoint (outputs/heat_sink.pt)")
@@ -252,7 +266,8 @@ def main() -> None:
 
     if not os.path.exists(args.ckpt):
         sys.exit(f"ERROR: checkpoint not found: {args.ckpt}")
-    onnx_path = export_onnx(args.ckpt, args.artifact_dir)
+    onnx_path = export_onnx(args.ckpt, args.artifact_dir,
+                            require_quality=args.require_quality)
     if not args.skip_verify:
         verify_onnx(args.ckpt, onnx_path)
 

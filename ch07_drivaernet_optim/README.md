@@ -42,7 +42,7 @@ python scripts/plot_tb_curves.py --logdir <目录> --out curves.png   # 零依�
 tensorboard --logdir <目录>                                          # 需 pip install tensorboard
 ```
 
-DDP 多卡时只有 rank 0 写日志。关闭记录：加 `--no-tb`，或设 `PN_TB=0`。
+DDP 多卡时只有 rank 0 写日志。关闭记录：设 `PN_TB=0`（通用）；非 Hydra 档脚本也可加 `--no-tb`。
 详见 [docs/ENVIRONMENT.md](../docs/ENVIRONMENT.md#训练曲线tensorboard默认开启)。
 
 ## 教材

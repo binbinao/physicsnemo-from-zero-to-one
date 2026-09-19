@@ -20,11 +20,20 @@ n_interior: 3000
 n_bottom: 300
 n_side: 300
 n_robin: 500
+n_base_top: 200
 
 # Loss weights
 w_pde: 1.0
 w_bottom: 10.0
 w_side: 1.0
 w_robin: 5.0
+w_base_top: 5.0
+
+# Network extensions (defaults keep the original tanh / no-Fourier behaviour)
+activation: tanh
+hard_bottom: false
+fourier_maps: 0
+fourier_scale: 6.0
+seed: 0
 
 output_dir: outputs

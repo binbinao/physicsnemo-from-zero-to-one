@@ -75,6 +75,7 @@ try:
 except Exception:  # pragma: no cover
     _HAS_PROM = False
     _REQUESTS = _PREDICT_SECONDS = None
+    CONTENT_TYPE_LATEST = "text/plain; version=0.0.4"
 
 
 # ---------------------------------------------------------------------------

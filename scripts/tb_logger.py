@@ -24,7 +24,8 @@ Behaviour
 * Writes ``events.out.tfevents.*`` (tensorboardX) **and** ``metrics.csv``.
 * If tensorboardX is missing, it warns once and falls back to CSV only, so
   training never breaks because of logging.
-* Disabled via ``--no-tb`` or env ``PN_TB=0``; root dir via env ``PN_TB_DIR``.
+* Disabled via ``--no-tb`` (argparse scripts) or env ``PN_TB=0`` (works
+  everywhere, including Hydra entry points); root dir via env ``PN_TB_DIR``.
 
 See docs/ENVIRONMENT.md ("Training curves") and
 docs/TENSORBOARD_INTEGRATION_PLAN.md.
@@ -54,6 +55,16 @@ def _env_disabled() -> bool:
 
 def _truthy(value: str) -> bool:
     return str(value).strip().lower() not in ("0", "false", "no", "off", "")
+
+
+def _cfg_get(obj, key, default=None):
+    """Read ``key`` from an argparse Namespace or a DictConfig/dict."""
+    if obj is None:
+        return default
+    try:
+        return obj[key]
+    except (TypeError, KeyError, AttributeError):
+        return getattr(obj, key.replace("-", "_"), default)
 
 
 class TBLogger:
@@ -115,28 +126,28 @@ class TBLogger:
         if getattr(args, "no_tb", False) or _env_disabled():
             return cls(None, enabled=False)
 
-        explicit = getattr(args, "tb_dir", None)
+        explicit = _cfg_get(args, "tb_dir", None)
         if explicit:
             return cls(Path(explicit).expanduser().resolve(),
-                       run_name=getattr(args, "tb_tag", None))
+                       run_name=_cfg_get(args, "tb_tag", None))
 
         if out_dir is None:
-            out_dir = getattr(args, "output_dir", None) or getattr(args, "out_dir", None)
+            out_dir = _cfg_get(args, "output_dir", None) or _cfg_get(args, "out_dir", None)
         root = os.environ.get("PN_TB_DIR")
 
         if out_dir and not root:
             # 时间戳子目录让每次运行成为独立 run，避免曲线在 TensorBoard 中叠加
             base = Path(out_dir).expanduser().resolve() / "tb"
-            if getattr(args, "tb_no_timestamp", False):
+            if _cfg_get(args, "tb_no_timestamp", False):
                 return cls(base)
             return cls(base / _stamp())
 
         base = Path(root).expanduser().resolve() if root else DEFAULT_TB_ROOT
         parts = [base, script_stem]
-        tag = getattr(args, "tb_tag", None)
+        tag = _cfg_get(args, "tb_tag", None)
         if tag:
             parts.append(tag)
-        if not getattr(args, "tb_no_timestamp", False):
+        if not _cfg_get(args, "tb_no_timestamp", False):
             parts.append(_stamp())
         return cls(Path(*parts))
 
@@ -145,8 +156,11 @@ class TBLogger:
         """Create a logger in ``<out_dir>/tb[/<tag>][/<timestamp>]``.
 
         For entry points that already know their output directory (Hydra,
-        config-driven scripts) and cannot rely on argparse flags.
+        config-driven scripts) and cannot rely on argparse flags. Env
+        ``PN_TB=0`` disables logging here too (Hydra 档唯一的关闭方式).
         """
+        if _env_disabled():
+            return cls(None, enabled=False)
         base = Path(out_dir).expanduser().resolve() / "tb"
         if tag:
             base = base / tag
