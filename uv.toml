@@ -1,0 +1,14 @@
+# uv 项目级配置（加速国内网络）
+# 文档：https://docs.astral.sh/uv/configuration/files/
+
+[[index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
+
+[[index]]
+url = "https://pypi.nvidia.com"
+
+# 注意：PyPI 上的 torch 在 Windows 只有 CPU 版。
+# 需要 GPU 版时手动指定 CUDA wheel 源（版本需与已装的 torch 对齐）：
+#   uv pip install torch==2.14.0+cu130 torchvision==0.29.0+cu130 \
+#     --extra-index-url https://mirror.sjtu.edu.cn/pytorch-wheels/cu130/

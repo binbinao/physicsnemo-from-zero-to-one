@@ -28,6 +28,10 @@ from require_ch04 import require_ch04
 require_ch04()
 from darcy_residual import darcy_residual_simple as darcy_pde_residual
 
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(_REPO_ROOT, "scripts"))
+from tb_logger import TBLogger  # noqa: E402
+
 
 def load_data(data_dir):
     """Load Darcy data (generate if missing)."""
@@ -103,6 +107,12 @@ def train(args):
 
     history = {"total": [], "data": [], "physics": [], "test": []}
 
+    # TensorBoard / CSV curves (default on; --no-tb to disable)
+    out_dir = os.path.join(script_dir, "outputs")
+    os.makedirs(out_dir, exist_ok=True)
+    tb = TBLogger.from_args(args, os.path.splitext(os.path.basename(__file__))[0],
+                            out_dir=out_dir)
+
     for epoch in range(1, args.epochs + 1):
         model.train()
         ep_total, ep_data, ep_phys, cnt = 0., 0., 0., 0
@@ -149,14 +159,16 @@ def train(args):
                       ("physics", ep_phys), ("test", v_loss)]:
             history[k].append(v)
 
+        tb.log(epoch, {"loss/total": ep_total, "loss/data": ep_data,
+                       "loss/physics": ep_phys, "loss/test": v_loss,
+                       "lr": optimizer.param_groups[0]["lr"]})
+
         if epoch % max(1, args.epochs // 10) == 0 or epoch == 1:
             print(f"[Epoch {epoch:3d}/{args.epochs}] "
                   f"total={ep_total:.6f} data={ep_data:.6f} "
                   f"phys={ep_phys:.6f} test={v_loss:.6f}")
 
     # ── Save ──────────────────────────────────────────────
-    out_dir = os.path.join(script_dir, "outputs")
-    os.makedirs(out_dir, exist_ok=True)
     ckpt_path = os.path.join(out_dir, "fno_physics_sdk.pt")
     torch.save({
         "model_state": model.state_dict(),
@@ -190,6 +202,8 @@ def train(args):
     plt.savefig(fig_path, dpi=120)
     print(f"Saved {fig_path}")
 
+    tb.close()
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -202,6 +216,7 @@ def main():
     parser.add_argument("--latent_channels", type=int, default=32)
     parser.add_argument("--n_layers", type=int, default=4)
     parser.add_argument("--n_modes", type=int, default=16)
+    TBLogger.add_args(parser)
     args = parser.parse_args()
     train(args)
 

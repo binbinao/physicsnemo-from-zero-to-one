@@ -14,6 +14,7 @@ Usage:
     python heat_sink_train.py --steps 5000 --hidden 128
 """
 
+import math
 import os
 import sys
 import argparse
@@ -33,6 +34,12 @@ sys.path.insert(0, _CH03_DIR)
 from heat_sink_geometry import HeatSinkGeometry
 from equations import heat_conduction_2d, robin_boundary, neumann_boundary
 
+_REPO_ROOT = os.path.dirname(_CH03_DIR)
+if _REPO_ROOT not in sys.path:
+    sys.path.insert(0, _REPO_ROOT)
+sys.path.insert(0, os.path.join(_REPO_ROOT, "scripts"))
+from tb_logger import TBLogger  # noqa: E402
+
 # Try Hydra
 try:
     import hydra
@@ -46,24 +53,73 @@ except ImportError:
 # Network
 # ---------------------------------------------------------------------------
 class HeatSinkNet(nn.Module):
-    """(x, y) -> T(x, y)"""
+    """(x, y) -> T(x, y)
 
-    def __init__(self, hidden: int = 128, depth: int = 5):
+    Args:
+        hidden: width of the tanh MLP.
+        depth: number of tanh layers.
+        hard_bottom: if True, the bottom Dirichlet BC (T = T_source at y = 0)
+            is enforced *exactly* by construction:
+                T(x, y) = (1 - y) * T_source + y * U(x, y)
+            where U is the network output and y is the normalised input
+            coordinate (y / scale, so y=0 is the heated bottom). This removes
+            the soft-constraint tug-of-war and the constant-field degenerate
+            solution that classic soft-PINN training is prone to.
+        T_source: bottom temperature in the same (normalised-coordinate) units.
+        fourier_maps: if > 0, prepend a *random Fourier feature* projection
+            (RFF, Tancik et al. 2020): the 2D input v is lifted to
+            [v, cos(2 pi B v), sin(2 pi B v)] with B ~ N(0, fourier_scale^2)
+            fixed (non-trainable buffer). This lifts the MLP out of the
+            spectral-bias regime for fields with sharp local gradients.
+            Default 0 keeps the plain MLP and the exact previous behaviour.
+        fourier_scale: std of the random frequency matrix B.
+        seed: seed for the RFF draw (reproducible across train/export).
+    """
+
+    def __init__(self, hidden: int = 128, depth: int = 5,
+                 hard_bottom: bool = False, T_source: float = 100.0,
+                 activation: str = "tanh",
+                 fourier_maps: int = 0, fourier_scale: float = 6.0,
+                 seed: int = 0):
         super().__init__()
-        layers = [nn.Linear(2, hidden), nn.Tanh()]
+        act = nn.Tanh if activation == "tanh" else nn.SiLU
+        in_dim = 2
+        self.hard_bottom = bool(hard_bottom)
+        self.T_source = float(T_source)
+        self.activation = activation
+        self.fourier_maps = int(fourier_maps)
+        if self.fourier_maps > 0:
+            gen = torch.Generator().manual_seed(int(seed))
+            B = torch.randn(self.fourier_maps, 2, generator=gen) * float(fourier_scale)
+            self.register_buffer("B", B)
+            in_dim = 2 * self.fourier_maps + 2
+        layers = [nn.Linear(in_dim, hidden), act()]
         for _ in range(depth - 1):
-            layers += [nn.Linear(hidden, hidden), nn.Tanh()]
+            layers += [nn.Linear(hidden, hidden), act()]
         layers.append(nn.Linear(hidden, 1))
         self.net = nn.Sequential(*layers)
 
+    def _encode(self, x, y):
+        v = torch.cat([x, y], dim=-1)
+        if self.fourier_maps > 0:
+            proj = v @ self.B.t()
+            v = torch.cat([v, torch.cos(2.0 * math.pi * proj),
+                           torch.sin(2.0 * math.pi * proj)], dim=-1)
+        return v
+
     def forward(self, x, y):
-        return self.net(torch.cat([x, y], dim=-1))
+        h = self.net(self._encode(x, y))
+        if self.hard_bottom:
+            return (1.0 - y) * self.T_source + y * h
+        return h
 
 
 # ---------------------------------------------------------------------------
 # Training
 # ---------------------------------------------------------------------------
-def train(cfg: dict):
+def train(cfg: dict, tb=None):
+    if tb is None:
+        tb = TBLogger(None, enabled=False)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Device: {device}")
 
@@ -82,7 +138,13 @@ def train(cfg: dict):
 
     # Network
     model = HeatSinkNet(hidden=cfg.get("hidden", 128),
-                        depth=cfg.get("depth", 5)).to(device)
+                        depth=cfg.get("depth", 5),
+                        hard_bottom=cfg.get("hard_bottom", False),
+                        T_source=cfg.get("T_source", 100.0),
+                        activation=cfg.get("activation", "tanh"),
+                        fourier_maps=cfg.get("fourier_maps", 0),
+                        fourier_scale=cfg.get("fourier_scale", 6.0),
+                        seed=cfg.get("seed", 0)).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=cfg.get("lr", 1e-3))
     steps = cfg.get("steps", 3000)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=steps)
@@ -176,6 +238,16 @@ def train(cfg: dict):
         history["robin"].append(loss_robin.item())
         history["base_top"].append(loss_base_top.item())
 
+        tb.log(step, {
+            "loss/total": loss.item(),
+            "loss/pde": loss_pde.item(),
+            "loss/bottom": loss_bot.item(),
+            "loss/side": loss_side.item(),
+            "loss/robin": loss_robin.item(),
+            "loss/base_top": loss_base_top.item(),
+            "lr": optimizer.param_groups[0]["lr"],
+        })
+
         if step % log_interval == 0 or step == 1:
             print(f"[{step:5d}/{steps}] loss={loss.item():.4e} "
                   f"pde={loss_pde.item():.4e} bot={loss_bot.item():.4e} "
@@ -262,6 +334,8 @@ def get_default_cfg():
         "n_base_top": 200,
         "w_pde": 1.0, "w_bottom": 10.0, "w_side": 1.0, "w_robin": 5.0,
         "w_base_top": 5.0,
+        "fourier_maps": 0, "fourier_scale": 6.0, "seed": 0,
+        "hard_bottom": False, "activation": "tanh",
         "output_dir": resolve_output_dir("outputs"),
     }
 
@@ -279,18 +353,24 @@ if HAS_HYDRA:
         flat = get_default_cfg()
         flat.update(OmegaConf.to_container(cfg, resolve=True))
         flat = normalize_cfg(flat)
-        model, history, geo, scale = train(flat)
+        tb = TBLogger.under(flat["output_dir"])
+        model, history, geo, scale = train(flat, tb=tb)
+        tb.close()
         quick_viz(model, geo, scale, flat["output_dir"])
 
 
 def main_argparse():
     parser = argparse.ArgumentParser()
+    TBLogger.add_args(parser)
     defaults = get_default_cfg()
     for k, v in defaults.items():
         parser.add_argument(f"--{k}", type=type(v), default=v)
     args = parser.parse_args()
     cfg = normalize_cfg(vars(args))
-    model, history, geo, scale = train(cfg)
+    tb = TBLogger.from_args(args, os.path.splitext(os.path.basename(__file__))[0],
+                            out_dir=cfg["output_dir"])
+    model, history, geo, scale = train(cfg, tb=tb)
+    tb.close()
     quick_viz(model, geo, scale, cfg["output_dir"])
 
 

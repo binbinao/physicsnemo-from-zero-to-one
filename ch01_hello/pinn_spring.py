@@ -9,6 +9,9 @@ Training: zero data, three-term loss = PDE residual + IC position + IC velocity
 """
 
 import argparse
+import sys
+from pathlib import Path
+
 import numpy as np
 import torch
 import torch.nn as nn
@@ -16,6 +19,9 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+from tb_logger import TBLogger  # noqa: E402
 
 # ── Physical parameters ───────────────────────────────────
 M = 1.0
@@ -90,9 +96,11 @@ def pinn_loss(model, t_collocation, x0=X0, v0=V0, m=M, k=K):
 
 # ── Training ─────────────────────────────────────────────
 def train(model, epochs=5000, n_collocation=256, lr=1e-3,
-          w_pde=1.0, w_ic_pos=100.0, w_ic_vel=100.0):
+          w_pde=1.0, w_ic_pos=100.0, w_ic_vel=100.0, tb=None):
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     history = {"pde": [], "ic_pos": [], "ic_vel": [], "total": []}
+    if tb is None:
+        tb = TBLogger(None, enabled=False)
 
     for epoch in range(epochs):
         # Resample collocation points each epoch (acts as data augmentation)
@@ -108,6 +116,14 @@ def train(model, epochs=5000, n_collocation=256, lr=1e-3,
         history["ic_pos"].append(l_ic_p.item())
         history["ic_vel"].append(l_ic_v.item())
         history["total"].append(loss.item())
+
+        tb.log(epoch, {
+            "loss/total": loss.item(),
+            "loss/pde": l_pde.item(),
+            "loss/ic_pos": l_ic_p.item(),
+            "loss/ic_vel": l_ic_v.item(),
+            "lr": optimizer.param_groups[0]["lr"],
+        })
 
         if epoch % 500 == 0:
             print(
@@ -158,6 +174,7 @@ def visualize(t_test, pred, truth, history, save_path="pinn_results.png"):
 # ── main ──────────────────────────────────────────────────
 def main():
     parser = argparse.ArgumentParser(description="PINN solver for spring oscillator")
+    TBLogger.add_args(parser)
     parser.add_argument("--epochs", type=int, default=5000)
     parser.add_argument("--hidden", type=int, default=64)
     parser.add_argument("--depth", type=int, default=4)
@@ -173,7 +190,10 @@ def main():
     print(f"Model parameters: {sum(p.numel() for p in model.parameters()):,}")
     print(f"Training mode: zero data, physics-driven")
 
-    history = train(model, epochs=args.epochs, n_collocation=args.n_collocation, lr=args.lr)
+    tb = TBLogger.from_args(args, Path(__file__).stem)
+    history = train(model, epochs=args.epochs, n_collocation=args.n_collocation,
+                    lr=args.lr, tb=tb)
+    tb.close()
 
     # Inference (extrapolate to 3*T_MAX to show PINN's periodic learning)
     t_test = torch.linspace(0, T_MAX * 3, 600).reshape(-1, 1)

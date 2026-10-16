@@ -28,6 +28,9 @@ from physicsnemo.utils import save_checkpoint
 sys.path.insert(0, os.path.dirname(__file__))
 from heat_sink_geometry import HeatSinkGeometry
 
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "scripts"))
+from tb_logger import TBLogger  # noqa: E402
+
 
 def setup_ddp():
     if "RANK" in os.environ:
@@ -152,6 +155,12 @@ def train(args):
     out_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "outputs_gpu")
     os.makedirs(out_dir, exist_ok=True)
 
+    # TensorBoard / CSV curves: only rank 0 writes to avoid clashes
+    tb = None
+    if rank == 0:
+        tb = TBLogger.from_args(args, os.path.splitext(os.path.basename(__file__))[0],
+                                out_dir=out_dir)
+
     for step in range(1, args.steps + 1):
         model.train()
         optimizer.zero_grad()
@@ -197,6 +206,10 @@ def train(args):
                       f"pde={l_pde.item():.4e} bot={l_bot.item():.4e} "
                       f"robin={l_robin.item():.4e}")
 
+            tb.log(step, {"loss/total": loss.item(), "loss/pde": l_pde.item(),
+                          "loss/bottom": l_bot.item(), "loss/robin": l_robin.item(),
+                          "lr": optimizer.param_groups[0]["lr"]})
+
     if rank == 0:
         save_checkpoint(out_dir, models=model.module if use_ddp else model,
                         optimizer=optimizer, epoch=args.steps)
@@ -227,6 +240,9 @@ def train(args):
         plt.savefig(os.path.join(out_dir, "heat_sink_gpu.png"), dpi=150)
         print(f"\nSaved to {out_dir}/")
 
+    if tb is not None:
+        tb.close()
+
     cleanup_ddp()
 
 
@@ -248,6 +264,7 @@ def main():
     parser.add_argument("--w_bottom", type=float, default=10.0)
     parser.add_argument("--w_robin", type=float, default=1.0)
     parser.add_argument("--ddp", action="store_true")
+    TBLogger.add_args(parser)
     args = parser.parse_args()
     train(args)
 

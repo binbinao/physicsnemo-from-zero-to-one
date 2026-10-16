@@ -18,6 +18,9 @@ Usage:
 
 import os
 import argparse
+import sys
+from pathlib import Path
+
 import torch
 import torch.nn as nn
 import torch.distributed as dist
@@ -30,6 +33,9 @@ import matplotlib.pyplot as plt
 
 from physicsnemo.models.mlp import FullyConnected
 from physicsnemo.utils import load_checkpoint, save_checkpoint
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+from tb_logger import TBLogger  # noqa: E402
 
 # ── Physics ───────────────────────────────────────────────
 ALPHA = 0.01
@@ -93,9 +99,13 @@ def analytical_solution(t, x):
     return np.sin(np.pi * x) * np.exp(-ALPHA * np.pi**2 * t)
 
 
-def train(args):
+def train(args, tb=None):
     rank, world_size, use_ddp = setup_ddp() if args.ddp else (0, 1, False)
     device = torch.device(f"cuda:{rank}" if torch.cuda.is_available() else "cpu")
+
+    # DDP: only rank 0 writes curves, otherwise processes would collide
+    if tb is None or rank != 0:
+        tb = TBLogger(None, enabled=False)
 
     if rank == 0:
         print(f"[Heat1D GPU] Device: {device}, World size: {world_size}")
@@ -163,6 +173,17 @@ def train(args):
             history["ic"].append(l_ic.item())
             history["bc"].append(l_bc.item())
             history["total"].append(loss.item())
+
+            metrics = {
+                "loss/total": loss.item(),
+                "loss/pde": l_pde.item(),
+                "loss/ic": l_ic.item(),
+                "loss/bc": l_bc.item(),
+                "lr": optimizer.param_groups[0]["lr"],
+            }
+            if device.type == "cuda":
+                metrics["mem/peak_gb"] = torch.cuda.max_memory_allocated() / 1e9
+            tb.log(step, metrics)
 
             if step % max(1, args.steps // 20) == 0 or step == 1:
                 print(f"[Step {step:5d}/{args.steps}]  loss={loss.item():.4e}  "
@@ -239,6 +260,7 @@ def train(args):
 
 def main():
     parser = argparse.ArgumentParser()
+    TBLogger.add_args(parser)
     parser.add_argument("--hidden", type=int, default=128)
     parser.add_argument("--depth", type=int, default=6)
     parser.add_argument("--steps", type=int, default=5000)
@@ -248,7 +270,12 @@ def main():
     parser.add_argument("--n_bc", type=int, default=512)
     parser.add_argument("--ddp", action="store_true", help="Enable DDP multi-GPU")
     args = parser.parse_args()
-    train(args)
+    out_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "outputs_gpu")
+    # torchrun 会为每个进程跑一遍 main，仅 rank 0 建日志目录
+    tb = TBLogger.from_args(args, Path(__file__).stem, out_dir=out_dir) \
+        if int(os.environ.get("RANK", 0)) == 0 else TBLogger(None, enabled=False)
+    train(args, tb=tb)
+    tb.close()
 
 
 if __name__ == "__main__":

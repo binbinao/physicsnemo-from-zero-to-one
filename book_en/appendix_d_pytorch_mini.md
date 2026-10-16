@@ -92,6 +92,7 @@ CPU is sufficient for Chapters 1–2; from Chapter 4 onwards, GPU is recommended
 ---
 
 ➡️ **Appendix A**: [Math Quick Reference](appendix_a_math.md)  
+➡️ **Appendix E**: [After the Book: Further Learning](appendix_e_further_learning.md)  
 ➡️ **Chapter 1**: [ch01.md](ch01.md)
 
 ---

@@ -29,6 +29,10 @@ from physicsnemo.models.afno import AFNO
 sys.path.insert(0, os.path.dirname(__file__))
 from dataset import load_weather_dataset
 
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(_REPO_ROOT, "scripts"))
+from tb_logger import TBLogger  # noqa: E402
+
 
 def train(args):
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -75,6 +79,12 @@ def train(args):
 
     history = {"train": [], "test": []}
 
+    # TensorBoard / CSV curves (default on; --no-tb to disable)
+    out_dir = os.path.join(script_dir, "outputs")
+    os.makedirs(out_dir, exist_ok=True)
+    tb = TBLogger.from_args(args, os.path.splitext(os.path.basename(__file__))[0],
+                            out_dir=out_dir)
+
     for epoch in range(1, args.epochs + 1):
         model.train()
         t_loss, cnt = 0.0, 0
@@ -103,13 +113,14 @@ def train(args):
         history["train"].append(t_loss)
         history["test"].append(v_loss)
 
+        tb.log(epoch, {"loss/train": t_loss, "loss/test": v_loss,
+                       "lr": optimizer.param_groups[0]["lr"]})
+
         if epoch % max(1, args.epochs // 10) == 0 or epoch == 1:
             print(f"[Epoch {epoch:3d}/{args.epochs}] "
                   f"train={t_loss:.6f} test={v_loss:.6f}")
 
     # ── Save ──────────────────────────────────────────────
-    out_dir = os.path.join(script_dir, "outputs")
-    os.makedirs(out_dir, exist_ok=True)
     ckpt_path = os.path.join(out_dir, "afno_weather_sdk.pt")
     torch.save({
         "model": model.state_dict(),
@@ -130,6 +141,8 @@ def train(args):
     plt.savefig(fig_path, dpi=120)
     print(f"Saved {fig_path}")
 
+    tb.close()
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -141,6 +154,7 @@ def main():
     parser.add_argument("--depth", type=int, default=4)
     parser.add_argument("--patch_size", type=int, default=1)
     parser.add_argument("--num_blocks", type=int, default=4)
+    TBLogger.add_args(parser)
     args = parser.parse_args()
     train(args)
 

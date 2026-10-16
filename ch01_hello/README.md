@@ -19,6 +19,18 @@ python pinn_spring.py --epochs 5000
 | SDK | `pinn_spring_sdk.py` | nvidia-physicsnemo.sym | 声明式 API 预览 |
 
 > 本章无独立 `*_gpu.py`；CPU 即可。
+
+## 查看训练曲线
+
+训练默认记录曲线，结束后会打印日志目录：
+
+```bash
+python scripts/plot_tb_curves.py --logdir outputs/tb/pinn_spring/<时间戳>   # 零依赖出图
+tensorboard --logdir outputs/tb/pinn_spring/<时间戳>                        # 需 pip install tensorboard
+```
+
+关闭记录：`python pinn_spring.py --no-tb`。详见 [docs/ENVIRONMENT.md](../docs/ENVIRONMENT.md#训练曲线tensorboard默认开启)。
+
 ## 配置
 
 - `conf/config.yaml` — 仅 SDK 版使用

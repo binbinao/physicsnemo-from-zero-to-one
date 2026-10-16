@@ -24,6 +24,10 @@ sys.path.insert(0, os.path.dirname(__file__))
 from models.cd_mlp import CdMLP
 from data.generate_toy_cars import generate_car_data
 
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(_REPO_ROOT, "scripts"))
+from tb_logger import TBLogger  # noqa: E402
+
 
 # Resolve paths relative to this script's directory
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -80,6 +84,10 @@ def train(args):
     best_val = float("inf")
     os.makedirs(args.out_dir, exist_ok=True)
 
+    # TensorBoard / CSV curves (default on; --no-tb to disable)
+    tb = TBLogger.from_args(args, os.path.splitext(os.path.basename(__file__))[0],
+                            out_dir=args.out_dir)
+
     for epoch in range(args.epochs):
         model.train()
         epoch_loss = 0.0
@@ -104,6 +112,10 @@ def train(args):
         if epoch % 20 == 0 or epoch == args.epochs - 1:
             print(f"epoch {epoch:4d}  train_mse {epoch_loss:.6f}  "
                   f"val_mse {val_mse:.6f}  val_mae {val_mae:.4f}  val_rel {val_rel:.2%}")
+
+        tb.log(epoch, {"loss/train_mse": epoch_loss,
+                       "val/mse": val_mse, "val/mae": val_mae, "val/rel": val_rel,
+                       "lr": optimizer.param_groups[0]["lr"]})
 
         if val_mse < best_val:
             best_val = val_mse
@@ -148,6 +160,7 @@ def train(args):
         all_pred = model(params).squeeze(-1)
         all_mae = (all_pred - cd).abs().mean().item()
     print(f"Overall MAE: {all_mae:.4f}  (Cd range: {cd.min():.3f}-{cd.max():.3f})")
+    tb.close()
 
 
 def main():
@@ -160,6 +173,7 @@ def main():
     parser.add_argument("--dropout", type=float, default=0.1)
     parser.add_argument("--n_samples", type=int, default=2000)
     parser.add_argument("--out_dir", type=str, default=os.path.join(_SCRIPT_DIR, "outputs"))
+    TBLogger.add_args(parser)
     args = parser.parse_args()
     train(args)
 

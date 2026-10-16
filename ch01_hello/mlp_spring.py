@@ -9,6 +9,9 @@ Training: generate 1000 (t, x) data points from analytical solution, MSE fit.
 """
 
 import argparse
+import sys
+from pathlib import Path
+
 import numpy as np
 import torch
 import torch.nn as nn
@@ -16,6 +19,9 @@ import matplotlib
 
 matplotlib.use("Agg")  # 无头环境兼容
 import matplotlib.pyplot as plt
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+from tb_logger import TBLogger  # noqa: E402
 
 # ── Physical parameters ───────────────────────────────────
 M = 1.0  # mass (kg)
@@ -54,9 +60,11 @@ class MLP(nn.Module):
 
 
 # ── Training ─────────────────────────────────────────────
-def train(model, t, x, epochs=1000, lr=1e-3):
+def train(model, t, x, epochs=1000, lr=1e-3, tb=None):
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     losses = []
+    if tb is None:
+        tb = TBLogger(None, enabled=False)
     for epoch in range(epochs):
         optimizer.zero_grad()
         pred = model(t)
@@ -64,6 +72,8 @@ def train(model, t, x, epochs=1000, lr=1e-3):
         loss.backward()
         optimizer.step()
         losses.append(loss.item())
+        tb.log(epoch, {"loss/mse": loss.item(),
+                       "lr": optimizer.param_groups[0]["lr"]})
         if epoch % 100 == 0:
             print(f"epoch {epoch:5d}  loss {loss.item():.6f}")
     return losses
@@ -106,6 +116,7 @@ def visualize(t_test, pred, truth, losses, save_path="mlp_results.png"):
 # ── main ──────────────────────────────────────────────────
 def main():
     parser = argparse.ArgumentParser(description="MLP fit for spring oscillator")
+    TBLogger.add_args(parser)
     parser.add_argument("--epochs", type=int, default=1000)
     parser.add_argument("--hidden", type=int, default=32)
     parser.add_argument("--depth", type=int, default=3)
@@ -120,7 +131,9 @@ def main():
     model = MLP(hidden=args.hidden, depth=args.depth)
     print(f"Model parameters: {sum(p.numel() for p in model.parameters()):,}")
 
-    losses = train(model, t, x, epochs=args.epochs, lr=args.lr)
+    tb = TBLogger.from_args(args, Path(__file__).stem)
+    losses = train(model, t, x, epochs=args.epochs, lr=args.lr, tb=tb)
+    tb.close()
 
     # Inference & visualization (extrapolate to 2*T_MAX)
     t_test = torch.linspace(0, T_MAX * 2, 500).reshape(-1, 1)

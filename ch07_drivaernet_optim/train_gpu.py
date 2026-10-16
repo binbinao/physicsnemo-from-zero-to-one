@@ -39,6 +39,10 @@ from physicsnemo.utils import save_checkpoint
 sys.path.insert(0, os.path.dirname(__file__))
 from data.generate_toy_cars import generate_car_data
 
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(_REPO_ROOT, "scripts"))
+from tb_logger import TBLogger  # noqa: E402
+
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -120,6 +124,16 @@ def train_model(args, hidden=None, layers=None, lr=None, trial=None):
     out_dir = os.path.join(_SCRIPT_DIR, "outputs_gpu")
     os.makedirs(out_dir, exist_ok=True)
 
+    # TensorBoard / CSV curves: only rank 0 writes (one run per train_model call)
+    tb = None
+    if rank == 0:
+        tag = f"trial{int(trial.number)}" if trial is not None else None
+        if tag is not None:
+            tb = TBLogger.under(out_dir, tag=tag)
+        else:
+            tb = TBLogger.from_args(args, os.path.splitext(os.path.basename(__file__))[0],
+                                    out_dir=out_dir)
+
     for epoch in range(args.epochs):
         if train_sampler is not None:
             train_sampler.set_epoch(epoch)
@@ -139,6 +153,10 @@ def train_model(args, hidden=None, layers=None, lr=None, trial=None):
         with torch.no_grad():
             val_pred = model(x_val).squeeze(-1)
             val_mse = nn.functional.mse_loss(val_pred, y_val).item()
+
+        if tb is not None:
+            tb.log(epoch, {"val/mse": val_mse,
+                           "lr": optimizer.param_groups[0]["lr"]})
 
         if val_mse < best_val:
             best_val = val_mse
@@ -168,6 +186,9 @@ def train_model(args, hidden=None, layers=None, lr=None, trial=None):
                     raise optuna.TrialPruned()
             except ImportError:
                 pass
+
+    if tb is not None:
+        tb.close()
 
     cleanup_ddp()
     return best_val
@@ -241,6 +262,7 @@ def main():
     parser.add_argument("--hpo", action="store_true", help="Run Optuna HPO")
     parser.add_argument("--hpo_trials", type=int, default=50)
     parser.add_argument("--ddp", action="store_true")
+    TBLogger.add_args(parser)
     args = parser.parse_args()
     train(args)
 

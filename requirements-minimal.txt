@@ -3,3 +3,5 @@ torch>=2.3
 numpy>=1.24
 matplotlib>=3.7
 scipy>=1.10
+# 训练曲线记录（默认开启，缺失时自动降级为 CSV）
+tensorboardX>=2.6

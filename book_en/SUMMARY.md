@@ -26,6 +26,7 @@
 | B | [Cloud GPU Selection and One-Click Setup](appendix_b_cloud_gpu.md) |
 | C | [50 Common Pitfalls](appendix_c_troubleshooting.md) |
 | D | [PyTorch 30-Minute Minimal Subset](appendix_d_pytorch_mini.md) |
+| E | [After the Book: Further Learning Roadmap](appendix_e_further_learning.md) |
 
 ## Companion Resources
 

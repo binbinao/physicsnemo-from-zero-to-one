@@ -1,6 +1,9 @@
 __pycache__/
 *.pyc
 *.pyo
+.venv/
+.python-version
+uv.lock.bak
 outputs/
 outputs_gpu/
 data/*.pt
@@ -10,3 +13,8 @@ data/*.pt
 pinn_results.png
 mlp_results.png
 /*_results.png
+multirun/
+
+# 训练/服务日志与 ONNX 外部权重数据（制品由本地 train+export 再生成，见 ch03_heatsink/inference/README.md）
+*.log
+ch03_heatsink/inference/artifacts/

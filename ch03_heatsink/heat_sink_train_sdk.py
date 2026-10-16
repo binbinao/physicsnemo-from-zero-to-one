@@ -23,6 +23,10 @@ import matplotlib.pyplot as plt
 
 from physicsnemo.models.mlp import FullyConnected
 
+# ── TensorBoard logger (repo-level, CSV fallback) ────────
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "scripts"))
+from tb_logger import TBLogger  # noqa: E402
+
 
 # ── Geometry: 2D heat sink cross-section ──────────────────
 # Domain: [0, Lx] x [0, Ly] with fins on top
@@ -127,6 +131,12 @@ def train(args):
 
     history = {"total": [], "pde": [], "bot": [], "robin": []}
 
+    # TensorBoard / CSV curves (default on; --no-tb to disable)
+    out_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "outputs")
+    os.makedirs(out_dir, exist_ok=True)
+    tb = TBLogger.from_args(args, os.path.splitext(os.path.basename(__file__))[0],
+                            out_dir=out_dir)
+
     for step in range(1, args.steps + 1):
         model.train()
 
@@ -174,9 +184,11 @@ def train(args):
             print(f"[{step:5d}/{args.steps}] loss={loss.item():.4e} "
                   f"pde={l_pde.item():.4e} bot={l_bot.item():.4e} robin={l_robin.item():.4e}")
 
+        tb.log(step, {"loss/total": loss.item(), "loss/pde": l_pde.item(),
+                      "loss/bottom": l_bot.item(), "loss/robin": l_robin.item(),
+                      "lr": optimizer.param_groups[0]["lr"]})
+
     # ── Save ──────────────────────────────────────────────
-    out_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "outputs")
-    os.makedirs(out_dir, exist_ok=True)
     ckpt_path = os.path.join(out_dir, "heat_sink_sdk.pt")
     torch.save({"model_state": model.state_dict(), "history": history}, ckpt_path)
     print(f"\nCheckpoint saved: {ckpt_path}")
@@ -214,6 +226,8 @@ def train(args):
     plt.savefig(fig_path, dpi=120)
     print(f"Saved {fig_path}")
 
+    tb.close()
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -232,6 +246,7 @@ def main():
     parser.add_argument("--w_pde", type=float, default=1.0)
     parser.add_argument("--w_bottom", type=float, default=10.0)
     parser.add_argument("--w_robin", type=float, default=1.0)
+    TBLogger.add_args(parser)
     args = parser.parse_args()
     train(args)
 

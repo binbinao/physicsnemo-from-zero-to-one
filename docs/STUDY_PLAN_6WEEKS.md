@@ -100,8 +100,8 @@
 | 目标 | 任务 |
 |:---|:---|
 | 代码 | ch07 `train.py` → `optimize.py`（可选 API / ONNX） |
-| 阅读 | [WHATS_NEXT.md](WHATS_NEXT.md) |
-| 复习 | 附录 A/B/C；对照 [results/BASELINE.md](../results/BASELINE.md) |
+| 阅读 | [附录 E](../book/appendix_e_further_learning.md) · [WHATS_NEXT.md](WHATS_NEXT.md) |
+| 复习 | 附录 A/B/C；对照 [results/BASELINE.md](../results/BASELINE.md)；[BEGINNER_ISSUE_BACKLOG](BEGINNER_ISSUE_BACKLOG.md) 全绿 |
 
 **毕业检查**：独立完成「从 clone 到 ch04 跑通」不查书超过 3 处。
 
@@ -141,7 +141,7 @@
 - [ ] W4 ch04 + CH04_GUIDE
 - [ ] W5 ch05
 - [ ] W6 ch06
-- [ ] W7 ch07 + WHATS_NEXT
+- [ ] W7 ch07 + 附录 E / WHATS_NEXT
 ```
 
 ---
