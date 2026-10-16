@@ -33,6 +33,10 @@ from physicsnemo.utils import save_checkpoint, load_checkpoint
 sys.path.insert(0, os.path.dirname(__file__))
 from dataset import generate_darcy_data
 
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(_REPO_ROOT, "scripts"))
+from tb_logger import TBLogger  # noqa: E402
+
 
 def setup_ddp():
     if "RANK" in os.environ:
@@ -133,6 +137,12 @@ def train(args):
     os.makedirs(out_dir, exist_ok=True)
     best_test = float("inf")
 
+    # TensorBoard / CSV curves: only rank 0 writes to avoid clashes
+    tb = None
+    if rank == 0:
+        tb = TBLogger.from_args(args, os.path.splitext(os.path.basename(__file__))[0],
+                                out_dir=out_dir)
+
     for epoch in range(1, args.epochs + 1):
         if use_ddp:
             sampler.set_epoch(epoch)
@@ -165,6 +175,9 @@ def train(args):
         if rank == 0:
             history["train"].append(t_loss)
             history["test"].append(v_loss)
+
+            tb.log(epoch, {"loss/train": t_loss, "loss/test": v_loss,
+                           "lr": optimizer.param_groups[0]["lr"]})
 
             if v_loss < best_test:
                 best_test = v_loss
@@ -209,6 +222,9 @@ def train(args):
         print(f"\nBest test MSE: {best_test:.6f}")
         print(f"Saved to {out_dir}/")
 
+    if tb is not None:
+        tb.close()
+
     cleanup_ddp()
 
 
@@ -223,6 +239,7 @@ def main():
     parser.add_argument("--n_samples", type=int, default=5000)
     parser.add_argument("--resolution", type=int, default=64)
     parser.add_argument("--ddp", action="store_true")
+    TBLogger.add_args(parser)
     args = parser.parse_args()
     train(args)
 

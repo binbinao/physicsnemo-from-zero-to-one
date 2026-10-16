@@ -34,6 +34,9 @@ sys.path.insert(0, os.path.dirname(__file__))
 from heat_sink_geometry import HeatSinkGeometry
 from equations import heat_conduction_2d, robin_boundary
 
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "scripts"))
+from tb_logger import TBLogger  # noqa: E402
+
 
 class QuickPINN(nn.Module):
     def __init__(self, hidden=64, depth=3):
@@ -111,11 +114,16 @@ def main():
                         help="Number of fin heights to evaluate")
     parser.add_argument("--steps", type=int, default=500,
                         help="Training steps per evaluation")
+    TBLogger.add_args(parser)
     args = parser.parse_args()
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Target tip temperature: {args.target_temp}")
     print(f"Evaluating {args.n_evals} fin heights...\n")
+
+    # TensorBoard / CSV curves of the design sweep (default on; --no-tb off)
+    tb = TBLogger.from_args(args, os.path.splitext(os.path.basename(__file__))[0],
+                            out_dir="outputs")
 
     fin_heights = np.linspace(5.0, 40.0, args.n_evals)
     tip_temps = []
@@ -123,6 +131,8 @@ def main():
     for i, fh in enumerate(fin_heights):
         T_tip = quick_train(fh, steps=args.steps, device=device)
         tip_temps.append(T_tip)
+        tb.log(i, {"eval/fin_height": float(fh), "eval/tip_temp": T_tip,
+                   "eval/abs_err_to_target": float(abs(T_tip - args.target_temp))})
         print(f"  fin_height={fh:5.1f} mm  ->  T_tip_avg={T_tip:.2f}")
 
     tip_temps = np.array(tip_temps)
@@ -150,6 +160,7 @@ def main():
     fig.savefig("outputs/inverse_optimization.png", dpi=150)
     print("Saved outputs/inverse_optimization.png")
     plt.close(fig)
+    tb.close()
 
 
 if __name__ == "__main__":

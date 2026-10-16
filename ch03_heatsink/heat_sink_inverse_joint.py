@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import sys
 
 import numpy as np
 import torch
@@ -18,6 +19,9 @@ import torch.nn as nn
 
 from heat_sink_geometry import HeatSinkGeometry
 from equations import heat_conduction_2d, robin_boundary
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "scripts"))
+from tb_logger import TBLogger  # noqa: E402
 
 
 class ParametricPINN(nn.Module):
@@ -42,6 +46,7 @@ def train_joint(
     device: str,
     log_every: int,
     tol_temp: float,
+    tb=None,
 ) -> tuple[float, float, int]:
     model = ParametricPINN().to(device)
     fin_height = nn.Parameter(torch.tensor([h_init], dtype=torch.float32, device=device))
@@ -105,6 +110,11 @@ def train_joint(
                 f"step {step:5d}  h={float(h.item()):6.2f} mm  "
                 f"T_tip={float(T_tip.item()):7.3f}  |err|={err:.3f}  loss={loss.item():.4e}"
             )
+        if tb is not None:
+            tb.log(step, {"h/fin_height_mm": float(h.item()),
+                          "T/tip": float(T_tip.item()),
+                          "objective/abs_err": err,
+                          "loss/total": loss.item()})
         if err < tol_temp:
             last_step = step
             print(f"Early stop at step {step}: |T_tip-target| < {tol_temp}")
@@ -132,14 +142,18 @@ def main():
     p.add_argument("--h_init", type=float, default=20.0)
     p.add_argument("--h_min", type=float, default=5.0)
     p.add_argument("--h_max", type=float, default=40.0)
+    TBLogger.add_args(p)
     args = p.parse_args()
     steps = 800 if args.fast else args.steps
     tol = 2.5 if args.fast else 0.5
     log_every = 200 if args.fast else 500
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Joint inversion on {device} (steps={steps}, tol={tol})")
+    tb = TBLogger.from_args(args, os.path.splitext(os.path.basename(__file__))[0],
+                            out_dir="outputs")
     h, T_tip, used = train_joint(
-        args.target_temp, steps, args.h_init, args.h_min, args.h_max, device, log_every, tol
+        args.target_temp, steps, args.h_init, args.h_min, args.h_max,
+        device, log_every, tol, tb=tb,
     )
     print(f"\nResult: fin_height={h:.2f} mm  T_tip={T_tip:.3f}  target={args.target_temp}  steps={used}")
     os.makedirs("outputs", exist_ok=True)
@@ -147,6 +161,7 @@ def main():
         f.write(
             f"fin_height_mm={h}\nT_tip={T_tip}\ntarget={args.target_temp}\nsteps={used}\n"
         )
+    tb.close()
 
 
 if __name__ == "__main__":

@@ -26,6 +26,7 @@
 | B | [云 GPU 选型与一键环境](appendix_b_cloud_gpu.md) |
 | C | [常见踩坑 50 问](appendix_c_troubleshooting.md) |
 | D | [PyTorch 30 分钟最小集](appendix_d_pytorch_mini.md) |
+| E | [学完之后：继续学习路线图](appendix_e_further_learning.md) |
 
 ## 配套资源
 

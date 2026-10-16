@@ -18,6 +18,8 @@ Usage:
 import argparse
 import os
 import math
+import sys
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -26,6 +28,9 @@ import torch.nn as nn
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+from tb_logger import TBLogger  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
@@ -94,9 +99,11 @@ def pde_residual(model: PINN, x: torch.Tensor, t: torch.Tensor,
 # ---------------------------------------------------------------------------
 # Training loop
 # ---------------------------------------------------------------------------
-def train(args):
+def train(args, tb=None):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Device: {device}")
+    if tb is None:
+        tb = TBLogger(None, enabled=False)
 
     model = PINN(hidden=args.hidden, depth=args.depth).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
@@ -135,6 +142,14 @@ def train(args):
         history["pde"].append(loss_pde.item())
         history["ic"].append(loss_ic.item())
         history["bc"].append(loss_bc.item())
+
+        tb.log(step, {
+            "loss/total": loss.item(),
+            "loss/pde": loss_pde.item(),
+            "loss/ic": loss_ic.item(),
+            "loss/bc": loss_bc.item(),
+            "lr": optimizer.param_groups[0]["lr"],
+        })
 
         if step % max(1, args.steps // 20) == 0 or step == 1:
             print(f"[Step {step:5d}/{args.steps}]  loss={loss.item():.4e}  "
@@ -221,6 +236,7 @@ def visualize(model, history, device="cpu"):
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="1D Heat Equation PINN")
+    TBLogger.add_args(parser)
     parser.add_argument("--hidden", type=int, default=64, help="Hidden layer width")
     parser.add_argument("--depth", type=int, default=4, help="Number of hidden layers")
     parser.add_argument("--steps", type=int, default=3000, help="Training steps")
@@ -234,7 +250,10 @@ if __name__ == "__main__":
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
 
-    model, history = train(args)
+    tb = TBLogger.from_args(args, Path(__file__).stem, out_dir="outputs")
+    model, history = train(args, tb=tb)
+    tb.close()
+
     device = "cuda" if torch.cuda.is_available() else "cpu"
     visualize(model, history, device)
     print("\nDone! Check the outputs/ directory for plots.")

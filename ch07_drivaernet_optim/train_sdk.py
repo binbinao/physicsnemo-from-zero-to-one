@@ -24,6 +24,10 @@ from physicsnemo.models.mlp import FullyConnected
 sys.path.insert(0, os.path.dirname(__file__))
 from data.generate_toy_cars import generate_car_data
 
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(_REPO_ROOT, "scripts"))
+from tb_logger import TBLogger  # noqa: E402
+
 
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -87,6 +91,10 @@ def train(args):
 
     history = {"train": [], "val": []}
 
+    # TensorBoard / CSV curves (default on; --no-tb to disable)
+    tb = TBLogger.from_args(args, os.path.splitext(os.path.basename(__file__))[0],
+                            out_dir=out_dir)
+
     for epoch in range(args.epochs):
         model.train()
         epoch_loss = 0.0
@@ -110,6 +118,10 @@ def train(args):
 
         history["train"].append(epoch_loss)
         history["val"].append(val_mse)
+
+        tb.log(epoch, {"loss/train_mse": epoch_loss, "val/mse": val_mse,
+                       "val/mae": val_mae, "val/rel": val_rel,
+                       "lr": optimizer.param_groups[0]["lr"]})
 
         if epoch % 20 == 0 or epoch == args.epochs - 1:
             print(f"epoch {epoch:4d}  train_mse {epoch_loss:.6f}  "
@@ -143,6 +155,8 @@ def train(args):
     plt.savefig(fig_path, dpi=120)
     print(f"Saved {fig_path}")
 
+    tb.close()
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -152,6 +166,7 @@ def main():
     parser.add_argument("--hidden", type=int, default=128)
     parser.add_argument("--layers", type=int, default=4)
     parser.add_argument("--n_samples", type=int, default=2000)
+    TBLogger.add_args(parser)
     args = parser.parse_args()
     train(args)
 

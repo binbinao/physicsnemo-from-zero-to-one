@@ -32,8 +32,14 @@ sys.path.insert(0, os.path.dirname(__file__))
 from afno_model import AFNOMini
 from dataset import load_weather_dataset
 
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(_REPO_ROOT, "scripts"))
+from tb_logger import TBLogger  # noqa: E402
 
-def train(cfg: dict):
+
+def train(cfg: dict, tb=None):
+    if tb is None:
+        tb = TBLogger(None, enabled=False)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"[AFNO Mini] Device: {device}")
 
@@ -96,6 +102,9 @@ def train(cfg: dict):
         history["train"].append(t_loss)
         history["test"].append(v_loss)
 
+        tb.log(epoch, {"loss/train": t_loss, "loss/test": v_loss,
+                       "lr": optimizer.param_groups[0]["lr"]})
+
         if epoch % max(1, epochs // 10) == 0 or epoch == 1:
             print(f"[Epoch {epoch:3d}/{epochs}] train={t_loss:.6f} test={v_loss:.6f}")
 
@@ -142,19 +151,26 @@ if HAS_HYDRA:
     def main_hydra(cfg: DictConfig):
         flat = get_defaults()
         flat.update(OmegaConf.to_container(cfg, resolve=True))
-        train(flat)
+        tb = TBLogger.under(flat["output_dir"])
+        train(flat, tb=tb)
+        tb.close()
 
 def main_argparse():
     parser = argparse.ArgumentParser()
     for k, v in get_defaults().items():
         parser.add_argument(f"--{k}", type=type(v), default=v)
     parser.add_argument("--seed", type=int, default=42)
+    TBLogger.add_args(parser)
     args = parser.parse_args()
 
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
 
-    train(vars(args))
+    cfg = vars(args)
+    tb = TBLogger.from_args(args, os.path.splitext(os.path.basename(__file__))[0],
+                            out_dir=cfg["output_dir"])
+    train(cfg, tb=tb)
+    tb.close()
 
 if __name__ == "__main__":
     if HAS_HYDRA:

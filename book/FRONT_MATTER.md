@@ -15,4 +15,4 @@
 
 **勘误与反馈**：GitHub [Issues](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues)
 
-**口径**：全书为 **前言 + 第 1–7 章 + 附录 A–D**；第 4 章目录名 `ch04_fno_airfoil` 与默认 Darcy 训练并存，见 [CH04_GUIDE](../ch04_fno_airfoil/CH04_GUIDE.md)。
+**口径**：全书为 **前言 + 第 1–7 章 + 附录 A–E**；第 4 章目录名 `ch04_fno_airfoil` 与默认 Darcy 训练并存，见 [CH04_GUIDE](../ch04_fno_airfoil/CH04_GUIDE.md)。

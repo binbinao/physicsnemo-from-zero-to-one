@@ -41,5 +41,18 @@
 | [#51](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/51) | P3 | 小测验答案  done |
 | [#52](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/52) | P3 | 配图风格  done |
 | [#53](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/53) | P3 | 能力矩阵  done |
+| [#54](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/54) | P1 | 训练脚本默认接入 tensorboardX 曲线记录  done |
 
 完整映射：`docs/issues/review-round2/issue_map.json`
+
+### #54 · 训练脚本默认接入 tensorboardX 曲线记录
+
+**问题**：26 个训练脚本只 `print` 日志，无曲线记录；`book/ch02.md`、`book/ch03.md` 却已声称支持 TensorBoard（书码不一致，关联 C26）。
+
+**交付**：
+- `scripts/tb_logger.py`：TensorBoard 事件文件 + `metrics.csv` 双写，缺 tensorboardX 时降级 CSV
+- `scripts/plot_tb_curves.py`：零依赖离线看图
+- ch01–ch07 训练脚本逐个接入（`--tb-dir` / `--no-tb` / `--tb-tag`）
+
+**方案与批次**：`docs/TENSORBOARD_INTEGRATION_PLAN.md`
+**验收**：见方案文档第 5 节（2026-09-04 全部通过：4 档代表脚本冒烟生成 `events.out.tfevents.*` + `metrics.csv`，`plot_tb_curves.py` 出图 5 指标，`--no-tb` 关闭生效，`check_env.py` 全绿）

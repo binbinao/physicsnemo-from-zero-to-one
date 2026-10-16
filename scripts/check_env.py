@@ -19,6 +19,14 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 WIDTH = 60
 
+if sys.platform == "win32":
+    # Windows 控制台默认 GBK，无法编码 ✅/❌ 等符号
+    for _stream in (sys.stdout, sys.stderr):
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
+
 # tier -> pip one-liner (display only)
 TIER_INSTALL = {
     0: 'pip install "torch>=2.3" numpy matplotlib scipy',
@@ -154,7 +162,9 @@ def probe_torch() -> dict:
         if torch.cuda.is_available():
             info["cuda"] = True
             props = torch.cuda.get_device_properties(0)
-            info["device"] = f"{torch.cuda.get_device_name(0)} ({props.total_mem / 1e9:.1f}GB)"
+            # torch 2.x 旧版为 total_mem，新版为 total_memory
+            total_mem = getattr(props, "total_memory", None) or getattr(props, "total_mem", 0)
+            info["device"] = f"{torch.cuda.get_device_name(0)} ({total_mem / 1e9:.1f}GB)"
     except ImportError:
         pass
     return info
@@ -180,6 +190,11 @@ def run_base_checks() -> bool:
         ok, detail = import_ok(pkg)
         # scipy 在 requirements-minimal 中；ch04/ch05 Darcy 数据生成硬依赖
         all_ok &= check_line(pkg.capitalize(), ok, detail if ok else f"pip install {pkg}")
+
+    # 训练曲线记录：默认开启，缺失时脚本自动降级为 CSV，不阻断训练
+    ok, detail = import_ok("tensorboardX")
+    check_line("TensorBoard 曲线记录", ok,
+               detail if ok else "未安装 -> 自动降级为 metrics.csv（pip install tensorboardX）")
 
     return all_ok
 

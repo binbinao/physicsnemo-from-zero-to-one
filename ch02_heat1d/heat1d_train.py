@@ -15,6 +15,7 @@ Usage (without Hydra):
 
 import os
 import sys
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -31,6 +32,9 @@ except ImportError:
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+from tb_logger import TBLogger  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
@@ -82,8 +86,10 @@ def pde_residual(model, x, t, alpha=0.1):
 # ---------------------------------------------------------------------------
 # Training
 # ---------------------------------------------------------------------------
-def run_training(cfg: dict):
+def run_training(cfg: dict, tb=None):
     """Train with a flat config dict."""
+    if tb is None:
+        tb = TBLogger(None, enabled=False)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Device: {device}")
     print(f"Config: hidden={cfg['hidden']}, depth={cfg['depth']}, "
@@ -130,6 +136,14 @@ def run_training(cfg: dict):
         history["ic"].append(loss_ic.item())
         history["bc"].append(loss_bc.item())
 
+        tb.log(step, {
+            "loss/total": loss.item(),
+            "loss/pde": loss_pde.item(),
+            "loss/ic": loss_ic.item(),
+            "loss/bc": loss_bc.item(),
+            "lr": optimizer.param_groups[0]["lr"],
+        })
+
         if step % log_interval == 0 or step == 1:
             print(f"[{step:5d}/{cfg['steps']}] loss={loss.item():.4e} "
                   f"pde={loss_pde.item():.4e} ic={loss_ic.item():.4e} "
@@ -159,13 +173,18 @@ if HAS_HYDRA:
         merged.update(flat.get("training", {}))
         merged.update({k: v for k, v in flat.items()
                        if k not in ("arch", "training")})
-        run_training(merged)
+        # Hydra 每次运行会切换 CWD 到时间戳目录，日志直接落在其中
+        from hydra.core.hydra_config import HydraConfig
+        tb = TBLogger(Path(HydraConfig.get().runtime.output_dir) / "tb")
+        run_training(merged, tb=tb)
+        tb.close()
 
 
 def main_argparse():
     """Fallback when Hydra is not installed."""
     import argparse
     parser = argparse.ArgumentParser(description="Heat1D PINN (argparse fallback)")
+    TBLogger.add_args(parser)
     parser.add_argument("--hidden", type=int, default=64)
     parser.add_argument("--depth", type=int, default=4)
     parser.add_argument("--steps", type=int, default=3000)
@@ -175,7 +194,9 @@ def main_argparse():
     parser.add_argument("--n_bc", type=int, default=200)
     parser.add_argument("--output_dir", type=str, default="outputs")
     args = parser.parse_args()
-    run_training(vars(args))
+    tb = TBLogger.from_args(args, Path(__file__).stem, out_dir=args.output_dir)
+    run_training(vars(args), tb=tb)
+    tb.close()
 
 
 if __name__ == "__main__":
