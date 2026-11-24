@@ -55,7 +55,7 @@ uv pip install -r requirements-full.txt        # Tier 2–3（SDK + 部署）
 - **训练中看**：`tensorboard --logdir <目录>`（需 `pip install tensorboard`，可选依赖）。
 - **训练后看（零依赖）**：`python scripts/plot_tb_curves.py --logdir <目录> --out curves.png`，
   直接读 `metrics.csv` 出图；支持 `--metrics loss/total,val/mae`、`--smooth 0.6`、`--linear-y`。
-- **关闭**：环境变量 `PN_TB=0`（所有脚本通用）；纯 argparse 脚本也可加 `--no-tb`，但 Hydra 档脚本（ch03/ch04/ch05/ch06 主入口、ch07 optuna 路径）会把 `--no-tb` 当非法 override 报错，只能用 `PN_TB=0`。`PN_TB_DIR` 可覆写日志根目录。
+- **关闭**：环境变量 `PN_TB=0`（**所有脚本通用，Hydra 档也可用**）；纯 argparse 脚本也可加 `--no-tb`，但 Hydra 档脚本（ch02–ch06 的 Hydra 入口）会把 `--no-tb` 当非法 override 报错，只能用 `PN_TB=0`。`PN_TB_DIR` 可覆写日志根目录。
 - **自定义**：`--tb-dir PATH`、`--tb-tag NAME`、`--tb-no-timestamp`（仅 argparse 档生效；`--tb-dir` 指定目录时 `--tb-tag` 不参与拼路径）。
 - **依赖**：`tensorboardX>=2.6` 已在 `requirements-minimal.txt`。
   未安装时脚本**自动降级为只写 CSV**（打印一条提示），训练不受影响。
@@ -107,8 +107,8 @@ python book/scripts/generate_all_figures.py
 pip install "torch>=2.3" numpy matplotlib scipy nvidia-physicsnemo nvidia-physicsnemo.sym hydra-core
 ```
 
-> **Hydra 注意**：装上 `hydra-core` 后，部分训练入口改用 `epochs=50` / `steps=500` 语法，
-> 不要用 `--epochs`。见 [COMMAND_REFERENCE.md](COMMAND_REFERENCE.md)。
+> **Hydra 注意**：装上 `hydra-core` 后，部分训练入口改用 `key=value` 语法（如 ch03 `steps=500`、ch04–ch06 `epochs=50`、ch02 `training.steps=500`），不要用 `--epochs` / `--steps`。
+> 键名以各章 `conf/config.yaml` 为准；完整对照见 [COMMAND_REFERENCE.md](COMMAND_REFERENCE.md#hydra-vs-argparse必读)。
 
 ### Tier 3 — 全书 + 部署（ch07 API / ONNX）
 
