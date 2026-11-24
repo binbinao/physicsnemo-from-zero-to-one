@@ -15,11 +15,11 @@ python rollout_eval.py --ckpt outputs/afno_weather.pt --rollout_steps 10
 
 ## 三档脚本
 
-| 档位 | 文件 | 说明 |
-|:---|:---|:---|
-| **首选 · 裸 PyTorch** | `train_afno_mini.py` | toy 天气 + AFNO |
-| SDK | `train_afno_sdk.py` | PhysicsNeMo AFNO |
-| GPU / DDP | `train_afno_gpu.py` | **需多卡才有意义**；无多卡可跳过 |
+| 档位 | 文件 | 依赖 | 说明 |
+|:---|:---|:---|:---|
+| **首选 · 裸 PyTorch** | `train_afno_mini.py` | torch | toy 天气 + AFNO |
+| SDK | `train_afno_sdk.py` | physicsnemo | PhysicsNeMo AFNO |
+| GPU / DDP | `train_afno_gpu.py` | CUDA | **需多卡才有意义**；无多卡可跳过 |
 
 ## 数据
 

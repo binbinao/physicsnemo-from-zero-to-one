@@ -25,11 +25,11 @@ python train_fno_mini.py --epochs 30
 
 ## 三档脚本
 
-| 档位 | 文件 | 说明 |
-|:---|:---|:---|
-| **首选 · 裸 PyTorch** | `train_fno_mini.py` | 路径 A；手写 FNO |
-| SDK | `train_fno_sdk.py` | 同 Darcy 数据，换 PhysicsNeMo backbone |
-| GPU | `train_fno_gpu.py` | DDP / 生产档 |
+| 档位 | 文件 | 依赖 | 说明 |
+|:---|:---|:---|:---|
+| **首选 · 裸 PyTorch** | `train_fno_mini.py` | torch, scipy | 路径 A；手写 FNO |
+| SDK | `train_fno_sdk.py` | physicsnemo | 同 Darcy 数据，换 PhysicsNeMo backbone |
+| GPU | `train_fno_gpu.py` | CUDA | DDP / 生产档 |
 
 ## 框架切换
 

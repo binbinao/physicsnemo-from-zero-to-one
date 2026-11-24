@@ -19,12 +19,12 @@ python train_physics_fno.py --epochs 50 --n_train 100 --lambda_physics 0.1
 
 ## 三档 / 对照脚本
 
-| 档位 | 文件 | 说明 |
-|:---|:---|:---|
-| **基线 · 纯数据** | `train_data_fno.py` | 无 PDE 正则（裸 PyTorch） |
-| **首选 · 混合** | `train_physics_fno.py` | 数据 + Darcy 残差 |
-| SDK | `train_physics_fno_sdk.py` | PhysicsNeMo backbone |
-| GPU | `train_physics_fno_gpu.py` | 生产档 |
+| 档位 | 文件 | 依赖 | 说明 |
+|:---|:---|:---|:---|
+| **基线 · 纯数据** | `train_data_fno.py` | torch, scipy | 无 PDE 正则（裸 PyTorch） |
+| **首选 · 混合** | `train_physics_fno.py` | torch, scipy | 数据 + Darcy 残差 |
+| SDK | `train_physics_fno_sdk.py` | physicsnemo | PhysicsNeMo backbone |
+| GPU | `train_physics_fno_gpu.py` | CUDA | 生产档 |
 
 > 本章不是简单的 mini/sdk/gpu 三平行，而是 **数据基线 → 混合损失** 的实验对照。
 
