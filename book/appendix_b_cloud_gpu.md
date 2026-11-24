@@ -46,7 +46,7 @@ source .venv/bin/activate
 
 # 3. 安装 PyTorch（按机器 CUDA 版本选，示例 CUDA 12.1）
 pip install --upgrade pip
-pip install "torch>=2.3" numpy matplotlib
+pip install "torch>=2.3" numpy matplotlib scipy
 
 # 4. 第 1–3 章裸 PyTorch 版到此即可；SDK 版再装：
 pip install nvidia-physicsnemo nvidia-physicsnemo.sym hydra-core
@@ -89,10 +89,10 @@ python scripts/check_env.py
 ```python
 !git clone --depth 1 https://github.com/binbinao/physicsnemo-from-zero-to-one.git
 %cd physicsnemo-from-zero-to-one
-!pip install -q numpy matplotlib hydra-core
+!pip install -q numpy matplotlib scipy hydra-core
 !python scripts/check_env.py
 !python ch01_hello/pinn_spring.py --epochs 800
-%cd ch04_fno_airfoil && python train_fno_mini.py --epochs 30
+%cd ch04_fno_airfoil && python train_fno_mini.py epochs=30   # 上一行装了 hydra-core，故用 epochs=
 ```
 
 **Colab 注意**：会话约 12h 断开；大文件用 Google Drive 挂载（笔记本末 cell 有示例）。详见 [CLOUD_GPU_GUIDE §2](../docs/CLOUD_GPU_GUIDE.md#2-google-colab逐步)。
@@ -135,13 +135,16 @@ python scripts/check_env.py
 
 ## B.10 各章在云上的首选命令
 
+> 下表按**未安装 `hydra-core`**（第 3 步最小安装）给出 `--epochs` 写法；若你按第 4 步装了 SDK + `hydra-core`，ch04 / ch06 要改成 `epochs=`（如 `train_fno_mini.py epochs=30`）。
+> 两套语法的判定与示例见 [docs/COMMAND_REFERENCE.md](../docs/COMMAND_REFERENCE.md)。
+
 | 章 | 命令 |
 |:---|:---|
 | ch01 | `python ch01_hello/pinn_spring.py --epochs 1000` |
 | ch02 | `python ch02_heat1d/heat1d_pinn_raw.py` |
-| ch04 | `cd ch04_fno_airfoil && python train_fno_mini.py --epochs 50` |
+| ch04 | `cd ch04_fno_airfoil && python train_fno_mini.py --epochs 50`（装了 `hydra-core` 则用 `epochs=50`） |
 | ch05 | 先确保 ch04 存在；`cd ch05_darcy_hybrid && python train_data_fno.py` |
-| ch06 | `cd ch06_fourcastnet_mini && python train_afno_mini.py --epochs 30` |
+| ch06 | `cd ch06_fourcastnet_mini && python train_afno_mini.py --epochs 30`（装了 `hydra-core` 则用 `epochs=30`） |
 | ch07 | `cd ch07_drivaernet_optim && python train.py` |
 
 显存与时长表：[HARDWARE_EXPECTATIONS.md](../docs/HARDWARE_EXPECTATIONS.md)

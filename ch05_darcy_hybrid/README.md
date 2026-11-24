@@ -9,17 +9,24 @@
 ## 先跑这个
 
 ```bash
+# 无 Hydra：--epochs；有 Hydra：epochs=50 n_train=100
 python train_data_fno.py --epochs 50 --n_train 100
 python train_physics_fno.py --epochs 50 --n_train 100 --lambda_physics 0.1
 ```
 
-## 三档脚本
+> **Hydra / argparse 双语法**：装 `hydra-core` 时用 `key=value`（本章如 `epochs=50`、`n_train=100`）；未装时用 `--flag`（如 `--epochs 50`、`--n_train 100`）。键名以本章 `conf/config.yaml` 为准。见 [COMMAND_REFERENCE](../docs/COMMAND_REFERENCE.md)。  
+> 另需 **scipy**（`requirements-minimal.txt` 已含）+ **ch04 目录**已存在。
 
-| 档位 | 文件 | 说明 |
-|:---|:---|:---|
-| **基线 · 纯数据** | `train_data_fno.py` | 无 PDE 正则 |
-| **首选 · 混合** | `train_physics_fno.py` | 数据 + Darcy 残差 |
-| SDK / GPU | `train_physics_fno_sdk.py` / `train_physics_fno_gpu.py` | |
+## 三档 / 对照脚本
+
+| 档位 | 文件 | 依赖 | 说明 |
+|:---|:---|:---|:---|
+| **基线 · 纯数据** | `train_data_fno.py` | torch, scipy | 无 PDE 正则（裸 PyTorch） |
+| **首选 · 混合** | `train_physics_fno.py` | torch, scipy | 数据 + Darcy 残差 |
+| SDK | `train_physics_fno_sdk.py` | physicsnemo | PhysicsNeMo backbone |
+| GPU | `train_physics_fno_gpu.py` | CUDA | 生产档 |
+
+> 本章不是简单的 mini/sdk/gpu 三平行，而是 **数据基线 → 混合损失** 的实验对照。
 
 ## 查看训练曲线
 

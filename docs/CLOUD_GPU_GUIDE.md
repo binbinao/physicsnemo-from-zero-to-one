@@ -32,12 +32,20 @@
 
 ### 2.3 按章节运行
 
+> 推荐直接打开 [`notebooks/colab_quickstart.ipynb`](../notebooks/colab_quickstart.ipynb)（含 ch01/ch03/ch04/ch05/ch06）。  
+> **已装 hydra-core 时**用 `epochs=30` / `steps=500`，不要用 `--epochs`（见 [COMMAND_REFERENCE](COMMAND_REFERENCE.md)）。
+
 | 章节 | Colab 命令（在仓库根目录） | 预计时长 (T4) |
 |:---|:---|:---|
 | ch01 | `!python ch01_hello/pinn_spring.py --epochs 500` | ~2 min |
-| ch02 | `!python ch02_heat1d/heat1d_pinn_raw.py` | ~5–10 min |
-| ch04 | `!python ch04_fno_airfoil/train_fno_mini.py --epochs 30` | ~10–20 min |
-| ch06 | `!python ch06_fourcastnet_mini/train_afno_mini.py --epochs 20` | ~15–30 min |
+| ch02 | `!python ch02_heat1d/heat1d_pinn_raw.py --steps 500` | ~3–8 min |
+| ch03 | `!python ch03_heatsink/heat_sink_train.py steps=500` | ~5–15 min |
+| ch04 | `!python ch04_fno_airfoil/train_fno_mini.py epochs=30` | ~10–20 min |
+| ch05 | `!python ch05_darcy_hybrid/train_data_fno.py epochs=20 n_train=50` | ~10–20 min |
+| ch06 | `!python ch06_fourcastnet_mini/train_afno_mini.py epochs=30` | ~15–30 min |
+| ch07 | `!python ch07_drivaernet_optim/train.py --epochs 100` | ~5–10 min |
+
+> 上表是 **Colab 演示缩短值**：ch01 脚本默认 5000 epoch、ch07 默认 200 epoch，日常按默认跑即可。
 
 ### 2.4 Colab 限制与对策
 
@@ -68,16 +76,19 @@ cd ~
 git clone https://github.com/binbinao/physicsnemo-from-zero-to-one.git
 cd physicsnemo-from-zero-to-one
 pip install -U pip
-pip install "torch>=2.3" numpy matplotlib hydra-core
+pip install "torch>=2.3" numpy matplotlib scipy hydra-core
 pip install nvidia-physicsnemo nvidia-physicsnemo.sym  # SDK 章节需要
 python scripts/check_env.py
 ```
 
 ### 3.3 跑第 4 章 FNO
 
+> §3.2 装了 `hydra-core`，因此 `train_fno_mini.py` 走 **Hydra**，参数用 `epochs=`（不是 `--epochs`）；
+> 若你的环境没装 `hydra-core`，改回 `--epochs 50`。两套写法见 [COMMAND_REFERENCE](COMMAND_REFERENCE.md#hydra-vs-argparse必读)。
+
 ```bash
 cd ch04_fno_airfoil
-python train_fno_mini.py --epochs 50
+python train_fno_mini.py epochs=50
 ls -la data/   # 应生成 darcy_data.pt
 ```
 

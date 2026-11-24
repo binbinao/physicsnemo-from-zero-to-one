@@ -46,7 +46,7 @@ source .venv/bin/activate
 
 # 3. Install PyTorch (select based on your CUDA version; example: CUDA 12.1)
 pip install --upgrade pip
-pip install "torch>=2.3" numpy matplotlib
+pip install "torch>=2.3" numpy matplotlib scipy
 
 # 4. For Chapters 1–3 bare PyTorch, you're done here; for SDK version, also install:
 pip install nvidia-physicsnemo nvidia-physicsnemo.sym hydra-core
@@ -89,10 +89,10 @@ python scripts/check_env.py
 ```python
 !git clone --depth 1 https://github.com/binbinao/physicsnemo-from-zero-to-one.git
 %cd physicsnemo-from-zero-to-one
-!pip install -q numpy matplotlib hydra-core
+!pip install -q numpy matplotlib scipy hydra-core
 !python scripts/check_env.py
 !python ch01_hello/pinn_spring.py --epochs 800
-%cd ch04_fno_airfoil && python train_fno_mini.py --epochs 30
+%cd ch04_fno_airfoil && python train_fno_mini.py epochs=30   # 上一行装了 hydra-core，故用 epochs=
 ```
 
 **Colab notes**: Sessions disconnect after ~12h; for large files, mount Google Drive (example in the last cell of the notebook). See [CLOUD_GPU_GUIDE §2](../docs/CLOUD_GPU_GUIDE.md#2-google-colab逐步) for details.
@@ -135,13 +135,17 @@ Step-by-step screenshots: [CLOUD_GPU_GUIDE §3](../docs/CLOUD_GPU_GUIDE.md#3-aut
 
 ## B.10 Recommended Commands per Chapter on Cloud
 
+> The table below uses the `--epochs` form for an environment **without `hydra-core`** (minimal install, step 3);
+> if you installed the SDK + `hydra-core` (step 4), use `epochs=` for ch04 / ch06 (e.g. `train_fno_mini.py epochs=30`).
+> See [docs/COMMAND_REFERENCE.md](../docs/COMMAND_REFERENCE.md) for both syntaxes.
+
 | Chapter | Command |
 |:---|:---|
 | ch01 | `python ch01_hello/pinn_spring.py --epochs 1000` |
 | ch02 | `python ch02_heat1d/heat1d_pinn_raw.py` |
-| ch04 | `cd ch04_fno_airfoil && python train_fno_mini.py --epochs 50` |
+| ch04 | `cd ch04_fno_airfoil && python train_fno_mini.py --epochs 50`（装了 `hydra-core` 则用 `epochs=50`） |
 | ch05 | Ensure ch04 exists first; `cd ch05_darcy_hybrid && python train_data_fno.py` |
-| ch06 | `cd ch06_fourcastnet_mini && python train_afno_mini.py --epochs 30` |
+| ch06 | `cd ch06_fourcastnet_mini && python train_afno_mini.py --epochs 30`（装了 `hydra-core` 则用 `epochs=30`） |
 | ch07 | `cd ch07_drivaernet_optim && python train.py` |
 
 VRAM and runtime estimates: [HARDWARE_EXPECTATIONS.md](../docs/HARDWARE_EXPECTATIONS.md)

@@ -1,7 +1,37 @@
 # 书—代码命令对照表
 
-> 正文以本表为准；发现不一致请提 Issue。  
-> **Hydra 章**：在章节目录下执行；无 Hydra 时用 `--参数` 形式。
+> 正文以本表为准；发现不一致请提 Issue。
+
+## Hydra vs argparse（必读）
+
+**一句话**：装了 `hydra-core` 就用 `key=value`（如 `epochs=50`）；没装就用 `--flag`（如 `--epochs 50`）。
+
+部分脚本（`heat1d_train.py`、`heat_sink_train.py`、`train_fno_mini.py`、
+`train_data_fno.py` / `train_physics_fno.py`、`train_afno_mini.py`、ch01 的
+`pinn_spring_sdk.py`）在检测到 `hydra-core` 时走 **Hydra**，否则走 **argparse**：
+
+| 模式 | 写法示例 | 何时生效 |
+|:---|:---|:---|
+| **argparse** | `python train_fno_mini.py --epochs 50` | 未安装 `hydra-core` |
+| **Hydra** | `python train_fno_mini.py epochs=50` | 已安装 `hydra-core`（如 `requirements-full.txt`） |
+
+装了 Hydra 后，`--epochs` / `--steps` **会被忽略或报错**。入口脚本启动时会打印一行提示。
+纯 argparse 脚本（如 `heat1d_pinn_raw.py`、`pinn_spring.py`、`mlp_spring.py`、`train.py`）始终用 `--参数`。
+
+**键名按章不同**：ch02 / ch03 的 config 只有 `steps=`；ch04 / ch05 / ch06 只有 `epochs=`（ch05 另有 `n_train=`）。
+写了本章 config 里不存在的键会报 `Could not override` —— 以 `ch0X_*/conf/config.yaml` 为准。
+
+## 关闭训练曲线记录（`PN_TB`）
+
+```bash
+PN_TB=0 python ch04_fno_airfoil/train_fno_mini.py epochs=30   # 唯一通用写法
+PN_TB=0 python ch01_hello/pinn_spring.py --epochs 500
+python ch01_hello/pinn_spring.py --epochs 500 --no-tb         # 仅纯 argparse 档可用
+```
+
+- `PN_TB=0` 是**跨 Hydra / argparse 的唯一通用**关闭方式（各章脚本均支持，含 `*_sdk.py` / `*_gpu.py`）。
+- `--no-tb` 只在纯 argparse 脚本有效（ch01 `pinn_spring.py` / `mlp_spring.py`、`heat1d_pinn_raw.py`、ch07 `train.py` 等）；Hydra 档（ch02–ch06 的 Hydra 入口）会把 `--no-tb` 当非法 override **报错**，这些脚本请用 `PN_TB=0`。
+- `PN_TB_DIR` 可覆写日志根目录。详见 [ENVIRONMENT.md](ENVIRONMENT.md#训练曲线tensorboard默认开启)。
 
 ## ch01（argparse）
 
@@ -15,15 +45,19 @@ python pinn_spring.py --epochs 5000
 
 ```bash
 cd ch02_heat1d
+# 首选（始终 argparse）：
+python heat1d_pinn_raw.py --steps 500
+# Hydra 入口：
 python heat1d_train.py
 python heat1d_train.py arch=large training=full
 python heat1d_train.py w_ic=1000
-python heat1d_train.py -m arch=small,large lr=1e-3,1e-4
+python heat1d_train.py -m arch=small,large training.lr=1e-3,1e-4
 ```
 
 无 Hydra 时：`python heat1d_train.py --hidden 64 --steps 3000`（见脚本 `--help`）。
 
-**注意**：配置项为 `w_ic` / `n_pde`，不是正文旧写法 `loss_weights.lam_ic` / `sampling.n_interior`。
+**注意**：配置项为 `w_ic` / `n_pde`，不是正文旧写法 `loss_weights.lam_ic` / `sampling.n_interior`。  
+**注意**：ch02 的 `steps` / `lr` / `hidden` 在分组里（`conf/training/*.yaml`、`conf/arch/*.yaml`），要写 `training.steps=500`；直接写 `steps=500` 会报 `Could not override`。
 
 ## ch03
 
@@ -32,6 +66,7 @@ python heat1d_train.py -m arch=small,large lr=1e-3,1e-4
 ```bash
 cd ch03_heatsink
 python heat_sink_train.py          # 结束写 outputs/validation_report.json
+# 无 Hydra：--steps；有 Hydra：steps=500
 python heat_sink_train.py --steps 500   # CPU 演示可缩短步数
 python validator.py --checkpoint outputs/heat_sink.pt
 python heat_sink_inverse_joint.py --target_temp 40 --steps 2000
@@ -46,8 +81,10 @@ python visualize.py
 
 ```bash
 cd ch04_fno_airfoil
+# 无 Hydra：
 python train_fno_mini.py --epochs 50
-# Hydra: python train_fno_mini.py epochs=50
+# 有 Hydra：
+python train_fno_mini.py epochs=50
 ```
 
 **路径 B（翼型合成，可选）**
@@ -62,6 +99,7 @@ python visualize_airfoil.py --ckpt outputs/fno_darcy.pt
 
 ```bash
 cd ch05_darcy_hybrid
+# 无 Hydra 用 --epochs；有 Hydra 用 epochs=50 n_train=100
 python train_data_fno.py epochs=50 n_train=100
 python train_physics_fno.py epochs=50 n_train=100 lambda_physics=0.1
 ```
@@ -71,6 +109,7 @@ python train_physics_fno.py epochs=50 n_train=100 lambda_physics=0.1
 ```bash
 cd ch06_fourcastnet_mini
 python scripts/generate_toy_weather.py --n_time 200 --resolution 64
+# 无 Hydra：--epochs；有 Hydra：epochs=30
 python train_afno_mini.py epochs=30
 python rollout_eval.py --ckpt outputs/afno_weather.pt --rollout_steps 10
 ```
