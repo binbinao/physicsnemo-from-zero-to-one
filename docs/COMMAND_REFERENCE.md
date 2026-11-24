@@ -4,6 +4,8 @@
 
 ## Hydra vs argparse（必读）
 
+**一句话**：装了 `hydra-core` 就用 `key=value`（如 `epochs=50`）；没装就用 `--flag`（如 `--epochs 50`）。
+
 部分脚本（`heat1d_train.py`、`heat_sink_train.py`、`train_fno_mini.py`、
 `train_data_fno.py` / `train_physics_fno.py`、`train_afno_mini.py`）在检测到
 `hydra-core` 时走 **Hydra**，否则走 **argparse**：
