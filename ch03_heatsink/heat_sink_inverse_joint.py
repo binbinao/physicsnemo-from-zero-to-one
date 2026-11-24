@@ -18,7 +18,7 @@ import torch
 import torch.nn as nn
 
 from heat_sink_geometry import HeatSinkGeometry
-from equations import heat_conduction_2d, robin_boundary
+from equations import L0_SI, heat_conduction_2d, resolve_robin_scale, robin_boundary
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "scripts"))
 from tb_logger import TBLogger  # noqa: E402
@@ -47,6 +47,7 @@ def train_joint(
     log_every: int,
     tol_temp: float,
     tb=None,
+    robin_scale: float = L0_SI,
 ) -> tuple[float, float, int]:
     model = ParametricPINN().to(device)
     fin_height = nn.Parameter(torch.tensor([h_init], dtype=torch.float32, device=device))
@@ -55,6 +56,7 @@ def train_joint(
     )
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=max(steps, 1))
     scale = 30.0
+    robin_scale_si = resolve_robin_scale(robin_scale)
     T_source, k, h_conv, T_inf = 100.0, 1.0, 10.0, 0.0
     w_target = 200.0
     last_step = steps
@@ -87,7 +89,8 @@ def train_joint(
         nyrt = torch.tensor(nyr, device=device, dtype=torch.float32).unsqueeze(1)
         Tr = model(xrt, yrt)
         loss_robin = (
-            robin_boundary(Tr, xrt, yrt, nxrt, nyrt, k=k, h_conv=h_conv, T_inf=T_inf) ** 2
+            robin_boundary(Tr, xrt, yrt, nxrt, nyrt, k=k, h_conv=h_conv,
+                           T_inf=T_inf, scale=robin_scale_si) ** 2
         ).mean()
 
         # Differentiable tip line w.r.t. fin_height (do not detach h here)
@@ -142,6 +145,9 @@ def main():
     p.add_argument("--h_init", type=float, default=20.0)
     p.add_argument("--h_min", type=float, default=5.0)
     p.add_argument("--h_max", type=float, default=40.0)
+    p.add_argument("--robin_scale", type=float, default=L0_SI,
+                   help="Physical characteristic length for the Robin BC, SI "
+                        "metres (0.03 = 30 mm, correct physics; 0 = legacy)")
     TBLogger.add_args(p)
     args = p.parse_args()
     steps = 800 if args.fast else args.steps
@@ -149,17 +155,19 @@ def main():
     log_every = 200 if args.fast else 500
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Joint inversion on {device} (steps={steps}, tol={tol})")
+    print(f"[units] robin scale = {args.robin_scale} m (0 = legacy pre-fix)")
     tb = TBLogger.from_args(args, os.path.splitext(os.path.basename(__file__))[0],
                             out_dir="outputs")
     h, T_tip, used = train_joint(
         args.target_temp, steps, args.h_init, args.h_min, args.h_max,
-        device, log_every, tol, tb=tb,
+        device, log_every, tol, tb=tb, robin_scale=args.robin_scale,
     )
     print(f"\nResult: fin_height={h:.2f} mm  T_tip={T_tip:.3f}  target={args.target_temp}  steps={used}")
     os.makedirs("outputs", exist_ok=True)
     with open("outputs/inverse_joint_result.txt", "w", encoding="utf-8") as f:
         f.write(
             f"fin_height_mm={h}\nT_tip={T_tip}\ntarget={args.target_temp}\nsteps={used}\n"
+            f"robin_scale={args.robin_scale}\n"
         )
     tb.close()
 
