@@ -123,6 +123,9 @@ PKG_ALIASES = {
     "onnx": "onnx",
 }
 
+# 已在 run_base_checks() 里判定的包：章节目录里不重复列出，避免「要装两次」的误解
+BASE_PKGS = {"torch", "numpy", "matplotlib", "scipy"}
+
 
 def banner(msg: str) -> None:
     print("=" * WIDTH)
@@ -199,10 +202,11 @@ def run_base_checks() -> bool:
     return all_ok
 
 
-def check_packages(names: list[str], label: str, required: bool) -> bool:
+def check_packages(names: list[str], label: str, required: bool, header: bool = True) -> bool:
     if not names:
         return True
-    print(f"\n── {label} ──")
+    if header:
+        print(f"\n── {label} ──")
     ok_all = True
     for name in names:
         ok, detail = import_ok(name)
@@ -228,7 +232,14 @@ def print_chapter_summary(ch: int) -> bool:
     print(f"安装参考: {TIER_INSTALL[meta['tier']]}")
 
     base_ok = run_base_checks()
-    req_ok = check_packages(meta["required"], "本章必需", required=True)
+    # 基础检查已覆盖的包不重复列出（否则初学者会以为要装两次）
+    required = meta["required"]
+    covered = [n for n in required if n in BASE_PKGS]
+    extra_required = [n for n in required if n not in BASE_PKGS]
+    print("\n── 本章必需 ──")
+    if covered:
+        print(f"（{' / '.join(covered)} 见上方基础检查，不重复列出）")
+    req_ok = check_packages(extra_required, "本章必需", required=True, header=False)
     check_packages(meta.get("optional", []), "本章可选（完整流程）", required=False)
     check_packages(meta.get("sdk", []), "SDK 版 (*_sdk.py) 额外需要", required=False)
 

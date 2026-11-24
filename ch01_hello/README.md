@@ -20,7 +20,7 @@ python pinn_spring.py --epochs 5000
 
 > 本章无独立 `*_gpu.py`；CPU 即可。
 
-> **命令语法**：本章脚本始终 argparse，用 `--flag`（如 `--epochs 5000`）；其它章的 Hydra 入口装 `hydra-core` 时用 `key=value`，未装时用 `--flag`。见 [COMMAND_REFERENCE](../docs/COMMAND_REFERENCE.md)。
+> **命令语法**：本章裸 PyTorch 两档（`pinn_spring.py`、`mlp_spring.py`）始终 argparse，用 `--flag`（如 `--epochs 5000`）；SDK 档 `pinn_spring_sdk.py` 走 Hydra（`conf/`），装 `hydra-core` 后用 `key=value`。其它章的 Hydra 入口同理：装了用 `key=value`，未装用 `--flag`。见 [COMMAND_REFERENCE](../docs/COMMAND_REFERENCE.md)。
 
 ## 查看训练曲线
 

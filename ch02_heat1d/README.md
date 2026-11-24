@@ -5,11 +5,11 @@
 ```bash
 # 始终 argparse（推荐初学）
 python heat1d_pinn_raw.py --steps 500
-# Hydra 入口：未装 hydra → --steps；已装 hydra → steps=500 / training=debug
+# Hydra 入口：未装 hydra → --steps；已装 hydra → training.steps=500 / training=debug
 python heat1d_train.py
 ```
 
-> **Hydra / argparse 双语法**：装 `hydra-core` 时用 `key=value`（如 `epochs=30`、`steps=500`）；未装时用 `--flag`（如 `--epochs 30`、`--steps 500`）。见 [COMMAND_REFERENCE](../docs/COMMAND_REFERENCE.md)。
+> **Hydra / argparse 双语法**：装 `hydra-core` 时用 `key=value`（本章如 `training.steps=500`、`arch=large`）；未装时用 `--flag`（如 `--steps 500`）。注意 `steps` / `lr` / `hidden` 在 `training.*` 与 `arch.*` 分组下，要写全 `training.steps=500`（或直接用 `training=debug` 预设）。见 [COMMAND_REFERENCE](../docs/COMMAND_REFERENCE.md)。
 
 ## 三档脚本
 

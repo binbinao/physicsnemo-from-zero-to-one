@@ -7,7 +7,7 @@
 python heat_sink_train.py --steps 500   # CPU 演示可缩短
 ```
 
-> **Hydra / argparse 双语法**：装 `hydra-core` 时用 `key=value`（如 `epochs=30`、`steps=500`）；未装时用 `--flag`（如 `--epochs 30`、`--steps 500`）。见 [COMMAND_REFERENCE](../docs/COMMAND_REFERENCE.md)。
+> **Hydra / argparse 双语法**：装 `hydra-core` 时用 `key=value`（本章如 `steps=500`）；未装时用 `--flag`（如 `--steps 500`）。键名以本章 `conf/config.yaml` 为准。见 [COMMAND_REFERENCE](../docs/COMMAND_REFERENCE.md)。
 
 ## 三档脚本
 

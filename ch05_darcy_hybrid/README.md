@@ -14,7 +14,7 @@ python train_data_fno.py --epochs 50 --n_train 100
 python train_physics_fno.py --epochs 50 --n_train 100 --lambda_physics 0.1
 ```
 
-> **Hydra / argparse 双语法**：装 `hydra-core` 时用 `key=value`（如 `epochs=30`、`steps=500`）；未装时用 `--flag`（如 `--epochs 30`、`--steps 500`）。见 [COMMAND_REFERENCE](../docs/COMMAND_REFERENCE.md)。  
+> **Hydra / argparse 双语法**：装 `hydra-core` 时用 `key=value`（本章如 `epochs=50`、`n_train=100`）；未装时用 `--flag`（如 `--epochs 50`、`--n_train 100`）。键名以本章 `conf/config.yaml` 为准。见 [COMMAND_REFERENCE](../docs/COMMAND_REFERENCE.md)。  
 > 另需 **scipy**（`requirements-minimal.txt` 已含）+ **ch04 目录**已存在。
 
 ## 三档 / 对照脚本

@@ -81,7 +81,7 @@ pip install "torch>=2.3" numpy matplotlib scipy
 
 详见 [QUICKSTART_DAY1.md](QUICKSTART_DAY1.md)。
 
-### Tier 1 — ch01–ch03 全部裸 PyTorch版（含 ch04 Darcy 数据生成）
+### Tier 1 — ch01–ch03 裸 PyTorch + ch04/ch05 数据生成（需 scipy）
 
 ```bash
 pip install "torch>=2.3" numpy matplotlib scipy

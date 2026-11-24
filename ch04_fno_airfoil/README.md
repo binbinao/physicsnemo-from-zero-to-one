@@ -13,7 +13,7 @@ python train_fno_mini.py --epochs 30
 生成/加载 `data/darcy_data.pt`，checkpoint 一般为 `outputs/fno_darcy.pt`。
 需 **scipy**（`requirements-minimal.txt` 已含）；先跑 `python ../scripts/check_env.py --chapter 4`。
 
-> **Hydra / argparse 双语法**：装 `hydra-core` 时用 `key=value`（如 `epochs=30`、`steps=500`）；未装时用 `--flag`（如 `--epochs 30`、`--steps 500`）。见 [COMMAND_REFERENCE](../docs/COMMAND_REFERENCE.md)。
+> **Hydra / argparse 双语法**：装 `hydra-core` 时用 `key=value`（本章如 `epochs=30`）；未装时用 `--flag`（如 `--epochs 30`）。键名以本章 `conf/config.yaml` 为准。见 [COMMAND_REFERENCE](../docs/COMMAND_REFERENCE.md)。
 
 ## 两条路径速查
 

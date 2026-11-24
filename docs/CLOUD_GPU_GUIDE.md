@@ -76,16 +76,19 @@ cd ~
 git clone https://github.com/binbinao/physicsnemo-from-zero-to-one.git
 cd physicsnemo-from-zero-to-one
 pip install -U pip
-pip install "torch>=2.3" numpy matplotlib hydra-core
+pip install "torch>=2.3" numpy matplotlib scipy hydra-core
 pip install nvidia-physicsnemo nvidia-physicsnemo.sym  # SDK 章节需要
 python scripts/check_env.py
 ```
 
 ### 3.3 跑第 4 章 FNO
 
+> §3.2 装了 `hydra-core`，因此 `train_fno_mini.py` 走 **Hydra**，参数用 `epochs=`（不是 `--epochs`）；
+> 若你的环境没装 `hydra-core`，改回 `--epochs 50`。两套写法见 [COMMAND_REFERENCE](COMMAND_REFERENCE.md#hydra-vs-argparse必读)。
+
 ```bash
 cd ch04_fno_airfoil
-python train_fno_mini.py --epochs 50
+python train_fno_mini.py epochs=50
 ls -la data/   # 应生成 darcy_data.pt
 ```
 

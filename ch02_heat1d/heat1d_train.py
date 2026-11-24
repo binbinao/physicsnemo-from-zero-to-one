@@ -203,8 +203,8 @@ if __name__ == "__main__":
     if HAS_HYDRA:
         print(
             "[INFO] hydra-core detected: use Hydra overrides "
-            "(e.g. epochs=50 / steps=500), not --epochs/--steps. "
-            "See docs/COMMAND_REFERENCE.md."
+            "(e.g. training.steps=500 or training=full), not --steps. "
+            "Key names follow conf/config.yaml. See docs/COMMAND_REFERENCE.md."
         )
         main_hydra()
     else:

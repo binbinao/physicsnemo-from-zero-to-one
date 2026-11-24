@@ -209,3 +209,17 @@ issue 的实际关闭（`closes #N` 或手写理由）需要仓库写权限，�
 3. **R3-09 / #174**：main 的 `book/ch04.md` 章首路径表、`CH04_GUIDE` 与 `ch04_fno_airfoil/README.md` 已建立路径 A/B 口径，本轮只补 §4.6/§4.7 的「路径 B · 扩展」提示块（原 §4.7.1 把 `in_channels=4` 的翼型骨架写成「仓库可跑入口」，与默认 `train_fno_mini.py` 矛盾）。
 
 **PR 处置**：PR #177 不直接 rebase 合入（其分支含 15.4 MB PDF、`.cursor/` 状态与 4 张零引用 PNG），本轮以 main 为基重新提交等效增量；PR #178 目标分支为 `cursor/setup-dev-environment-5075` 且无独有 R3 增量，不采用。
+
+**复测轮补充（2026-11-24，测试验证节点）**：本机装上真实依赖（torch 2.15 CPU / numpy / scipy / matplotlib）后逐条跑了验收，
+补掉 2 处会直接误导新人的口径问题，并另记 2 处**范围外**的教材命令问题：
+
+1. **#166 连带面补齐**：scipy 进基础检查后，`book/ch01.md`、`book/appendix_b_cloud_gpu.md`、
+   `docs/CLOUD_GPU_GUIDE.md` 及 `book_en/` 镜像共 7 处 Day-1 安装命令补齐 `scipy`
+   （原先照抄这些命令会得到 `❌ Scipy` 环境未就绪）。
+2. **#167 键名按章落地**：入口脚本的 Hydra 提示与各章 README 的示例键改为**本章 config 真实存在的键**
+   （ch02 的 `steps`/`lr` 在分组下，须写 `training.steps=500`；ch03 用 `steps=`；ch04–ch06 用 `epochs=`）——
+   原先统一写 `epochs=50 / steps=500`，在 ch02/ch03 敲 `epochs=`、在 ch04–ch06 敲 `steps=` 都会 `Could not override`。
+3. **#176 英文镜像同步**：`book_en/ch07.md` 重号、`book_en/ch00.md`/`ch07.md` 的「Chapter 0」按中文书口径一并修正。
+4. **范围外、待另开 issue（本轮不改）**：`book/ch02.md:459/462/529` 的 `optimizer.lr=…`（ch02 config 无该分组）、
+   `book/ch06.md:337/343` 的 `training=full`（ch06 config 无该分组）——教材正文的配置示例与仓库 `conf/` 结构不一致，
+   属教材内容问题，按范围纪律不在本轮修改。
