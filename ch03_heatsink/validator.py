@@ -23,6 +23,27 @@ Two families of numbers are reported, both from the *same* point set:
   physically meaningful (raw residuals are in W/m², so a bare ``0.1`` there
   would mean 0.1 W/m², i.e. 1e-4 relative — unreachable and unit-less).
 
+  **Which Laplacian does ``pde_relative_rms`` use?** The one the network sees:
+  ``r̃_pde = k·∂²T/∂ñ² / (k·ΔT) = ∂²T/∂ñ² / ΔT`` (normalised coordinates).
+  The SI residual is ``r_SI = L0²·k·∂²T/∂ñ²``, i.e. ``r_SI = r̃_pde·k·ΔT/L0²``
+  — a factor ``1/L0² = 1111`` larger. The robin side, by contrast, *is*
+  reported in physical units (``robin_residual_rms_reference``). Both are
+  self-consistent; do not expect the two raw numbers to share a unit system.
+
+Physical gates (necessary complement to the residual gates)
+-----------------------------------------------------------
+Residuals can be satisfied by a non-physical field: a 600-step run reaches
+``robin_relative_rms ≈ 0.02`` (below ``GATE``) while the fin tip sits at
+5 ℃ instead of ~31 ℃, and a constant field ``T ≡ T_inf`` trivially has zero
+PDE *and* zero Robin residual. The probe-based checks
+(``pass_tip_band`` / ``pass_fin_profile`` / ``pass_1d_consistency`` →
+``pass_physical``) are therefore part of ``pass_all_relative``; a residual
+gate alone is never a certificate.
+
+Probes are derived from the geometry (``base_height`` / ``fin_height`` /
+middle-fin axis), so ``--fin_height 40`` moves them; the tip band is
+``T_inf + [0.15, 0.55]·ΔT`` (15–55 ℃ for the default 100 K rise).
+
 Usage:
     python validator.py --checkpoint outputs/model.pt   # if saved
     python validator.py --checkpoint outputs/model.pt --robin_scale 0.03 --seed 0
@@ -40,21 +61,52 @@ import numpy as np
 import torch
 
 from heat_sink_geometry import HeatSinkGeometry
-from equations import (L0_SI, heat_conduction_2d, resolve_robin_scale,
-                       robin_boundary, neumann_boundary)
+from equations import (COORD_SCALE_MM, L0_SI, heat_conduction_2d,
+                       resolve_robin_scale, robin_boundary, neumann_boundary)
 
 #: Dimensionless residual gate (fraction of the characteristic flux).
 GATE = 1e-1
 
-#: Fixed physical probes (mm) on the middle fin axis: root / mid height / tip.
-#: The middle fin is centred at x = 0 (spacing = 60/(3+1) = 15 mm), so its axis
-#: is x = 0 and its faces are x = ±2 mm. Fixed points keep the probes free of
-#: sampling noise.
+#: Probe inset from the fin root / tip, in mm (keeps the probes inside the solid
+#: and out of the singular corner).
+PROBE_INSET_MM = 0.5
+
+#: Probes (mm) for the **default** geometry (base 10 mm, fin 20 mm, middle-fin
+#: axis x = 0). Kept for documentation / back-compatible imports;
+#: :func:`fin_probe_points` derives the same points from an arbitrary geometry.
 PROBES = {
     "T_fin_root": (0.0, 10.5),
     "T_fin_mid": (0.0, 20.0),
     "T_fin_tip": (0.0, 29.5),
 }
+
+
+def fin_probe_points(geo) -> "dict[str, tuple[float, float]]":
+    """Root / mid / tip probe coordinates (mm) derived from ``geo``.
+
+    * axis: centre line of the fin whose centre is closest to ``x = 0``;
+    * ``y_root = base_height + 0.5``, ``y_mid = base_height + fin_height/2``,
+      ``y_tip = base_height + fin_height - 0.5`` (mm).
+
+    Deriving them from the geometry matters: with hard-coded ``y`` values a
+    taller/shorter fin would silently report a different material point (for
+    ``fin_height = 40`` the hard-coded "tip" at ``y = 29.5`` is mid-fin, and the
+    1D cross-check would then compare two unrelated things).
+    """
+    base_h = float(getattr(geo, "base_height", 10.0))
+    fin_h = float(getattr(geo, "fin_height", 20.0))
+    fins = list(getattr(geo, "fins", []) or [])
+    if fins:
+        fin = min(fins, key=lambda f: abs(0.5 * (f.x_min + f.x_max)))
+        px = 0.5 * (fin.x_min + fin.x_max)
+    else:
+        px = 0.0
+    inset = min(PROBE_INSET_MM, 0.5 * fin_h)
+    return {
+        "T_fin_root": (px, base_h + inset),
+        "T_fin_mid": (px, base_h + 0.5 * fin_h),
+        "T_fin_tip": (px, base_h + max(fin_h - inset, inset)),
+    }
 
 
 def fin_tip_temperature_bound(T_source: float, T_inf: float, h: float, k: float,
@@ -122,7 +174,7 @@ def run_validation(
     T_source = cfg.get("T_source", 100.0)
     h_conv = cfg.get("h_conv", 10.0)
     T_inf = cfg.get("T_inf", 0.0)
-    scale = cfg.get("scale", 30.0)
+    scale = cfg.get("scale", COORD_SCALE_MM)
     # Robin convention of *this* evaluation: 0.03 = physical, 0 = legacy
     # (pre-fix). Old checkpoints have no "robin_scale" key -> 0.0 -> legacy, so
     # their historical numbers are reproduced exactly.
@@ -157,17 +209,23 @@ def run_validation(
         T_vals = T.detach().cpu().numpy()
     T_max = float(T_vals.max())
     T_min = float(T_vals.min())
-    fin_h = cfg.get("fin_height", 20.0)
-    fin_w = cfg.get("fin_width", 4.0)
+    fin_h = float(getattr(geo, "fin_height", cfg.get("fin_height", 20.0)))
+    fin_w = float(getattr(geo, "fin_width", cfg.get("fin_width", 4.0)))
     T_tip_bound = fin_tip_temperature_bound(T_source, T_inf, h_conv, k, fin_h / scale)
 
-    # Fixed physical probes (no sampling noise)
+    # Physical probes, derived from *this* geometry (no sampling noise)
+    probe_pts = fin_probe_points(geo)
     probes: dict[str, float] = {}
     with torch.no_grad():
-        for name, (px, py) in PROBES.items():
+        for name, (px, py) in probe_pts.items():
             probes[name] = float(model(_tensor([px], scale, device),
                                        _tensor([py], scale, device)).item())
-    tip_1d = fin_tip_1d_from_root(probes["T_fin_root"], T_inf, h_conv, k, fin_h, fin_w)
+    # 1D fin analytic reference driven by the *measured* root temperature. The
+    # length is the probe-to-probe span (fin_height - 2·inset), not the nominal
+    # fin height: the root probe is 0.5 mm inside the fin, so using fin_height
+    # biases the analytic tip low by ~2.4 ℃ at the default geometry.
+    span_mm = probe_pts["T_fin_tip"][1] - probe_pts["T_fin_root"][1]
+    tip_1d = fin_tip_1d_from_root(probes["T_fin_root"], T_inf, h_conv, k, span_mm, fin_w)
 
     # Dimensionless (relative) residuals — convention A, single definition
     dT = float(T_source) - float(T_inf)
@@ -175,6 +233,17 @@ def run_validation(
     robin_den = abs(h_conv * dT) if abs(h_conv * dT) > 0 else 1.0
     pde_rel = pde_rms / pde_den
     robin_rel = robin_rms_ref / robin_den
+
+    # Physical (probe) criteria. A residual gate can be satisfied by a
+    # non-physical field -- ``T ≡ T_inf`` has zero PDE and zero Robin residual,
+    # and a 600-step run passes the robin gate with a 5 ℃ fin tip -- so these
+    # are what actually certifies "the fin conducts heat like a fin".
+    tip_lo = T_inf + 0.15 * dT
+    tip_hi = T_inf + 0.55 * dT
+    pass_tip_band = bool(tip_lo <= probes["T_fin_tip"] <= tip_hi)
+    pass_profile = bool(probes["T_fin_root"] > probes["T_fin_mid"] > probes["T_fin_tip"])
+    pass_1d = bool(abs(probes["T_fin_tip"] - tip_1d) <= 10.0)
+    pass_physical = bool(pass_tip_band and pass_profile and pass_1d)
 
     report = {
         # --- legacy fields: names, types and meaning unchanged ---------------
@@ -201,15 +270,25 @@ def run_validation(
         "pass_pde_relative": pde_rel < GATE,
         "pass_robin_relative": robin_rel < GATE,
         "pass_all_relative": None,   # filled below
+        "fin_probe_points_mm": {k: [float(a), float(b)]
+                                for k, (a, b) in probe_pts.items()},
+        "fin_probe_span_mm": float(span_mm),
+        "pass_tip_band": pass_tip_band,
+        "pass_fin_profile": pass_profile,
+        "pass_1d_consistency": pass_1d,
+        "pass_physical": pass_physical,
         "convention": ("robin_relative = robin_rms_ref/(h*dT); "
-                       "pde_relative = pde_rms/(k*dT); dT = T_source - T_inf; "
-                       f"L0 = {L0_SI} m"),
+                       "pde_relative = pde_rms/(k*dT) with pde_rms evaluated on the "
+                       "*normalised* coordinates (k*d2T/dn2, SI equivalent r*k*dT/L0^2); "
+                       "dT = T_source - T_inf; "
+                       f"L0 = {L0_SI} m (= COORD_SCALE_MM/1000)"),
     }
     report["pass_all"] = (report["pass_pde"] and report["pass_robin"]
                           and report["pass_temperature_range"])
     report["pass_all_relative"] = (report["pass_pde_relative"]
                                    and report["pass_robin_relative"]
-                                   and report["pass_temperature_range"])
+                                   and report["pass_temperature_range"]
+                                   and report["pass_physical"])
     return report
 
 
@@ -231,7 +310,7 @@ def load_and_validate(ckpt_path: str, device: str = "cpu",
     from heat_sink_train import HeatSinkNet
     ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
     cfg = dict(ckpt.get("config", {}) or {})
-    cfg["scale"] = ckpt.get("scale", 30.0)
+    cfg["scale"] = ckpt.get("scale", COORD_SCALE_MM)
     if robin_scale is None:
         cfg["robin_scale"] = float(ckpt.get("robin_scale", 0.0))
     else:
@@ -239,7 +318,9 @@ def load_and_validate(ckpt_path: str, device: str = "cpu",
     if seed is not None:
         np.random.seed(int(seed))
         torch.manual_seed(int(seed))
-    geo = HeatSinkGeometry(fin_height=cfg.get("fin_height", 20.0), n_fins=cfg.get("n_fins", 3))
+    geo = HeatSinkGeometry(fin_height=cfg.get("fin_height", 20.0),
+                           fin_width=cfg.get("fin_width", 4.0),
+                           n_fins=cfg.get("n_fins", 3))
     model = HeatSinkNet(
         hidden=int(cfg.get("hidden", 128)),
         depth=int(cfg.get("depth", 5)),

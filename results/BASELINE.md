@@ -39,7 +39,8 @@
 | 多条 constraint loss | 同量级下降 |
 | 温度场 | 热点在芯片附近，无全场常数 |
 | **鳍顶温度（物理判据）** | **`T_fin_tip` ∈ 15–55 ℃**（参考解 31.4 ℃）；沿鳍单调递减 `T_fin_root > T_fin_mid > T_fin_tip`，`T_fin_root` ∈ 55–95 ℃ |
-| **与 1D 鳍自洽** | `\|T_fin_tip − fin_tip_1d_from_root\| ≤ 10 ℃`（`validation_report.json` 字段） |
+| **与 1D 鳍自洽** | `\|T_fin_tip − fin_tip_1d_from_root\| ≤ 10 ℃`（`validation_report.json` 字段；1D 参考按探针跨度 `fin_height − 1 mm` 计算） |
+| **物理门** | 上面三条合成为 `pass_physical`（`validator.py`）。残差门可被平凡场满足（`T ≡ T_inf` 的 PDE/Robin 残差严格为 0），**不要只看 `pass_robin_relative`** |
 | 相对残差 | `pde_relative_rms` / `robin_relative_rms` 与 `GATE=0.1` 同口径比较 |
 | 训练时长 | 15–60 min |
 

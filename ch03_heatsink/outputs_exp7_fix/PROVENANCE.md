@@ -6,8 +6,8 @@
 | 配方 | **exp7 同配方**：hidden 192 × depth 6、SiLU、`hard_bottom`、RFF Fourier 64 maps / scale 6 / seed 0、lr 3e-3 + cosine、8000 步、6k 内点采样、w_bottom=30 / w_side=8 / w_robin=30 / w_base_top=12、无 pde ramp、无 weight decay |
 | 唯一差异 | `robin_scale=0.03`（**正确物理口径**：`-(k/L0)∂T/∂ñ - hΔT`，`L0=0.03 m`） |
 | 机器 | 8 vCPU / 15 GB / CPU-only（torch 2.15.0+cpu），约 66 min |
-| 复评 | `validator.py --seed 0`（同点集）：`pde_relative_rms 2.1305` / `robin_relative_rms 0.003746`（`pass_robin_relative=true`）/ `T_fin_root|mid|tip = 89.17 / 78.40 / 68.98 ℃` / `pass_all=false` |
-| 判定 | **robin 口径修复达标**（相对特征通量 0.37%），但 pde 回退、鳍剖面过平 → `pass_all` 仍 false，原因与分析见 `EXPERIMENTS_PASS.md` §10.3–§10.4 |
+| 复评 | `validator.py --seed 0`（同点集）：`pde_relative_rms 2.1305` / `robin_relative_rms 0.003746`（`pass_robin_relative=true`）/ `T_fin_root|mid|tip = 89.17 / 78.40 / 68.98 ℃` / `fin_tip_1d_from_root 38.78 ℃` / `pass_physical=false` / `pass_all=false` |
+| 判定 | **robin 口径修复达标**（相对特征通量 0.37%），但 pde 回退、鳍剖面过平（`T_fin_tip` 超 55 ℃ 上界、与 1D 差 30.2 ℃）→ `pass_all` 与 `pass_all_relative` 均仍 false。**残差门是必要非充分条件**，物理判据看 `pass_physical`；分析与 gate 组成见 `EXPERIMENTS_PASS.md` §10.1–§10.4 |
 
 ## 复现
 

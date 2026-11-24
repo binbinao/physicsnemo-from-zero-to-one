@@ -76,7 +76,7 @@
 | 6~12 mm | 1.6 | ~2.6 ℃ |
 | >12 mm / 鳍顶面 | 0.31 / 0.18 | ~0.1 ℃ |
 
-robin 残差几乎全部来自**鳍根 0~1 mm 一条热边界层**；鳍顶面已接近门槛（0.18）。同时诊断显示模型鳍内整体 ≈0.1–4 ℃，而按几何同款 1D 鳍估算鳍顶应 ≈31–46 ℃（`fin_tip_1d_bound=61.7` 为绝热上限）——鳍没有真正导热。
+robin 残差几乎全部来自**鳍根 0~1 mm 一条热边界层**；鳍顶面已接近门槛（0.18）。同时诊断显示模型鳍内整体 ≈0.1–4 ℃，而按几何同款 1D 鳍估算鳍顶应 ≈31–46 ℃（绝热上限 `T_source/cosh(mL) ≈ 46.5 ℃`；`fin_tip_1d_bound=61.7` 不是上限，它是 `m=√(h/(kL))`（等价 P/A=1/L）的 fin-efficiency 粗估，只作量级参考）——鳍没有真正导热。
 
 ### 6.2 量纲缺陷（已结案，修复记录见 §10）
 
@@ -158,12 +158,27 @@ decay、cosine 退火），无需传参；② `seed` 只控制 RFF 频率抽样�
 | `pde_relative_rms` | 0.26685 | 2.1305 | **↑8.0×**（AC13 ✗，见 §10.3） |
 | `pde_residual_rms`（旧字段） | 26.69 | 213.05 | ↑8.0×（同一件事） |
 | `T_fin_root` / `T_fin_mid` / `T_fin_tip` (℃) | 20.03 / 0.73 / **0.025** | 89.17 / 78.40 / **68.98** | 冷鳍 → 鳍恢复导热 |
-| `fin_tip_1d_from_root` (℃) | 8.17 | 36.37 | — |
+| `fin_tip_1d_from_root` (℃)（跨度 19 mm = 鳍高 − 2×0.5 mm 探针内缩） | 8.71 | 38.78 | — |
 | `T_min` / `T_max` (℃) | 0.011 / 99.99 | 67.57 / 100.00 | — |
 | `pass_robin_relative` / `pass_pde_relative` / `pass_all_relative` | false / false / false | **true** / false / false | robin 单独过关 |
+| `pass_tip_band` / `pass_fin_profile` / `pass_1d_consistency` / **`pass_physical`** | false / true / true / **false** | false / true / false / **false** | 物理判据未过（见 §10.1.1） |
 | `pass_all`（旧语义） | false | false | **预期仍 false**（旧字段按新口径算，见 §10.2） |
 
 > 表中两份 JSON 都由 `validator.py --seed 0` 生成（**同点集**，仓库内 `outputs_exp7_fix/validation_report.json` 与 `outputs_exp7_legacy/validation_report.json`）；不带 `--seed` 的训练时报告数值略有采样波动（after: pde 210.6 / robin 3.34；before: robin 9.86），结论不变。
+
+#### 10.1.1 残差门是必要条件，不是物理证书
+
+`pass_all_relative = pass_pde_relative ∧ pass_robin_relative ∧ pass_temperature_range ∧ pass_physical`，其中 `pass_physical = pass_tip_band ∧ pass_fin_profile ∧ pass_1d_consistency`（`T_fin_tip ∈ T_inf+[0.15, 0.55]ΔT`、`root>mid>tip`、`|T_tip − fin_tip_1d_from_root| ≤ 10 ℃`）。这不是保险丝式冗余，而是实测出来的：
+
+| 场 | `robin_relative_rms` | `T_fin_tip` | `pass_robin_relative` | `pass_physical` |
+|:---|:---:|:---:|:---:|:---:|
+| 600 步（exp7 配方 + `robin_scale=0.03`） | **0.0193（过 0.1 门）** | **5.14 ℃** | true | **false** |
+| 2k pilot | 0.0106 | 20.84 ℃ | true | false（与 1D 差 10.6 ℃） |
+| 8k `outputs_exp7_fix` | 0.003746 | 68.98 ℃ | true | false（超 55 ℃ 上界、与 1D 差 30.2 ℃） |
+| 8k `outputs_exp7_legacy`（冷鳍） | 1.0871 | 0.025 ℃ | false | false |
+
+反向的极端例子更直接：常数场 `T ≡ T_inf` 的 PDE 残差与 Robin 残差都**严格为 0**（旧 `pass_all` 会判 true），只有探针判据能识破。回归测试固化在 `tests/test_validator_gates.py`（V2）。
+
 
 参照值（同几何有限体积参考解，`tests/test_robin_scale.py --with-fv`）：鳍根 73.7 / 鳍中 41.6 / **鳍顶 31.3 ℃**；1D 鳍解析（根 74.9）→ 30.55 ℃。
 
@@ -180,7 +195,7 @@ decay、cosine 退火），无需传参；② `seed` 只控制 RFF 频率抽样�
 `pde_relative_rms` 0.26685 → 2.1305（8.0×）。这不是实现错误，而是**目标场变陡**：
 
 1. 修复前那个"冷鳍"场在鳍内梯度极小（≈等温 0.1–4 ℃），`k∇²T` 天然接近 0 → pde 残差小且"好看"；exp7 的 16.5 就是这么来的。
-2. 修复后鳍内必须从 89 ℃ 降到 69 ℃ 并维持向空气的横向热流，真实解在鳍根/鳍面附近有 ~1–2 mm 热边界层；用特征尺度估算，该层对 `k L0²∇²T` 的贡献量级为 `k L0²·ΔT/δ² ≈ 9e-4×30/(1.5e-3)² ≈ 1.2e4`，即 pde 残差"几百"是这类场的**自然量级**，不是训练崩了。
+2. 修复后鳍内必须从 89 ℃ 降到 69 ℃ 并维持向空气的横向热流，真实解在鳍根/鳍面附近有 ~1–2 mm 热边界层；冷鳍场在该薄层里梯度本来就小，`k∇²T` 天然接近 0。因此"冷鳍场的 pde 好看、正确物理场的 pde 变大"是**同一份误差在不同目标场下的口径差**，定量论证见第 4 条（`≈315` 与实测 213 同阶）。
 3. 训练末段的损失配比：`pde mse ≈ 4.5e4`（w=1）vs `robin mse ≈ 15–23`（w=30，贡献 ≈5e2）→ **pde 已占损失 99%**，说明剩余 pde 不是权重失衡（R5 的扫描触发条件不成立：`loss_robin/loss_pde ≈ 3e-4 ≪ 30`），而是**表达/采样能力**：模型没有把鳍的轴向导热解开。
 4. 量化证据（同一组固定探针：鳍根 (0,10.5) / 鳍中 (0,20) / 鳍顶 (0,29.5) mm）：
 
@@ -191,22 +206,25 @@ decay、cosine 退火），无需传参；② `seed` 只控制 RFF 频率抽样�
    | 修复后 2k（pilot，仅作趋势参考） | 72.22 | 46.06 | **20.84** | 0.289 |
    | 修复前 8k（`outputs_exp7_legacy`） | 20.03 | 0.73 | **0.025** | 0.001 |
 
-   8k 场的鳍剖面**过平**（tip/root 0.77 vs 解析 0.41）→ 轴向 `k t T''` 没被解析出来：单纯按鳍方程 `k t T'' = 2h(T−T∞)` 折算，缺失项在归一化坐标下约 `2h(T−T∞)L0²/(k t) ≈ 315`，与实测 `pde rms ≈ 210` 同量级。**结论：量纲修好后，限制项从"方程写错"变成了"鳍内薄层/轴向曲率的表达与采样"。** 同时注意 2k 与 8k 两个点分别落在参考解两侧（20.8 / 69.0 vs 31.3），说明该配方下的温度剖面尚未收敛。
+   8k 场的鳍剖面**过平**（tip/root 0.77 vs 解析 0.41）→ 轴向 `k t T''` 没被解析出来：单纯按鳍方程 `k t T'' = 2h(T−T∞)` 折算，缺失项在归一化坐标下约 `2h(T−T∞)L0²/(k t) ≈ 315`，与实测 `pde rms ≈ 210` 同量级。**结论：量纲修好后，限制项从"方程写错"变成了"鳍内薄层/轴向曲率的表达与采样"。**
+
+   **步数不是解药（三点单调）**：把 600 步补进来看，`T_fin_tip` 是 5.14 → 20.84 → 68.98 ℃（600/2k/8k），参考解 31.3 ℃ —— 单调上升并越过参考解继续偏离；同一路线上 `robin_relative_rms` 0.0193 → 0.0106 → 0.0037、`pde_relative_rms` 9.02 → 4.40 → 2.13 单调改善。**残差单调变好、物理剖面单调变坏**，这是损失面的系统性偏置（走向"热而近等温"的鳍），不是围绕参考解的振荡：2k 落在带内只是轨迹上的瞬态，继续加步数只会更远。方向应是 §10.5 第 1 条（鳍内采样/表达），不是"再多训一会儿"。
 
 ### 10.4 与验收条款的对账（真实判定）
 
 | AC | 判定 | 依据 |
 |:---|:---:|:---|
-| AC7 鳍顶 15–55 ℃ | **✗（8k）** | `T_fin_tip = 68.98 ℃`（超出上界 55）。注意 2k pilot 为 20.6 ℃，在带内；两个步数点分别落在参考解 31.3 ℃ 两侧 |
+| AC7 鳍顶 15–55 ℃ | **✗（8k）** | `T_fin_tip = 68.98 ℃`（超出上界 55）。2k pilot 为 20.84 ℃（带内）、600 步为 5.14 ℃（低于下界）；三点随步数**单调远离**参考解 31.3 ℃（§10.3），故"带内"只是轨迹瞬态 |
 | AC8 `root>mid>tip` 且 mid∈[30,60]、root∈[55,95] | **✗（8k）** | 89.2 > 78.4 > 69.0 ✅ 单调，但 `T_fin_mid = 78.4` 超上界 60 |
-| AC9 `\|T_fin_tip − fin_tip_1d_from_root\| ≤ 10 ℃` | **✗（8k）** | 68.98 vs 36.37 → 32.6 ℃（2k pilot 为 8.7 ℃ ✅） |
+| AC9 `\|T_fin_tip − fin_tip_1d_from_root\| ≤ 10 ℃` | **✗（8k）** | 68.98 vs 38.78 → **30.2 ℃**（2k pilot：20.84 vs 31.41 → 10.6 ℃，也 ✗）。注意修前冷鳍场该差值为 8.69 ℃（"过"），说明单项 1D 自洽不足以判物理 |
 | AC10 温度范围不回退 | ✅ | `T_max = 99.99 ≤ 105`，`pass_temperature_range = true` |
 | AC11 robin 改善 ≥10× 且 ≤1.0 | ✅ | 1.0871 → 0.003746（290×） |
-| AC12 robin ≤ 0.1 | ✅ | 0.003746 |
+| AC12 robin ≤ 0.1 | ✅（需限定） | 0.003746。**限定**：600 步场 `robin_relative_rms = 0.0193` 已过门而鳍顶只有 5.14 ℃ → 残差门是必要非充分条件，物理判据看 `pass_physical`（§10.1.1） |
 | AC13 pde ≤ 1.3× 基线 | **✗** | 2.1305 vs 0.26685×1.3 = 0.347（原因见 §10.3，未改门槛、未做 3 组扫描，理由见 §10.3 第 3 条） |
 | AC14 旧字段仍可复核 | ✅ | 两份 `validation_report.json` 都保留旧字段，本节给出与 exp7（16.5/10.5）的对照 |
+| `results/BASELINE.md` 物理判据 | **✗** | `T_fin_tip = 68.98`（判据 15–55）、`T_fin_mid = 78.40`；`pass_physical = false` |
 
-> **一句话结论**：量纲修复**达成**了它的目标——robin 残差降 290×（相对特征通量 0.37%）、鳍从 0 ℃ 冷铁片恢复成"数十 ℃ 且单调"的导热体，且旧 ckpt/旧命令零漂移。但它**没有**让 `pass_all` 变绿：修好后暴露出的下一个瓶颈是鳍内薄层/轴向曲率的表达能力（pde 回退），属于配方而非物理口径问题，需另开一项（见 §10.5）。
+> **一句话结论**：量纲修复**达成**了它的目标——robin 残差降 290×（相对特征通量 0.37%）、鳍从 0 ℃ 冷铁片恢复成"数十 ℃ 且单调"的导热体，且旧 ckpt/旧命令零漂移。但它**没有**让 `pass_all` / `pass_all_relative` 变绿：修好后暴露出的下一个瓶颈是鳍内薄层/轴向曲率的表达能力（pde 回退 + 鳍剖面过平），属于配方而非物理口径问题，需另开一项（见 §10.5）。
 
 ### 10.5 由此产生的后续项
 
@@ -234,8 +252,13 @@ python3 heat_sink_train.py --output_dir outputs_exp7_fix \
 # before（复现修复前方程）
 python3 heat_sink_train.py --output_dir outputs_exp7_legacy  ...（同上）... --robin_scale 0
 
-# 同点集复评（--seed 0 固定采样；before 需用 --robin_scale 0.03 强制正确口径）
+# 同点集复评（--seed 0 固定采样）。归档的两份 JSON 就是这两条命令的产物
 python3 validator.py --checkpoint outputs_exp7_fix/heat_sink.pt    --seed 0 --out_dir outputs_exp7_fix
+python3 validator.py --checkpoint outputs_exp7_legacy/heat_sink.pt --seed 0 --out_dir outputs_exp7_legacy
+
+# 可选：把 before 的旧字段 robin_residual_rms 按"正确口径"重算（会把该字段从
+# 14.33 改写成 1087.12，与归档文件不同；跨 ckpt 对比请直接用
+# robin_residual_rms_reference / robin_relative_rms，不必跑这条）
 python3 validator.py --checkpoint outputs_exp7_legacy/heat_sink.pt --robin_scale 0.03 --seed 0 --out_dir /tmp/rep_before
 ```
 
@@ -254,4 +277,19 @@ python3 heat_sink_train.py --output_dir /tmp/pilot_fix \
   --seed 0 --robin_scale 0.03
 ```
 
-结果：`T_fin_root|mid|tip = 72.22 / 46.06 / 20.84 ℃`、`robin_relative_rms = 0.0106`、`pde_relative_rms = 4.40`、`fin_tip_1d_from_root = 29.5 ℃`。
+结果：`T_fin_root|mid|tip = 72.22 / 46.06 / 20.84 ℃`、`robin_relative_rms = 0.0106`、`pde_relative_rms = 4.40`、`fin_tip_1d_from_root = 31.41 ℃`（按探针跨度 19 mm 重算；旧稿按 20 mm 名义鳍高算得 29.46，偏低 1.95 ℃）。与 1D 参考差 10.6 ℃ → **AC9 也不通过**，且该点未入库（scratch），只作"步数不是解药"的趋势证据（§10.3）。
+
+### 10.8 验证节点复核（2026-11-24 第二轮）：把物理判据接进门
+
+本轮验证复核发现 §10.1 的 `pass_all_relative` 只由残差 + 温度范围组成，**不含物理探针判据**——实测 600 步场 `robin_relative_rms = 0.0193`（过 0.1 门）而鳍顶 5.14 ℃，即残差门可被非物理解满足。已修：
+
+| 变更 | 内容 | 影响 |
+|:---|:---|:---|
+| 物理判据进门槛 | 新增 `pass_tip_band` / `pass_fin_profile` / `pass_1d_consistency` → `pass_physical`，并入 `pass_all_relative` | 现有两份制品的 `pass_all_relative` 仍为 false（原本 pde 也未过），无数值回退 |
+| 探针随几何 | 探针由 `geo.base_height/fin_height/中间鳍轴线` 推导（`fin_probe_points`），`fin_width` 取 `geo.fin_width`；输出 `fin_probe_points_mm` / `fin_probe_span_mm` | 默认几何点位不变（10.5/20/29.5）；`--fin_height 40` 不再静默读错点 |
+| 1D 参考用探针跨度 | `fin_tip_1d_from_root` 传入 `fin_height − 2×0.5 mm`（19 mm），不再用名义鳍高 | 8k：36.37 → **38.78 ℃**；before：8.17 → **8.71 ℃**（修掉 ~2 ℃ 系统性偏低） |
+| `pde` 口径写进文档与 `convention` | `pde_relative_rms` 的分母残差是**归一化坐标**的 `k·∂²T/∂ñ²`；SI 等价量 = `r̃·kΔT/L0²`（差 `1/L0²=1111×`） | 只改措辞与 `convention` 字符串，数值未动 |
+| `L0_SI` 由坐标归一化常量派生 | `equations.COORD_SCALE_MM = 30.0`，`L0_SI = COORD_SCALE_MM/1000`；三个脚本的 `scale = 30.0` 改为 `COORD_SCALE_MM` | 值仍为 `0.03`（逐位相等），改归一化时不再静默错 |
+| 回归测试 | 新增 `tests/test_validator_gates.py`（V1–V5：探针随几何、常数场被物理门拒、键序契约、1D 跨度、`L0` 不变式） | `python3 tests/test_validator_gates.py`，< 1 s |
+
+旧 ckpt 零漂移仍成立：无 `robin_scale` 键的旧格式 ckpt 在新 validator 下 `pde_residual_rms / robin_residual_rms / T_min / T_max / fin_tip_1d_bound / pass_all` 与基线 commit 逐位相同（本节点实测，见验证报告）。

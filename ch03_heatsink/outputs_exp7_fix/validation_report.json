@@ -17,9 +17,28 @@
   "T_fin_root": 89.17269134521484,
   "T_fin_mid": 78.40489196777344,
   "T_fin_tip": 68.98088836669922,
-  "fin_tip_1d_from_root": 36.36965307586394,
+  "fin_tip_1d_from_root": 38.78369314241871,
   "pass_pde_relative": false,
   "pass_robin_relative": true,
   "pass_all_relative": false,
-  "convention": "robin_relative = robin_rms_ref/(h*dT); pde_relative = pde_rms/(k*dT); dT = T_source - T_inf; L0 = 0.03 m"
+  "fin_probe_points_mm": {
+    "T_fin_root": [
+      0.0,
+      10.5
+    ],
+    "T_fin_mid": [
+      0.0,
+      20.0
+    ],
+    "T_fin_tip": [
+      0.0,
+      29.5
+    ]
+  },
+  "fin_probe_span_mm": 19.0,
+  "pass_tip_band": false,
+  "pass_fin_profile": true,
+  "pass_1d_consistency": false,
+  "pass_physical": false,
+  "convention": "robin_relative = robin_rms_ref/(h*dT); pde_relative = pde_rms/(k*dT) with pde_rms evaluated on the *normalised* coordinates (k*d2T/dn2, SI equivalent r*k*dT/L0^2); dT = T_source - T_inf; L0 = 0.03 m (= COORD_SCALE_MM/1000)"
 }

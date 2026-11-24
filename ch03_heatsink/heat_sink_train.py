@@ -32,8 +32,8 @@ _CH03_DIR = os.path.dirname(os.path.abspath(__file__))
 # Local imports
 sys.path.insert(0, _CH03_DIR)
 from heat_sink_geometry import HeatSinkGeometry
-from equations import (L0_SI, heat_conduction_2d, neumann_boundary,
-                       resolve_robin_scale, robin_boundary)
+from equations import (COORD_SCALE_MM, L0_SI, heat_conduction_2d,
+                       neumann_boundary, resolve_robin_scale, robin_boundary)
 
 _REPO_ROOT = os.path.dirname(_CH03_DIR)
 if _REPO_ROOT not in sys.path:
@@ -137,7 +137,8 @@ def train(cfg: dict, tb=None):
     h_conv = cfg.get("h_conv", 10.0)       # convection coefficient
     T_inf = cfg.get("T_inf", 0.0)          # ambient temperature
     # Physical characteristic length for the Robin residual (SI metres).
-    # Coordinates fed to the network are normalised by `scale = 30.0` (mm), so
+    # Coordinates fed to the network are normalised by `scale = COORD_SCALE_MM`
+    # (30 mm), so
     # dT/dn must be divided by L0 = 0.03 m to be physical. 0 = legacy (pre-fix)
     # behaviour, kept only to reproduce old runs.
     robin_scale_si = resolve_robin_scale(cfg.get("robin_scale", L0_SI))
@@ -173,8 +174,9 @@ def train(cfg: dict, tb=None):
                "base_top": []}
     log_interval = max(1, steps // 20)
 
-    # Normalization scale (geometry is in mm, normalize to ~unit)
-    scale = 30.0
+    # Normalization scale (geometry is in mm, normalize to ~unit). Single
+    # source of truth: equations.COORD_SCALE_MM, from which L0_SI derives.
+    scale = COORD_SCALE_MM
 
     for step in range(1, steps + 1):
         optimizer.zero_grad()

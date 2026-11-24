@@ -22,7 +22,7 @@
 | 量 | 值 | 出现位置 | 备注 |
 |:---|:---|:---|:---|
 | 坐标归一化常数 | `scale = 30.0` | `heat_sink_train.py` / `validator.py`，`x̃ = x_mm / 30` | 无量纲，只为网络输入 |
-| 物理特征长度 | `L0_SI = 0.03`（米） | `equations.py`，`robin_boundary(scale=...)` | **同一段 30 mm，换成米** |
+| 物理特征长度 | `L0_SI = 0.03`（米） | `equations.py`，`robin_boundary(scale=...)` | **同一段 30 mm，换成米**；由 `COORD_SCALE_MM/1000` 派生 —— 随坐标归一化变，**不随鳍高变** |
 | 边界条件配置 | `robin_scale: 0.03` | `conf/config.yaml` / ckpt | `0` = legacy（修复前行为） |
 
 **推导**：$\tilde n = n_{\mathrm{SI}}/L_0 \Rightarrow \partial T/\partial n_{\mathrm{SI}} = (1/L_0)\,\partial T/\partial\tilde n$，因此
@@ -35,7 +35,7 @@ $$r_{robin} = -\frac{k}{L_0}\,\frac{\partial T}{\partial\tilde n} - h\,(T-T_\inf
 
 1. 几何 mm **只允许**出现在采样层（`heat_sink_geometry.py`）与可视化里；进入网络一律 `/scale`，进入方程一律 `/1000`（或 `/L0` 换回无量纲）。
 2. 任何对归一化坐标求导的项，乘 `1/L0`（`robin_boundary(scale=L0_SI)`）。
-3. 残差门槛必须写清除数：本章 `GATE = 0.1` 指 $\tilde r = r/(h\Delta T)$（robin）、$r/(k\Delta T)$（pde），$0.1 \equiv 100\ \mathrm{W/m^2}$（robin，$\Delta T=100$ K）。
+3. 残差门槛必须写清除数：本章 `GATE = 0.1` 指 $\tilde r = r/(h\Delta T)$（robin）、$r/(k\Delta T)$（pde），$0.1 \equiv 100\ \mathrm{W/m^2}$（robin，$\Delta T=100$ K）。**两项的 $r$ 不在同一坐标系**：robin 的 $r$ 用 $L_0$ 换回 SI（$\mathrm{W/m^2}$），pde 的 $r$ 是**对归一化坐标**的拉普拉斯 $k\,\partial^2T/\partial\tilde n^2$（SI 等价量 $=\tilde r\,k\Delta T/L_0^2$，差 $1/L_0^2=1111$ 倍）。读 `pde_relative_rms` 时按前者理解。
 4. 新脚本复制本章公式时先跑 `python ch03_heatsink/tests/test_robin_scale.py`：C1 保证旧口径逐位不变，C3 把 `0.03` 与 `30` 的 1000× 差异钉死。
 
 ## 与 Icepak/CFD 对接

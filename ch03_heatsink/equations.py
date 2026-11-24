@@ -16,7 +16,8 @@ This module works in two coordinate systems and they must not be mixed:
 * ``k``, ``h_conv``, ``T`` are in **SI**-consistent units, so ``∂T/∂n`` in the
   Robin condition is a derivative w.r.t. **metres**.
 * The training/validation scripts feed the network coordinates normalised by
-  ``scale = 30.0`` (mm → ~unit box), i.e. ``x̃ = x_mm / 30``. Hence
+  ``scale = COORD_SCALE_MM = 30.0`` (mm → ~unit box), i.e. ``x̃ = x_mm / 30``.
+  Hence
 
       ∂T/∂n_SI = (1 / L0) · ∂T/∂ñ ,      L0 = 0.03 m   (= 30 mm)
 
@@ -33,11 +34,17 @@ import warnings
 import torch
 
 
-#: Physical characteristic length of the ch03 heat sink, in **SI metres**
-#: (30 mm → 0.03). This is *not* the coordinate normalisation constant
-#: ``scale = 30.0`` used by the sampling scripts, although both describe the
-#: same 30 mm.
-L0_SI = 0.03
+#: Coordinate normalisation constant used by the ch03 scripts, in **millimetres**
+#: (network input is ``x_mm / COORD_SCALE_MM``). Single source of truth: the
+#: scripts import this instead of hard-coding ``30.0``.
+COORD_SCALE_MM = 30.0
+
+#: Physical length corresponding to **one normalised coordinate unit**, in SI
+#: metres: ``L0_SI = COORD_SCALE_MM / 1000 = 0.03``. This is the "restore
+#: length" of the coordinate system (30 mm expressed in metres), *not* the fin
+#: height and *not* the number 30. It is derived from ``COORD_SCALE_MM`` so the
+#: two can never drift apart: change the normalisation and this follows.
+L0_SI = COORD_SCALE_MM / 1000.0
 
 
 def resolve_robin_scale(value) -> "float | None":
@@ -103,9 +110,12 @@ def robin_boundary(T: torch.Tensor, x: torch.Tensor, y: torch.Tensor,
         k: thermal conductivity (SI with h_conv)
         h_conv: convective heat transfer coefficient (SI)
         T_inf: ambient temperature
-        scale: **physical characteristic length L0, in the same unit system as
-            ``k`` and ``h_conv``.** Converts the normalised-coordinate normal
-            derivative back to a physical one (``∂T/∂n = (1/L0)·∂T/∂ñ``).
+        scale: **physical length of one normalised coordinate unit, in the same
+            unit system as ``k`` and ``h_conv``** (``L0 = COORD_SCALE_MM/1000 =
+            0.03 m``). Converts the normalised-coordinate normal derivative back
+            to a physical one (``∂T/∂n = (1/L0)·∂T/∂ñ``). It follows the
+            *coordinate normalisation*, not the geometry: a taller fin does not
+            change it, a different ``COORD_SCALE_MM`` does.
 
             - ``None`` (default): legacy behaviour, ``-k ∂T/∂ñ - h(T-T_inf)``.
               This is *bit-for-bit* what the pre-fix implementation computed

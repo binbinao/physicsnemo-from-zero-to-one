@@ -21,9 +21,10 @@ python heat_sink_train.py
 | `heat_sink_geometry.py` | CSG 几何 |
 | `heat_sink_inverse.py` | 反问题 · 参数扫描（对照） |
 | `heat_sink_inverse_joint.py` | 反问题 · **联合训练**（推荐） |
-| `validator.py` | CAE 残差报告 → `outputs/validation_report.json`（双口径残差 + 鳍温探针） |
+| `validator.py` | CAE 残差报告 → `outputs/validation_report.json`（双口径残差 + 鳍温探针 + `pass_physical`） |
 | `visualize.py` | 结果可视化 |
 | `tests/test_robin_scale.py` | Robin 量纲回归（旧口径逐位不变 / `0.03` vs `30` / 1D 鳍 / 可选 FV 参考） |
+| `tests/test_validator_gates.py` | 门槛回归（探针随几何 / 常数场被物理门拒 / 键序契约 / 1D 跨度 / `L0` 不变式） |
 | `inference/` | **生产推理包**：ONNX 制品 + FastAPI 服务（见 [inference/README.md](inference/README.md)） |
 | `EXPERIMENTS_PASS.md` | **追 PASS 实验结论文档**：死锁机制/配方/Fourier 证据链/robin 量纲**已修复**（§6、§10） |
 

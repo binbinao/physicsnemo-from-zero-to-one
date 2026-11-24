@@ -32,7 +32,8 @@ import matplotlib.pyplot as plt
 
 sys.path.insert(0, os.path.dirname(__file__))
 from heat_sink_geometry import HeatSinkGeometry
-from equations import L0_SI, heat_conduction_2d, resolve_robin_scale, robin_boundary
+from equations import (COORD_SCALE_MM, L0_SI, heat_conduction_2d,
+                       resolve_robin_scale, robin_boundary)
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "scripts"))
 from tb_logger import TBLogger  # noqa: E402
@@ -61,7 +62,7 @@ def quick_train(fin_height: float, steps: int = 500, device: str = "cpu",
     geo = HeatSinkGeometry(fin_height=fin_height)
     model = QuickPINN(hidden=64, depth=3).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
-    scale = 30.0
+    scale = COORD_SCALE_MM
     robin_scale_si = resolve_robin_scale(robin_scale)
 
     T_source = 100.0

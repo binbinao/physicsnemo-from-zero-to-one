@@ -18,7 +18,8 @@ import torch
 import torch.nn as nn
 
 from heat_sink_geometry import HeatSinkGeometry
-from equations import L0_SI, heat_conduction_2d, resolve_robin_scale, robin_boundary
+from equations import (COORD_SCALE_MM, L0_SI, heat_conduction_2d,
+                       resolve_robin_scale, robin_boundary)
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "scripts"))
 from tb_logger import TBLogger  # noqa: E402
@@ -55,7 +56,7 @@ def train_joint(
         [{"params": model.parameters(), "lr": 1e-3}, {"params": [fin_height], "lr": 2e-2}],
     )
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=max(steps, 1))
-    scale = 30.0
+    scale = COORD_SCALE_MM
     robin_scale_si = resolve_robin_scale(robin_scale)
     T_source, k, h_conv, T_inf = 100.0, 1.0, 10.0, 0.0
     w_target = 200.0
