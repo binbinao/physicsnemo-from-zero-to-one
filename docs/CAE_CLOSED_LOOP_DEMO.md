@@ -59,7 +59,9 @@ python heat_sink_inverse_joint.py --target_temp 40          # 默认 3000 步 + 
 python heat_sink_inverse_joint.py --target_temp 40 --fast   # 800 步，CI/演示
 ```
 
-说明：联合反演已修复 **鳍高梯度**（tip 观测对 `fin_height` 可微、每步按当前 `h` 重采样几何）。演示 PINN 在无量纲坐标下 **tip 温度动态范围有限**，`target_temp=40` 可能无法严格达到；签审请用 `validator.py` + 扫描版 `heat_sink_inverse.py` 对照。闭环脚本中 ch03 仅作「可运行」检查（`--fast`）。
+说明：联合反演已修复 **鳍高梯度**（tip 观测对 `fin_height` 可微、每步按当前 `h` 重采样几何）。
+
+**Robin 量纲修复后的数值变化（2026-11-24）**：`robin_boundary` 现在按 SI 特征长度 `L0 = 0.03 m` 计算（`--robin_scale`，默认 `0.03`；`0` = 修复前口径，仅用于复现旧数值），因此 demo 的 `tip` 温度从「≈0.1 ℃ 量级」变为「十几 ℃ 量级」——`--fast`（800 步）实测 `T_tip ≈ 16.2 ℃`（`fin_height ≈ 13.7 mm`），物理上已与 1D 鳍解析解同量级，但 `target_temp=40` 在 800 步内仍**不能严格达到**（欠训练而非"动态范围不可达"）；要更接近目标请跑默认 3000 步 + 早停。签审请用 `validator.py`（双口径残差 + 鳍温探针）与扫描版 `heat_sink_inverse.py` 对照。闭环脚本中 ch03 仅作「可运行」检查（`--fast`）。
 
 ## 接入真实 CFD
 
