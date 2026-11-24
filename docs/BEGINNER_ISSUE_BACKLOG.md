@@ -182,19 +182,30 @@
 
 | 本地 | 标题 | 优先级 | 状态 | GitHub |
 |:---|:---|:---|:---|:---|
-| R3-01 | check_env 补 scipy 自检（ch04/ch05） | P0 | 本轮处理中 · 待关闭 | [#166](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/166) |
-| R3-02 | Hydra/argparse 双语法提示 | P0 | 本轮处理中 · 待关闭 | [#167](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/167) |
-| R3-03 | 统一 ch01/ch07 README 与代码默认 epoch | P0 | 本轮处理中 · 待关闭 | [#168](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/168) |
-| R3-04 | 修复 BASELINE.md example_record 死链 | P0 | 本轮处理中 · 待关闭 | [#169](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/169) |
-| R3-05 | 补 ch02–ch07 example_record 与 BASELINE 数量级 | P1 | 本轮处理中 · 待关闭 | [#170](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/170) |
-| R3-06 | 对齐 Colab notebook 与 6 周计划无 GPU 覆盖 | P1 | 本轮处理中 · 待关闭 | [#171](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/171) |
-| R3-07 | 拆分 6 周计划第 6 周过载 | P1 | 本轮处理中 · 待关闭 | [#172](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/172) |
-| R3-08 | 三档变体命名对照表 + raw/sdk 不可直接对比 | P1 | 本轮处理中 · 待关闭 | [#173](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/173) |
-| R3-09 | ch04 翼型/Darcy 路径 A/B 与示例对齐标注 | P2 | 本轮处理中 · 待关闭 | [#174](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/174) |
-| R3-10 | ch03/ch06 可选深读 + DDP 无多卡可跳过 | P2 | 本轮处理中 · 待关闭 | [#175](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/175) |
-| R3-11 | 体例小错（ch07 编号 / SDK 口径 / 第0章 / 图号） | P2 | 本轮处理中 · 待关闭 | [#176](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/176) |
+| R3-01 | check_env 补 scipy 自检（ch04/ch05） | P0 | 已实现 · 待关闭 | [#166](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/166) |
+| R3-02 | Hydra/argparse 双语法提示 | P0 | 已实现 · 待关闭 | [#167](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/167) |
+| R3-03 | 统一 ch01/ch07 README 与代码默认 epoch | P0 | 已实现（扩到 ch06）· 待关闭 | [#168](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/168) |
+| R3-04 | 修复 BASELINE.md example_record 死链 | P0 | 已实现（换改法：修过期描述，非死链）· 待关闭 | [#169](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/169) |
+| R3-05 | 补 ch02–ch07 example_record 与 BASELINE 数量级 | P1 | 转新需求（模板 + 征集真实记录）· 待关闭 | [#170](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/170) |
+| R3-06 | 对齐 Colab notebook 与 6 周计划无 GPU 覆盖 | P1 | 已实现 · 待关闭 | [#171](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/171) |
+| R3-07 | 拆分 6 周计划第 6 周过载 | P1 | 已实现 · 待关闭 | [#172](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/172) |
+| R3-08 | 三档变体命名对照表 + raw/sdk 不可直接对比 | P1 | 已实现 · 待关闭 | [#173](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/173) |
+| R3-09 | ch04 翼型/Darcy 路径 A/B 与示例对齐标注 | P2 | 已实现（仅补路径 B 标注）· 待关闭 | [#174](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/174) |
+| R3-10 | ch03/ch06 可选深读 + DDP 无多卡可跳过 | P2 | 已实现 · 待关闭 | [#175](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/175) |
+| R3-11 | 体例小错（ch07 编号 / SDK 口径 / 第0章 / 图号） | P2 | 已实现 · 待关闭 | [#176](https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/176) |
 
 **决策（实现时采用）**：
 
 1. 三档变体：**保留现有文件名**，各章 README 增加对照表（不统一改名）。  
 2. raw/sdk 物理设定不一致：**显式标注「两版问题不同，不可直接对比 loss」**（不对齐参数）。
+
+**状态口径**：本表状态为**本轮实现后的真实状态**，不是 GitHub issue 的已关闭状态。  
+issue 的实际关闭（`closes #N` 或手写理由）需要仓库写权限，由凭证持有方按《R3 逐项结案清单》逐条执行后再把本列改为 `已关闭`。
+
+**本轮对 3 项的改法说明**：
+
+1. **R3-04 / #169**：`results/BASELINE.md` 里 `[ch01_hello/example_record/](ch01_hello/example_record/)` **不是死链**（该目录自 `d0e56b3` 起即存在），真正过期的是「验证环境 commit `5de0cb7` 前后」「微缩默认 epoch」两处锚点，以及把示例记录称作「实测样例」。已按此口径修正，故 issue 以「措辞失效、真实问题已修」结案。
+2. **R3-05 / #170**：PR #177 曾补 12 个 `results/ch02..ch07/*/example_record/` 数值文件，但文件头自述 `illustrative … (not a single locked seed)`、ch03 甚至写区间 `≈1e-03–5e-03`，属**示意值冒充实测**，不予入库；改为 `results/README.md` 的「提交真实记录的要求」模板 + 征集读者真实记录。
+3. **R3-09 / #174**：main 的 `book/ch04.md` 章首路径表、`CH04_GUIDE` 与 `ch04_fno_airfoil/README.md` 已建立路径 A/B 口径，本轮只补 §4.6/§4.7 的「路径 B · 扩展」提示块（原 §4.7.1 把 `in_channels=4` 的翼型骨架写成「仓库可跑入口」，与默认 `train_fno_mini.py` 矛盾）。
+
+**PR 处置**：PR #177 不直接 rebase 合入（其分支含 15.4 MB PDF、`.cursor/` 状态与 4 张零引用 PNG），本轮以 main 为基重新提交等效增量；PR #178 目标分支为 `cursor/setup-dev-environment-5075` 且无独有 R3 增量，不采用。
