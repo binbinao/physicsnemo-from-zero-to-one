@@ -142,9 +142,9 @@ python scripts/check_env.py
 |:---|:---|
 | ch01 | `python ch01_hello/pinn_spring.py --epochs 1000` |
 | ch02 | `python ch02_heat1d/heat1d_pinn_raw.py` |
-| ch04 | `cd ch04_fno_airfoil && python train_fno_mini.py --epochs 50` |
+| ch04 | `cd ch04_fno_airfoil && python train_fno_mini.py --epochs 50`（装了 `hydra-core` 则用 `epochs=50`） |
 | ch05 | 先确保 ch04 存在；`cd ch05_darcy_hybrid && python train_data_fno.py` |
-| ch06 | `cd ch06_fourcastnet_mini && python train_afno_mini.py --epochs 30` |
+| ch06 | `cd ch06_fourcastnet_mini && python train_afno_mini.py --epochs 30`（装了 `hydra-core` 则用 `epochs=30`） |
 | ch07 | `cd ch07_drivaernet_optim && python train.py` |
 
 显存与时长表：[HARDWARE_EXPECTATIONS.md](../docs/HARDWARE_EXPECTATIONS.md)
