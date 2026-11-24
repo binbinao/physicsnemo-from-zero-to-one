@@ -3,8 +3,8 @@
 > **非签审标准**；用于判断「训练是否正常」。实测因硬件/种子而异。  
 > 硬件与时长见 [docs/HARDWARE_EXPECTATIONS.md](../docs/HARDWARE_EXPECTATIONS.md)。
 
-**验证环境**：Python 3.12 · PyTorch 2.9.x · 微缩默认 epoch · commit `5de0cb7` 前后文档批次。  
-**样例目录**：各章 `results/chXX_*/example_record/`（看趋势与数量级，勿死磕小数点）。
+**验证环境**：Python 3.12 · PyTorch 2.9.x · 各章脚本**默认参数**（下表逐章列出，以脚本 `--help` 为准）。  
+**是否本轮复测**：否。本文件只给**定性趋势**；`results/` 下只有 ch01 的一份历史示例记录，其余章的真实记录按 [README.md](README.md) 的模板征集。
 
 ---
 
@@ -16,8 +16,8 @@
 | 曲线 vs 解析解 | visually 重合 |
 | 训练时长 | 1–5 min（CPU 可） |
 
-脚本：`pinn_spring.py --epochs 2000`（演示可缩短；默认脚本为 5000）  
-**实测样例**：[ch01_hello/example_record/](ch01_hello/example_record/)（`final_losses.txt`：pde≈4e-5）
+脚本：`pinn_spring.py`（默认 `--epochs 5000`；快速演示可 `--epochs 2000`）  
+**示例记录（历史提交，未经本轮复测）**：[ch01_hello/example_record/](ch01_hello/example_record/)（`final_losses.txt`：pde≈4e-5）
 
 ---
 
@@ -29,7 +29,7 @@
 | 终值 PDE | 约 1e-4–1e-3（视 `w_ic`, `w_bc`） |
 | 训练时长 | 5–15 min（GPU debug） |
 
-脚本：`heat1d_pinn_raw.py` 或 `heat1d_train.py` + `training=debug`  
+脚本：`heat1d_pinn_raw.py`（默认 `--steps 3000`；CPU 短跑 `--steps 500`）或 `heat1d_train.py`（默认 `steps=3000`）+ `training=debug`
 
 ---
 
@@ -42,7 +42,7 @@
 | 终值 total | 约 1e-3–1e-2 量级（微缩步数会更高） |
 | 训练时长 | 15–60 min |
 
-脚本：`heat_sink_train.py`  
+脚本：`heat_sink_train.py`（默认 `steps=3000`；CPU 演示可 `--steps 500`）
 
 ---
 
@@ -52,11 +52,11 @@
 |:---|:---|
 | train MSE | 随 epoch 下降 |
 | test MSE | 与 train 同数量级（微缩数据） |
-| 终值 | 约 1e-2–5e-02 量级（50 epoch, n=200） |
+| 终值 | 约 1e-2–5e-2 量级（短程微缩训练通常更高） |
 | 训练时长 | 10–30 min（8GB GPU） |
 
-脚本：`train_fno_mini.py --epochs 50`  
-输出：`outputs/fno_darcy.pt`  
+脚本：`train_fno_mini.py`（默认 `--epochs 30`；加长演示可 `--epochs 50`）  
+输出：`outputs/fno_darcy.pt`
 
 ---
 
@@ -68,7 +68,7 @@
 | + `lambda_physics=0.1` | test 往往改善或更稳定（约 1e-2–5e-2） |
 | 训练时长 | 15–40 min |
 
-脚本：`train_data_fno.py` → `train_physics_fno.py`  
+脚本：`train_data_fno.py` → `train_physics_fno.py`（默认 `epochs=50`、`n_train=100`）
 
 ---
 
@@ -80,7 +80,7 @@
 | rollout RMSE | 随步数增加而上升（误差累积正常） |
 | 训练时长 | 15–45 min |
 
-脚本：`train_afno_mini.py` + `rollout_eval.py`  
+脚本：`train_afno_mini.py`（默认 `epochs=30`）+ `rollout_eval.py`
 
 ---
 
@@ -93,7 +93,7 @@
 | 优化后 Cd | 低于参数空间中心点 baseline |
 | 训练时长 | 5–20 min |
 
-脚本：`train.py --epochs 200`  
+脚本：`train.py`（默认 `--epochs 200`）
 
 ---
 
@@ -103,7 +103,7 @@
 mkdir -p results/ch04_fno_airfoil/$(date +%Y-%m-%d)_mygpu
 # 训练后保存：
 #   final_losses.txt  — 末 epoch train/test loss
-#   notes.md          — GPU 型号、commit、命令行
+#   notes.md          — GPU 型号、commit、命令行、种子、日期
 ```
 
-欢迎 PR 补充「实测数值 + 环境」到对应子目录（勿提交大 checkpoint）。
+要求与禁止项见 [README.md](README.md)：**只收真实跑出来的数值**，示意值 / 区间值 / 未实测数值一律不入库。
