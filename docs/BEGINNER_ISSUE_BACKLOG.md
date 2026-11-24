@@ -204,7 +204,7 @@ issue 的实际关闭（`closes #N` 或手写理由）需要仓库写权限，�
 
 **本轮对 3 项的改法说明**：
 
-1. **R3-04 / #169**：`results/BASELINE.md` 里 `[ch01_hello/example_record/](ch01_hello/example_record/)` **不是死链**（该目录自 `d0e56b3` 起即存在），真正过期的是「验证环境 commit `5de0cb7` 前后」「微缩默认 epoch」两处锚点，以及把示例记录称作「实测样例」。已按此口径修正，故 issue 以「措辞失效、真实问题已修」结案。
+1. **R3-04 / #169**：`results/BASELINE.md` 里指向 `results/ch01_hello/example_record/` 的链接**不是死链**（该目录自 `d0e56b3` 起即存在），真正过期的是「验证环境 commit `5de0cb7` 前后」「微缩默认 epoch」两处锚点，以及把示例记录称作「实测样例」。已按此口径修正，故 issue 以「措辞失效、真实问题已修」结案。
 2. **R3-05 / #170**：PR #177 曾补 12 个 `results/ch02..ch07/*/example_record/` 数值文件，但文件头自述 `illustrative … (not a single locked seed)`、ch03 甚至写区间 `≈1e-03–5e-03`，属**示意值冒充实测**，不予入库；改为 `results/README.md` 的「提交真实记录的要求」模板 + 征集读者真实记录。
 3. **R3-09 / #174**：main 的 `book/ch04.md` 章首路径表、`CH04_GUIDE` 与 `ch04_fno_airfoil/README.md` 已建立路径 A/B 口径，本轮只补 §4.6/§4.7 的「路径 B · 扩展」提示块（原 §4.7.1 把 `in_channels=4` 的翼型骨架写成「仓库可跑入口」，与默认 `train_fno_mini.py` 矛盾）。
 
