@@ -18,7 +18,9 @@ python rollout_eval.py --ckpt outputs/afno_weather.pt --rollout_steps 10
 
 ## 数据
 
-- 无 ERA5 时：用 `scripts/generate_toy_weather.py`（仓库未含 `download_era5_subset.sh`）。
+- **toy（默认，开箱可跑）**：`scripts/generate_toy_weather.py` 生成 4 通道合成天气场（温度/位势/纬向风/经向风），仅用于验证数据管线与训练/rollout 能跑通，**不代表真实预报技能**。数据文件不存在时 `dataset.py` 会自动调用它生成。
+- **真实数据（需自备）**：仓库只提供 toy 生成器，**不含** ERA5 下载脚本（设计如此，不是文件缺失）。ERA5 需自行从 ECMWF Copernicus Climate Data Store（CDS）或 ARCO-ERA5 获取；本仓库不承诺下载链接、账号配额与接口稳定性。
+- **落点与格式**：自备数据须与 toy 同构 —— `<data_dir>/toy_weather.pt` = `dict{'data': float32 张量 (T, C, H, W)}`；或把 `conf/config.yaml` 的 `data_dir` 指向自备目录（无需改代码）。该 `.pt` 已被 `.gitignore` 忽略，不入库。
 
 ## 查看训练曲线
 

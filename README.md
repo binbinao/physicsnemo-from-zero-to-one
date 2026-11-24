@@ -170,7 +170,9 @@ python ch07_drivaernet_optim/train_gpu.py --hpo --hpo_trials 50
 
 ## Vibe Publishing
 
-This entire codebase (56 files, 7,400+ lines) was created in **2 weeks** using multi-agent AI orchestration:
+This entire codebase (73 Python files, ~12.4k lines; the textbook adds ~6.3k lines each in Chinese and English) was created in **2 weeks** using multi-agent AI orchestration:
+
+> Counts as of **2026-11-24**, reproduce on a clean checkout (no local `.venv/`): `find . -name '*.py' -not -path './.git/*' | wc -l` (Python files), `find . -name '*.py' -not -path './.git/*' -print0 | xargs -0 cat | wc -l` (Python lines), `cat book/*.md | wc -l` and `cat book_en/*.md | wc -l` (book lines, per language). Python counts include `scripts/`, `tools/`, `book/scripts/` and `docs/`.
 
 - 🤖 **Agent pipeline**: Topic Scout → Plan → Research → Parallel Writing → Review → Revision
 - ⚡ **30× productivity multiplier** vs traditional solo authoring

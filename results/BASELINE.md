@@ -3,7 +3,11 @@
 > **非签审标准**；用于判断「训练是否正常」。实测因硬件/种子而异。  
 > 硬件与时长见 [docs/HARDWARE_EXPECTATIONS.md](../docs/HARDWARE_EXPECTATIONS.md)。
 
-**验证环境**：Python 3.12 · PyTorch 2.9.x · 微缩默认 epoch · commit `5de0cb7` 前后文档批次。
+**代码基线**：以 `main` 最新为准，不绑定具体 commit（自查：`git rev-parse --short HEAD`）。  
+**环境快照**：Python 3.12 · PyTorch 2.9.x · 微缩默认 epoch。  
+**记录时点**：2026-05-19（本文件最近一次随实测记录更新）。此后 `main` 的改动**不在本快照覆盖范围内**；重跑方法见文末「本地记录模板」。
+
+> 新鲜度自查：`grep -m1 '记录时点' results/BASELINE.md` 读出快照记录日，与 `date -I` 对比即知有多旧。（`git log -1 --format='%ad' -- results/BASELINE.md` 反映的是本文件最后一次**改动**时间，文档整理也会改变它，故以「记录时点」为准。）
 
 ---
 
