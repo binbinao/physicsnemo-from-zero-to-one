@@ -6,10 +6,13 @@
 
 | 项 | 值 |
 |:---|:---|
-| **Git commit** | 以 `main` 最新为准（本地：`git rev-parse --short HEAD`） |
+| **代码基线** | 以 `main` 最新为准（`git rev-parse --short HEAD`），不记录固定 commit |
+| **记录时点** | 2026-05-19（本文件最近一次人工记录）。此后 `main` 的改动**未纳入**本快照 |
 | **Python** | 3.12 |
 | **PyTorch** | 2.9.x（CUDA 与 CPU 均测过 check_env） |
 | **OS** | macOS / Linux |
+
+> 新鲜度自查：`grep -m1 '记录时点' docs/TESTED_ENVIRONMENT.md`，与 `date -I` 对比即知该快照有多旧。
 
 ```bash
 git fetch origin && git checkout main && git pull   # 与 Colab/协作者保持一致

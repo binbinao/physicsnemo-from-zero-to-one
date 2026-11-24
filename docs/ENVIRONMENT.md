@@ -159,4 +159,4 @@ python scripts/check_env.py --tier 2
 |:---|:---|
 | [requirements-minimal.txt](../requirements-minimal.txt) | ch01–ch03 裸 PyTorch |
 | [requirements-full.txt](../requirements-full.txt) | SDK + ch07 |
-| [TESTED_ENVIRONMENT.md](TESTED_ENVIRONMENT.md) | 最近验证的 commit / Python / PyTorch |
+| [TESTED_ENVIRONMENT.md](TESTED_ENVIRONMENT.md) | 环境快照：Python / PyTorch 版本与记录时点 |
