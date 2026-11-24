@@ -5,8 +5,8 @@
 ```bash
 # 数据可自动生成；也可手动：
 python scripts/generate_toy_weather.py --n_time 200 --resolution 64
-# 无 Hydra：--epochs；有 Hydra：epochs=20
-python train_afno_mini.py --epochs 20
+# 无 Hydra：--epochs；有 Hydra：epochs=30
+python train_afno_mini.py --epochs 30
 python rollout_eval.py --ckpt outputs/afno_weather.pt --rollout_steps 10
 ```
 

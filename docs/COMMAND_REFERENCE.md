@@ -16,6 +16,18 @@
 装了 Hydra 后，`--epochs` / `--steps` **会被忽略或报错**。入口脚本启动时会打印一行提示。
 纯 argparse 脚本（如 `heat1d_pinn_raw.py`、`pinn_spring.py`、`train.py`）始终用 `--参数`。
 
+## 关闭训练曲线记录（`PN_TB`）
+
+```bash
+PN_TB=0 python ch04_fno_airfoil/train_fno_mini.py epochs=30   # 唯一通用写法
+PN_TB=0 python ch01_hello/pinn_spring.py --epochs 500
+python ch01_hello/pinn_spring.py --epochs 500 --no-tb         # 仅纯 argparse 档可用
+```
+
+- `PN_TB=0` 是**跨 Hydra / argparse 的唯一通用**关闭方式（各章脚本均支持，含 `*_sdk.py` / `*_gpu.py`）。
+- `--no-tb` 只在纯 argparse 脚本有效；Hydra 档（ch03/ch04/ch05/ch06 主入口、ch07 optuna 路径）会把 `--no-tb` 当非法 override **报错**。
+- `PN_TB_DIR` 可覆写日志根目录。详见 [ENVIRONMENT.md](ENVIRONMENT.md#训练曲线tensorboard默认开启)。
+
 ## ch01（argparse）
 
 ```bash

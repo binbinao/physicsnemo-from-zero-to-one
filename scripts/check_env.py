@@ -96,7 +96,7 @@ CHAPTERS: dict[int, dict] = {
         "required": ["torch", "numpy", "matplotlib"],
         "optional": ["hydra"],
         "sdk": ["physicsnemo"],
-        "entry": "cd ch06_fourcastnet_mini && python train_afno_mini.py --epochs 20",
+        "entry": "cd ch06_fourcastnet_mini && python train_afno_mini.py --epochs 30",
     },
     7: {
         "title": "端到端流水线",
