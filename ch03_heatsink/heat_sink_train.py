@@ -32,7 +32,8 @@ _CH03_DIR = os.path.dirname(os.path.abspath(__file__))
 # Local imports
 sys.path.insert(0, _CH03_DIR)
 from heat_sink_geometry import HeatSinkGeometry
-from equations import heat_conduction_2d, robin_boundary, neumann_boundary
+from equations import (COORD_SCALE_MM, L0_SI, heat_conduction_2d,
+                       neumann_boundary, resolve_robin_scale, robin_boundary)
 
 _REPO_ROOT = os.path.dirname(_CH03_DIR)
 if _REPO_ROOT not in sys.path:
@@ -135,6 +136,12 @@ def train(cfg: dict, tb=None):
     T_source = cfg.get("T_source", 100.0)  # bottom temperature
     h_conv = cfg.get("h_conv", 10.0)       # convection coefficient
     T_inf = cfg.get("T_inf", 0.0)          # ambient temperature
+    # Physical characteristic length for the Robin residual (SI metres).
+    # Coordinates fed to the network are normalised by `scale = COORD_SCALE_MM`
+    # (30 mm), so
+    # dT/dn must be divided by L0 = 0.03 m to be physical. 0 = legacy (pre-fix)
+    # behaviour, kept only to reproduce old runs.
+    robin_scale_si = resolve_robin_scale(cfg.get("robin_scale", L0_SI))
 
     # Network
     model = HeatSinkNet(hidden=cfg.get("hidden", 128),
@@ -167,8 +174,9 @@ def train(cfg: dict, tb=None):
                "base_top": []}
     log_interval = max(1, steps // 20)
 
-    # Normalization scale (geometry is in mm, normalize to ~unit)
-    scale = 30.0
+    # Normalization scale (geometry is in mm, normalize to ~unit). Single
+    # source of truth: equations.COORD_SCALE_MM, from which L0_SI derives.
+    scale = COORD_SCALE_MM
 
     for step in range(1, steps + 1):
         optimizer.zero_grad()
@@ -209,7 +217,8 @@ def train(cfg: dict, tb=None):
         nyr_t = torch.tensor(nyr, dtype=torch.float32, device=device).unsqueeze(1)
         T_robin = model(xr_t, yr_t)
         res_robin = robin_boundary(T_robin, xr_t, yr_t, nxr_t, nyr_t,
-                                   k=k, h_conv=h_conv, T_inf=T_inf)
+                                   k=k, h_conv=h_conv, T_inf=T_inf,
+                                   scale=robin_scale_si)
         loss_robin = (res_robin ** 2).mean()
 
         # --- Base top exposed surface (Robin BC, convective) ---
@@ -220,7 +229,8 @@ def train(cfg: dict, tb=None):
         nybt_t = torch.tensor(nybt, dtype=torch.float32, device=device).unsqueeze(1)
         T_base_top = model(xbt_t, ybt_t)
         res_base_top = robin_boundary(T_base_top, xbt_t, ybt_t, nxbt_t, nybt_t,
-                                      k=k, h_conv=h_conv, T_inf=T_inf)
+                                      k=k, h_conv=h_conv, T_inf=T_inf,
+                                      scale=robin_scale_si)
         loss_base_top = (res_base_top ** 2).mean()
 
         # Total loss
@@ -262,7 +272,8 @@ def train(cfg: dict, tb=None):
         "model": model.state_dict(),
         "config": cfg,
         "history": history,
-        "scale": scale,
+        "scale": scale,                                  # coordinate normalisation (mm), unchanged
+        "robin_scale": float(cfg.get("robin_scale", L0_SI)),  # physical Robin convention (SI m)
     }, ckpt_path)
     print(f"\nCheckpoint saved: {ckpt_path}")
 
@@ -330,6 +341,10 @@ def get_default_cfg():
         "hidden": 128, "depth": 5, "steps": 3000, "lr": 1e-3,
         "fin_height": 20.0, "n_fins": 3,
         "k": 1.0, "Q": 0.0, "T_source": 100.0, "h_conv": 10.0, "T_inf": 0.0,
+        # Physical characteristic length for robin_boundary (SI metres, 30 mm
+        # -> 0.03). NOT the coordinate normalisation constant (30.0). 0 means
+        # legacy/pre-fix behaviour, for replaying old numbers only.
+        "robin_scale": L0_SI,
         "n_interior": 3000, "n_bottom": 300, "n_side": 300, "n_robin": 500,
         "n_base_top": 200,
         "w_pde": 1.0, "w_bottom": 10.0, "w_side": 1.0, "w_robin": 5.0,

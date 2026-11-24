@@ -32,7 +32,8 @@ import matplotlib.pyplot as plt
 
 sys.path.insert(0, os.path.dirname(__file__))
 from heat_sink_geometry import HeatSinkGeometry
-from equations import heat_conduction_2d, robin_boundary
+from equations import (COORD_SCALE_MM, L0_SI, heat_conduction_2d,
+                       resolve_robin_scale, robin_boundary)
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "scripts"))
 from tb_logger import TBLogger  # noqa: E402
@@ -51,12 +52,18 @@ class QuickPINN(nn.Module):
         return self.net(torch.cat([x, y], dim=-1))
 
 
-def quick_train(fin_height: float, steps: int = 500, device: str = "cpu"):
-    """Train a small PINN for given fin_height and return avg tip temperature."""
+def quick_train(fin_height: float, steps: int = 500, device: str = "cpu",
+                robin_scale: float = L0_SI):
+    """Train a small PINN for given fin_height and return avg tip temperature.
+
+    ``robin_scale`` is the physical characteristic length (SI metres) used by
+    the Robin residual; ``0`` restores the pre-fix (unit-less) behaviour.
+    """
     geo = HeatSinkGeometry(fin_height=fin_height)
     model = QuickPINN(hidden=64, depth=3).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
-    scale = 30.0
+    scale = COORD_SCALE_MM
+    robin_scale_si = resolve_robin_scale(robin_scale)
 
     T_source = 100.0
     k, h_conv, T_inf = 1.0, 10.0, 0.0
@@ -86,7 +93,8 @@ def quick_train(fin_height: float, steps: int = 500, device: str = "cpu"):
         nxrt = torch.tensor(nxr, dtype=torch.float32, device=device).unsqueeze(1)
         nyrt = torch.tensor(nyr, dtype=torch.float32, device=device).unsqueeze(1)
         Tr = model(xrt, yrt)
-        res_r = robin_boundary(Tr, xrt, yrt, nxrt, nyrt, k=k, h_conv=h_conv, T_inf=T_inf)
+        res_r = robin_boundary(Tr, xrt, yrt, nxrt, nyrt, k=k, h_conv=h_conv,
+                               T_inf=T_inf, scale=robin_scale_si)
         loss_robin = (res_r ** 2).mean()
 
         loss = loss_pde + 10.0 * loss_bot + 5.0 * loss_robin
@@ -114,11 +122,16 @@ def main():
                         help="Number of fin heights to evaluate")
     parser.add_argument("--steps", type=int, default=500,
                         help="Training steps per evaluation")
+    parser.add_argument("--robin_scale", type=float, default=L0_SI,
+                        help="Physical characteristic length for the Robin BC, "
+                             "SI metres (0.03 = 30 mm, correct physics; "
+                             "0 = legacy/pre-fix)")
     TBLogger.add_args(parser)
     args = parser.parse_args()
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Target tip temperature: {args.target_temp}")
+    print(f"[units] robin scale = {args.robin_scale} m (0 = legacy pre-fix)")
     print(f"Evaluating {args.n_evals} fin heights...\n")
 
     # TensorBoard / CSV curves of the design sweep (default on; --no-tb off)
@@ -129,7 +142,8 @@ def main():
     tip_temps = []
 
     for i, fh in enumerate(fin_heights):
-        T_tip = quick_train(fh, steps=args.steps, device=device)
+        T_tip = quick_train(fh, steps=args.steps, device=device,
+                            robin_scale=args.robin_scale)
         tip_temps.append(T_tip)
         tb.log(i, {"eval/fin_height": float(fh), "eval/tip_temp": T_tip,
                    "eval/abs_err_to_target": float(abs(T_tip - args.target_temp))})

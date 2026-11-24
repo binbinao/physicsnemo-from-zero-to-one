@@ -14,6 +14,10 @@ Q: 0.0
 T_source: 100.0
 h_conv: 10.0
 T_inf: 0.0
+# Robin 量纲：物理特征长度 L0，与 k / h_conv 同为 SI 单位（30 mm → 0.03 m）。
+# 网络输入坐标按 scale=30 归一化，robin_boundary 必须用 1/L0 把法向导数换回 SI。
+# 0 = legacy（复现修复前数值）；不要写 30（那是坐标归一化常数，不是 L0）。
+robin_scale: 0.03
 
 # Sampling
 n_interior: 3000

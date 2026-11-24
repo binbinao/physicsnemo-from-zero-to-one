@@ -21,12 +21,18 @@ python heat_sink_train.py
 | `heat_sink_geometry.py` | CSG 几何 |
 | `heat_sink_inverse.py` | 反问题 · 参数扫描（对照） |
 | `heat_sink_inverse_joint.py` | 反问题 · **联合训练**（推荐） |
-| `validator.py` | CAE 残差报告 → `outputs/validation_report.json` |
+| `validator.py` | CAE 残差报告 → `outputs/validation_report.json`（双口径残差 + 鳍温探针 + `pass_physical`） |
 | `visualize.py` | 结果可视化 |
+| `tests/test_robin_scale.py` | Robin 量纲回归（旧口径逐位不变 / `0.03` vs `30` / 1D 鳍 / 可选 FV 参考） |
+| `tests/test_validator_gates.py` | 门槛回归（探针随几何 / 常数场被物理门拒 / 键序契约 / 1D 跨度 / `L0` 不变式） |
 | `inference/` | **生产推理包**：ONNX 制品 + FastAPI 服务（见 [inference/README.md](inference/README.md)） |
-| `EXPERIMENTS_PASS.md` | **追 PASS 实验结论文档**：死锁机制/配方/Fourier 证据链/robin 量纲假说（后续改进项） |
+| `EXPERIMENTS_PASS.md` | **追 PASS 实验结论文档**：死锁机制/配方/Fourier 证据链/robin 量纲**已修复**（§6、§10） |
 
 训练结束自动生成验证报告。2D 微缩，非 Icepak 3D 签审级。
+
+> **单位提醒**：几何 mm，`k`/`h` 为 SI；网络输入按 `scale=30` 归一化，Robin 残差必须传物理特征长度
+> `robin_scale=0.03`（米，**不是 30**）。`robin_scale=0` 复现修复前（缺 `1/L0`）的数值，仅供旧记录对照。
+> 详见 [docs/CAE_UNITS_AND_NONDIM.md](../docs/CAE_UNITS_AND_NONDIM.md#ch03-单位规则本章唯一事实源)。
 
 ## 查看训练曲线
 
