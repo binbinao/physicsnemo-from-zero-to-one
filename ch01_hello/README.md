@@ -3,18 +3,24 @@
 ## 先跑这个
 
 ```bash
-python pinn_spring.py --epochs 2000
+python pinn_spring.py --epochs 5000
 ```
 
-零基础第 1 天只需：`pip install torch numpy matplotlib` → 见 [docs/QUICKSTART_DAY1.md](../docs/QUICKSTART_DAY1.md)。
+（脚本默认亦为 5000；快速演示可改 `--epochs 2000`。）
+
+零基础第 1 天只需：`pip install torch numpy matplotlib scipy` → 见 [docs/QUICKSTART_DAY1.md](../docs/QUICKSTART_DAY1.md)。
 
 ## 三档脚本
 
-| 档位 | 文件 | 依赖 |
-|:---|:---|:---|
-| **首选 · 裸 PyTorch** | `pinn_spring.py` | torch |
-| 对照 · 数据驱动 | `mlp_spring.py` | torch |
-| SDK | `pinn_spring_sdk.py` | nvidia-physicsnemo.sym |
+| 档位 | 文件 | 依赖 | 说明 |
+|:---|:---|:---|:---|
+| **首选 · 裸 PyTorch** | `pinn_spring.py` | torch | 本章无 `_raw` 后缀 |
+| 对照 · 数据驱动 | `mlp_spring.py` | torch | 与 PINN 对比用 |
+| SDK | `pinn_spring_sdk.py` | nvidia-physicsnemo.sym | 声明式 API 预览 |
+
+> 本章无独立 `*_gpu.py`；CPU 即可。
+
+> **命令语法**：本章脚本始终 argparse，用 `--flag`（如 `--epochs 5000`）；其它章的 Hydra 入口装 `hydra-core` 时用 `key=value`，未装时用 `--flag`。见 [COMMAND_REFERENCE](../docs/COMMAND_REFERENCE.md)。
 
 ## 查看训练曲线
 
@@ -25,7 +31,7 @@ python scripts/plot_tb_curves.py --logdir outputs/tb/pinn_spring/<时间戳>   #
 tensorboard --logdir outputs/tb/pinn_spring/<时间戳>                        # 需 pip install tensorboard
 ```
 
-关闭记录：`python pinn_spring.py --no-tb`。详见 [docs/ENVIRONMENT.md](../docs/ENVIRONMENT.md#训练曲线tensorboard默认开启)。
+关闭记录：`PN_TB=0 python pinn_spring.py ...`（各章通用；本脚本也可 `--no-tb`）。详见 [docs/ENVIRONMENT.md](../docs/ENVIRONMENT.md#训练曲线tensorboard默认开启)。
 
 ## 配置
 

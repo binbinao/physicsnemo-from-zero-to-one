@@ -5,9 +5,13 @@
 ## 先跑这个
 
 ```bash
-python train.py --epochs 100
+python train.py --epochs 200
 python optimize.py --checkpoint outputs/best.pt --n_trials 50
 ```
+
+（`train.py` 默认亦为 200 epochs。）
+
+> **命令语法**：本章脚本始终 argparse，用 `--flag`（如 `--epochs 200`）；其它章的 Hydra 入口装 `hydra-core` 时用 `key=value`，未装时用 `--flag`。见 [COMMAND_REFERENCE](../docs/COMMAND_REFERENCE.md)。
 
 ## 流程
 
@@ -22,11 +26,13 @@ python optimize.py --checkpoint outputs/best.pt --n_trials 50
 
 ## 三档脚本
 
-| 档位 | 文件 |
-|:---|:---|
-| **首选** | `train.py` |
-| SDK | `train_sdk.py` |
-| GPU + HPO | `train_gpu.py` |
+| 档位 | 文件 | 说明 |
+|:---|:---|:---|
+| **首选 · 裸 PyTorch** | `train.py` | toy Cd 代理；始终 argparse |
+| SDK | `train_sdk.py` | PhysicsNeMo FullyConnected |
+| GPU + HPO | `train_gpu.py` | Optuna / 生产档 |
+
+> 默认数据为 **toy 合成**，非完整 DrivAerNet；勿与真实风洞数据比绝对精度。
 
 ## 查看训练曲线
 

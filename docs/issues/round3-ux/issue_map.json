@@ -1,0 +1,79 @@
+[
+  {
+    "id": "R3-01",
+    "priority": "P0",
+    "number": 166,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/166",
+    "title": "check_env 补 scipy 自检（ch04/ch05）"
+  },
+  {
+    "id": "R3-02",
+    "priority": "P0",
+    "number": 167,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/167",
+    "title": "Hydra/argparse 双语法提示（README + COMMAND_REFERENCE + 入口脚本）"
+  },
+  {
+    "id": "R3-03",
+    "priority": "P0",
+    "number": 168,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/168",
+    "title": "统一 ch01/ch07 README 与代码默认 epoch"
+  },
+  {
+    "id": "R3-04",
+    "priority": "P0",
+    "number": 169,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/169",
+    "title": "修复 BASELINE.md example_record 死链"
+  },
+  {
+    "id": "R3-05",
+    "priority": "P1",
+    "number": 170,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/170",
+    "title": "补 ch02–ch07 example_record 与 BASELINE 数量级"
+  },
+  {
+    "id": "R3-06",
+    "priority": "P1",
+    "number": 171,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/171",
+    "title": "对齐 Colab notebook 与 6 周计划无 GPU 覆盖"
+  },
+  {
+    "id": "R3-07",
+    "priority": "P1",
+    "number": 172,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/172",
+    "title": "拆分 6 周计划第 6 周过载（ch06 / ch07）"
+  },
+  {
+    "id": "R3-08",
+    "priority": "P1",
+    "number": 173,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/173",
+    "title": "三档变体命名对照表 + raw/sdk 不可直接对比说明"
+  },
+  {
+    "id": "R3-09",
+    "priority": "P2",
+    "number": 174,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/174",
+    "title": "ch04 翼型/Darcy 路径 A/B 与 §4.6–4.7 示例对齐标注"
+  },
+  {
+    "id": "R3-10",
+    "priority": "P2",
+    "number": 175,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/175",
+    "title": "ch03/ch06 可选深读标注 + DDP 无多卡可跳过"
+  },
+  {
+    "id": "R3-11",
+    "priority": "P2",
+    "number": 176,
+    "url": "https://github.com/binbinao/physicsnemo-from-zero-to-one/issues/176",
+    "title": "体例小错：ch07 编号、SDK 口径、第0章、图号"
+  }
+]

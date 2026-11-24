@@ -20,7 +20,7 @@ pip install -U pip
 
 ```bash
 pip install -r requirements-minimal.txt
-# 或等价：pip install "torch>=2.3" numpy matplotlib
+# 或等价：pip install "torch>=2.3" numpy matplotlib scipy
 ```
 
 不要在这一步安装 `nvidia-physicsnemo`（留给第 2 天或跑 SDK 版时再说）。
